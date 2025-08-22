@@ -3,8 +3,10 @@ import Anime from "../entity/anime.entity";
 
 export type IAnimeRepository = {
   create: (data: CreateAnimeDto) => Promise<Anime>;
-  update: (id: string, data: UpdateAnimeDto) => Promise<Anime>;
+  update: (id: string, data: UpdateAnimeDto) => Promise<Anime | null>;
   delete: (id: string) => Promise<boolean>;
-  findById: (id: string) => Promise<Anime>;
+  deleteAll: () => Promise<boolean>;
+  findById: (id: string) => Promise<Anime | null>;
+  findByName: (name: string) => Promise<Anime | null>;
   findAll: () => Promise<Anime[]>;
 };

@@ -1,8 +1,8 @@
-import { IAnimeRepository } from '@/interfaces/repositories/anime.repositories';
-import { CreateAnimeSchema, UpdateAnimeSchema } from '@/schemas/anime.schema';
-import { AnimeDTO } from '@/interfaces/dto/anime.dto';
-import { DuplicateAnimeTitleError } from '@/errors/anime.errors';
-import AnimeModel from '@/database/models/anime.model';
+import { IAnimeRepository } from "@/interfaces/repositories/anime.repositories";
+import { CreateAnimeSchema, UpdateAnimeSchema } from "@/schemas/anime.schema";
+import { AnimeDTO } from "@/interfaces/dto/anime.dto";
+import { DuplicateAnimeTitleError } from "@/errors/anime.errors";
+import AnimeModel from "@/database/models/anime.model";
 
 export class AnimeService {
   constructor(private readonly repo: IAnimeRepository) {}
@@ -19,13 +19,16 @@ export class AnimeService {
 
   async update(id: string, data: UpdateAnimeSchema): Promise<AnimeDTO | null> {
     if (data.title) {
-      const exists = await AnimeModel.exists({ title: data.title, _id: { $ne: id } });
+      const exists = await AnimeModel.exists({
+        title: data.title,
+        _id: { $ne: id },
+      });
 
       if (exists) {
         throw new DuplicateAnimeTitleError(data.title);
       }
     }
-    
+
     return this.repo.update(id, data);
   }
 

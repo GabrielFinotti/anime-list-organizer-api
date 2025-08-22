@@ -14,7 +14,7 @@ export const deleteAnime = async (
     const mapped = mapError(err);
 
     if (mapped.status === 500) return next(err);
-    
+
     res.status(mapped.status).json(mapped.body);
   }
 };

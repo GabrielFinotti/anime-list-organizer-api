@@ -1,6 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
 import animeRoute from "@/router/anime.route";
+import basicAuth from "@/middlewares/auth.middleware";
 import connectToDatabase from "@/database/config/mongo";
 
 dotenv.config();
@@ -8,7 +9,7 @@ dotenv.config();
 const app = express();
 app.use(express.json());
 
-app.use("/api", animeRoute);
+app.use("/api", basicAuth, animeRoute);
 
 const startServer = async () => {
   try {

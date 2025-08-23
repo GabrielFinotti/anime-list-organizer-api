@@ -14,16 +14,16 @@ if (!process.env.VERSION) {
 const app = express();
 app.use(express.json());
 
+app.use(`/api/${process.env.VERSION}`, basicAuth, animeRoutes);
+
 const startServer = async () => {
   try {
     await validationEnv();
 
     await new MongoConfig().connectToDatabase();
 
-  app.use(`/api/${process.env.VERSION}`, basicAuth, animeRoutes);
-
     app.listen(process.env.PORT, () => {
-      console.log(`Servidor rodando na porta ${process.env.PORT}`);
+      console.log(`Servidor rodando na porta ${process.env.PORT}, versão ${process.env.VERSION}`);
     });
   } catch (error) {
     console.error(error);

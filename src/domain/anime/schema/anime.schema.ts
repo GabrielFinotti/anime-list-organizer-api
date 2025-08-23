@@ -25,6 +25,9 @@ const AnimeSchema = z.object({
   lastReleaseSeason: z.number().min(0).nullable(),
   lastWatchedSeason: z.number().min(0).nullable(),
   lastWatchedEpisode: z.number().min(0).nullable(),
+  status: z
+    .enum(["watching", "completed", "dropped", "in list"])
+    .default("in list"),
 });
 
 export const createAnimeSchema = AnimeSchema;

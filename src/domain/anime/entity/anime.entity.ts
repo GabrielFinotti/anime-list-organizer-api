@@ -16,6 +16,7 @@ export type IAnime = {
   lastReleaseSeason: number | null;
   lastWatchedSeason: number | null;
   lastWatchedEpisode: number | null;
+  status: "watching" | "completed" | "dropped" | "in list";
   createdAt: Date;
   updatedAt: Date;
 };
@@ -38,6 +39,7 @@ class Anime implements IAnime {
   lastReleaseSeason: number | null;
   lastWatchedSeason: number | null;
   lastWatchedEpisode: number | null;
+  status: "watching" | "completed" | "dropped" | "in list";
   createdAt: Date;
   updatedAt: Date;
 
@@ -55,6 +57,7 @@ class Anime implements IAnime {
     this.lastReleaseSeason = props.lastReleaseSeason;
     this.lastWatchedSeason = props.lastWatchedSeason;
     this.lastWatchedEpisode = props.lastWatchedEpisode;
+    this.status = props.status;
     this.createdAt = props.createdAt;
     this.updatedAt = props.updatedAt;
   }

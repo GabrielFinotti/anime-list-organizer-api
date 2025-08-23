@@ -67,6 +67,11 @@ const animeModelSchema = new Schema<IAnimeModel>(
       type: Number,
       default: null,
     },
+    status: {
+      type: String,
+      enum: ["watching", "completed", "dropped", "in list"],
+      default: "in list",
+    },
   },
   { timestamps: true }
 );

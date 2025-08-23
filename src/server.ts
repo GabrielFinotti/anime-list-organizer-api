@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import MongoConfig from "@/infrastructure/database/config/mongo.config";
 import animeRoutes from "@/infrastructure/http/routes/anime.route";
 import validationEnv from "@/infrastructure/utils/validations/env/env.validate";
+import animeLookup from "./infrastructure/api/openai/anime.lookup";
 
 dotenv.config();
 
@@ -20,6 +21,8 @@ const startServer = async () => {
     await new MongoConfig().connectToDatabase();
 
     app.use(`/api/${process.env.VERSION}`, animeRoutes);
+
+    await animeLookup();
 
     app.listen(process.env.PORT, () => {
       console.log(`Servidor rodando na porta ${process.env.PORT}`);

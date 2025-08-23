@@ -9,6 +9,7 @@ const animeModelSchema = new Schema<IAnimeModel>(
       type: String,
       required: true,
       index: true,
+      unique: true,
     },
     synopsis: {
       type: String,

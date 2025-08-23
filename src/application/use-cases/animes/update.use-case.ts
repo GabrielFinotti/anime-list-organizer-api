@@ -8,6 +8,10 @@ class UpdateAnimeUseCase {
 
   async execute(id: string, data: UpdateAnimeDto) {
     try {
+      if (Object.keys(data).length === 0) {
+        return ApiResponse.error(400, "Nenhum dado para atualizar", null);
+      }
+
       const dataParsed = await updateAnimeSchema.safeParseAsync(data);
 
       if (!dataParsed.success) {
@@ -18,10 +22,11 @@ class UpdateAnimeUseCase {
         );
       }
 
-      const updatedAnime = await this.animeRepository.update(
-        id,
-        dataParsed.data
+      const filteredData = Object.fromEntries(
+        Object.entries(dataParsed.data).filter(([_, v]) => v !== undefined)
       );
+
+      const updatedAnime = await this.animeRepository.update(id, filteredData);
 
       if (!updatedAnime) {
         return ApiResponse.error(404, "Anime não encontrado", null);

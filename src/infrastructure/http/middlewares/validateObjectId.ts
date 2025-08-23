@@ -2,11 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import { Types } from "mongoose";
 import ApiResponse from "../utils/api.response";
 
-export const validateObjectId = (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+const validateObjectId = (req: Request, res: Response, next: NextFunction) => {
   const value = req.params.id;
 
   if (!Types.ObjectId.isValid(value)) {
@@ -18,3 +14,5 @@ export const validateObjectId = (
 
   next();
 };
+
+export default validateObjectId;

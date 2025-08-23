@@ -1,6 +1,6 @@
 {
   "name": "anime-list-organizer-api",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "API Dedicada para o Anime List Organizer",
   "main": "server.js",
   "scripts": {
@@ -15,13 +15,12 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
+  "license": "Apache-2.0",
   "bugs": {
     "url": "https://github.com/GabrielFinotti/anime-list-organizer-api/issues"
   },
   "homepage": "https://github.com/GabrielFinotti/anime-list-organizer-api#readme",
   "dependencies": {
-    "bcrypt": "^6.0.0",
     "dotenv": "^17.2.1",
     "express": "^5.1.0",
     "mongoose": "^8.17.2",

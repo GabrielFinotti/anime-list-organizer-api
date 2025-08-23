@@ -5,7 +5,7 @@ import CreateAnimeController from "@/infrastructure/http/controllers/animes/crea
 import UpdateAnimeController from "@/infrastructure/http/controllers/animes/update.controller";
 import DeleteAnimeController from "@/infrastructure/http/controllers/animes/delete.controller";
 import DeleteAllAnimeController from "@/infrastructure/http/controllers/animes/deleteAll.controller";
-import { validateObjectId } from "../middlewares/validateObjectId";
+import validateObjectId from "../middlewares/validateObjectId";
 import AnimeLookupController from "../controllers/animes/animeLookup.controller";
 
 const route = Router();

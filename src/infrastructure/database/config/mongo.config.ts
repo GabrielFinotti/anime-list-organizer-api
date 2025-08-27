@@ -19,7 +19,9 @@ class MongoConfig {
 
   async connectToDatabase() {
     try {
-      await mongoose.connect(this.url, { dbName: "anime-list" });
+      await mongoose.connect(this.url, {
+        dbName: "anime-list",
+      });
 
       console.log("Conectado ao banco de dados com sucesso");
     } catch (error) {

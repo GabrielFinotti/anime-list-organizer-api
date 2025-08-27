@@ -1,5 +1,5 @@
-import { IAnime } from "@/domain/anime/entity/anime.entity";
 import { Document, model, Schema, Types } from "mongoose";
+import { IAnime } from "@/domain/anime/entity/anime.entity";
 
 type IAnimeModel = Document<Types.ObjectId, unknown, IAnime> & IAnime;
 
@@ -16,11 +16,15 @@ const animeModelSchema = new Schema<IAnimeModel>(
       required: true,
     },
     category: {
-      type: String,
+      type: Types.ObjectId,
+      ref: "Category",
+      index: true,
       required: true,
     },
-    genres: {
-      type: [String],
+    genre: {
+      type: [Types.ObjectId],
+      ref: "Genre",
+      index: true,
       required: true,
     },
     typeOfMaterialOrigin: {
@@ -37,6 +41,7 @@ const animeModelSchema = new Schema<IAnimeModel>(
     },
     isAMovie: {
       type: Boolean,
+      index: true,
       required: true,
     },
     derivates: {
@@ -71,6 +76,8 @@ const animeModelSchema = new Schema<IAnimeModel>(
     status: {
       type: String,
       enum: ["watching", "completed", "dropped", "in list"],
+      index: true,
+      required: true,
       default: "in list",
     },
   },

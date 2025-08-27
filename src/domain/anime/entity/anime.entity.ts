@@ -1,9 +1,12 @@
+import { ICategory } from "@/domain/category/entity/category.entity";
+import { IGenre } from "@/domain/genre/entity/genre.entity";
+
 export type IAnime = {
-  _id: string;
+  id: string;
   name: string;
   synopsis: string;
-  category: string;
-  genres: string[];
+  category: ICategory | string;
+  genres: IGenre[] | string[];
   typeOfMaterialOrigin: string;
   materialOriginName: string;
   releaseDate: Date;
@@ -22,11 +25,11 @@ export type IAnime = {
 };
 
 class Anime implements IAnime {
-  _id: string;
+  id: string;
   name: string;
   synopsis: string;
-  category: string;
-  genres: string[];
+  category: ICategory | string;
+  genres: IGenre[] | string[];
   typeOfMaterialOrigin: string;
   materialOriginName: string;
   releaseDate: Date;
@@ -44,7 +47,7 @@ class Anime implements IAnime {
   updatedAt: Date;
 
   constructor(props: IAnime) {
-    this._id = props._id.toString();
+    this.id = props.id;
     this.name = props.name;
     this.synopsis = props.synopsis;
     this.category = props.category;

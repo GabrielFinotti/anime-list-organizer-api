@@ -1,6 +1,6 @@
 {
   "name": "anime-list-organizer-api",
-  "version": "2.1.0-alpha",
+  "version": "3.0.0-alpha",
   "description": "API Dedicada para o Anime List Organizer",
   "main": "server.js",
   "scripts": {

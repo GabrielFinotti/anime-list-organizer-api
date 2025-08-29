@@ -1,3 +1,4 @@
+import IUser from "../interface/user.interface";
 import Name from "../value-object/name.vo";
 import ObjectId from "../value-object/objectId.vo";
 import Password from "../value-object/password.vo";
@@ -9,20 +10,14 @@ class User {
   private _favoriteAnimes: string[];
   private _favoriteGenres: string[];
 
-  private constructor(
-    id: string,
-    username: string,
-    password: string,
-    favoriteAnimes: string[],
-    favoriteGenres: string[]
-  ) {
-    this._id = ObjectId.create(id).value;
-    this._username = Name.create(username).value;
-    this._password = Password.create(password).value;
-    this._favoriteAnimes = favoriteAnimes.map(
+  private constructor(data: IUser) {
+    this._id = ObjectId.create(data.id).value;
+    this._username = Name.create(data.name).value;
+    this._password = Password.create(data.password).value;
+    this._favoriteAnimes = data.favoriteAnime.map(
       (anime) => ObjectId.create(anime).value
     );
-    this._favoriteGenres = favoriteGenres.map(
+    this._favoriteGenres = data.favoriteGenres.map(
       (genre) => ObjectId.create(genre).value
     );
   }
@@ -57,14 +52,8 @@ class User {
     );
   }
 
-  static create(
-    id: string,
-    username: string,
-    password: string,
-    favoriteAnimes: string[],
-    favoriteGenres: string[]
-  ): User {
-    return new User(id, username, password, favoriteAnimes, favoriteGenres);
+  static create(data: IUser): User {
+    return new User(data);
   }
 }
 

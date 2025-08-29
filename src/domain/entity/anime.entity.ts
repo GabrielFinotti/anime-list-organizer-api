@@ -1,9 +1,8 @@
+import IAnime, { Status } from "../interface/anime.interface";
 import Name from "../value-object/name.vo";
 import ObjectId from "../value-object/objectId.vo";
 import ReleaseDate from "../value-object/releaseDate.vo";
 import Synopsis from "../value-object/synopsis.vo";
-
-type Status = "watching" | "completed" | "dropped" | "in list";
 
 class Anime {
   private readonly _id: string;
@@ -25,48 +24,31 @@ class Anime {
   private _lastWatchedEpisode: number | null;
   private _status: Status;
 
-  private constructor(
-    id: string,
-    name: string,
-    synopsis: string,
-    category: string,
-    genres: string[],
-    typeOfMaterialOrigin: string,
-    materialOriginName: string,
-    releaseDate: Date,
-    isAMovie: boolean,
-    derivates: {
-      movies?: string[];
-      ova?: string[];
-      specials?: string[];
-    } | null,
-    lastReleaseSeason: number | null,
-    lastWatchedSeason: number | null,
-    lastWatchedEpisode: number | null,
-    status: Status
-  ) {
-    this._id = ObjectId.create(id).value;
-    this._name = Name.create(name).value;
-    this._synopsis = Synopsis.create(synopsis).value;
-    this._category = ObjectId.create(category).value;
-    this._genres = genres.map((genre) => ObjectId.create(genre).value);
-    this._typeOfMaterialOrigin = Name.create(typeOfMaterialOrigin).value;
-    this._materialOriginName = Name.create(materialOriginName).value;
-    this._releaseDate = ReleaseDate.create(releaseDate).value;
-    this._isAMovie = isAMovie;
-    this._derivates = derivates
+  private constructor(data: IAnime) {
+    this._id = ObjectId.create(data.id).value;
+    this._name = Name.create(data.name).value;
+    this._synopsis = Synopsis.create(data.synopsis).value;
+    this._category = ObjectId.create(data.category).value;
+    this._genres = data.genres.map((genre) => ObjectId.create(genre).value);
+    this._typeOfMaterialOrigin = Name.create(data.typeOfMaterialOrigin).value;
+    this._materialOriginName = Name.create(data.materialOriginName).value;
+    this._releaseDate = ReleaseDate.create(data.releaseDate).value;
+    this._isAMovie = data.isAMovie;
+    this._derivates = data.derivates
       ? {
-          movies: derivates.movies?.map((movie) => Name.create(movie).value),
-          ova: derivates.ova?.map((ova) => Name.create(ova).value),
-          specials: derivates.specials?.map(
+          movies: data.derivates.movies?.map(
+            (movie) => Name.create(movie).value
+          ),
+          ova: data.derivates.ova?.map((ova) => Name.create(ova).value),
+          specials: data.derivates.specials?.map(
             (special) => Name.create(special).value
           ),
         }
       : null;
-    this._lastReleaseSeason = lastReleaseSeason;
-    this._lastWatchedSeason = lastWatchedSeason;
-    this._lastWatchedEpisode = lastWatchedEpisode;
-    this._status = status;
+    this._lastReleaseSeason = data.lastReleaseSeason;
+    this._lastWatchedSeason = data.lastWatchedSeason;
+    this._lastWatchedEpisode = data.lastWatchedEpisode;
+    this._status = data.status;
   }
 
   get id() {
@@ -159,42 +141,8 @@ class Anime {
     this._status = status;
   }
 
-  static create(
-    id: string,
-    name: string,
-    synopsis: string,
-    category: string,
-    genres: string[],
-    typeOfMaterialOrigin: string,
-    materialOriginName: string,
-    releaseDate: Date,
-    isAMovie: boolean,
-    derivates: {
-      movies?: string[];
-      ova?: string[];
-      specials?: string[];
-    } | null,
-    lastReleaseSeason: number | null,
-    lastWatchedSeason: number | null,
-    lastWatchedEpisode: number | null,
-    status: Status
-  ) {
-    return new Anime(
-      id,
-      name,
-      synopsis,
-      category,
-      genres,
-      typeOfMaterialOrigin,
-      materialOriginName,
-      releaseDate,
-      isAMovie,
-      derivates,
-      lastReleaseSeason,
-      lastWatchedSeason,
-      lastWatchedEpisode,
-      status
-    );
+  static create(data: IAnime) {
+    return new Anime(data);
   }
 }
 

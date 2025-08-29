@@ -1,3 +1,4 @@
+import ICategory from "../interface/category.interface";
 import Name from "../value-object/name.vo";
 import ObjectId from "../value-object/objectId.vo";
 import TargetAudience from "../value-object/targetAudience.vo";
@@ -10,18 +11,14 @@ class Category {
   private readonly _targetAudience: string;
   private readonly _characteristics: string[];
 
-  private constructor(
-    id: string,
-    name: string,
-    traduction: string,
-    targetAudience: string,
-    characteristics: string[]
-  ) {
-    this._id = ObjectId.create(id).value;
-    this._name = Name.create(name).value;
-    this._traduction = Traduction.create(traduction).value;
-    this._targetAudience = TargetAudience.create(targetAudience).value;
-    this._characteristics = characteristics.map((c) => Name.create(c).value);
+  private constructor(data: ICategory) {
+    this._id = ObjectId.create(data.id).value;
+    this._name = Name.create(data.name).value;
+    this._traduction = Traduction.create(data.traduction).value;
+    this._targetAudience = TargetAudience.create(data.targetAudience).value;
+    this._characteristics = data.characteristics.map(
+      (c) => Name.create(c).value
+    );
   }
 
   get id() {
@@ -40,14 +37,8 @@ class Category {
     return [...this._characteristics];
   }
 
-  static create(
-    id: string,
-    name: string,
-    traduction: string,
-    targetAudience: string,
-    characteristics: string[]
-  ) {
-    return new Category(id, name, traduction, targetAudience, characteristics);
+  static create(data: ICategory) {
+    return new Category(data);
   }
 }
 

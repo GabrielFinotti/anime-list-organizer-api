@@ -1,3 +1,4 @@
+import IGenre from "../interface/genre.interface";
 import Description from "../value-object/description.vo";
 import Name from "../value-object/name.vo";
 import ObjectId from "../value-object/objectId.vo";
@@ -7,10 +8,12 @@ class Genre {
   private readonly _name: string;
   private readonly _description: string[];
 
-  private constructor(id: string, name: string, description: string[]) {
-    this._id = ObjectId.create(id).value;
-    this._name = Name.create(name).value;
-    this._description = description.map((d) => Description.create(d).value);
+  private constructor(data: IGenre) {
+    this._id = ObjectId.create(data.id).value;
+    this._name = Name.create(data.name).value;
+    this._description = data.description.map(
+      (d) => Description.create(d).value
+    );
   }
 
   get id() {
@@ -23,8 +26,8 @@ class Genre {
     return [...this._description];
   }
 
-  static create(id: string, name: string, description: string[]) {
-    return new Genre(id, name, description);
+  static create(data: IGenre) {
+    return new Genre(data);
   }
 }
 

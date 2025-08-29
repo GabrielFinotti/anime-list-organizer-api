@@ -71,15 +71,47 @@ describe("EnvValidationService", () => {
     it("deve lançar erro quando MONGODB_URI não é uma URL válida", () => {
       process.env.PORT = "3000";
       process.env.VERSION = "1.0.0";
-      process.env.MONGODB_URI = "invalid-url";
+      process.env.MONGODB_URI = "not-a-valid-url";
       process.env.OPENAI_API_KEY = "sk-test-key";
 
       expect(() => EnvValidationService.execute()).toThrow(
-        "Erro na validação das variáveis de ambiente: - MONGODB_URI : Invalid url"
+        "Erro na validação das variáveis de ambiente: - MONGODB_URI : MONGODB_URI deve ser uma URL válida"
       );
     });
 
-    it("deve lançar erro quando OPENAI_API_KEY está vazia", () => {
+    it("deve aceitar MONGODB_URI com mongodb+srv://", () => {
+      process.env.PORT = "3000";
+      process.env.VERSION = "1.0.0";
+      process.env.MONGODB_URI = "mongodb+srv://cluster.mongodb.net/test";
+      process.env.OPENAI_API_KEY = "sk-test-key";
+
+      const result = EnvValidationService.execute();
+
+      expect(result.MONGODB_URI).toBe("mongodb+srv://cluster.mongodb.net/test");
+    });
+
+    it("deve rejeitar MONGODB_URI que não começa com mongodb:// ou mongodb+srv://", () => {
+      process.env.PORT = "3000";
+      process.env.VERSION = "1.0.0";
+      process.env.MONGODB_URI = "postgresql://localhost:5432/test";
+      process.env.OPENAI_API_KEY = "sk-test-key";
+
+      expect(() => EnvValidationService.execute()).toThrow(
+        "MONGODB_URI deve começar com 'mongodb://' ou 'mongodb+srv://'"
+      );
+    });
+
+    it("deve aceitar OPENAI_API_KEY opcional quando não presente", () => {
+      process.env.PORT = "3000";
+      process.env.VERSION = "1.0.0";
+      process.env.MONGODB_URI = "mongodb://localhost:27017/test";
+
+      const result = EnvValidationService.execute();
+
+      expect(result.OPENAI_API_KEY).toBeUndefined();
+    });
+
+    it("deve aceitar OPENAI_API_KEY vazia", () => {
       process.env.PORT = "3000";
       process.env.VERSION = "1.0.0";
       process.env.MONGODB_URI = "mongodb://localhost:27017/test";
@@ -94,7 +126,7 @@ describe("EnvValidationService", () => {
       process.env.PORT = "invalid";
       process.env.VERSION = "";
       process.env.MONGODB_URI = "invalid-url";
-      process.env.OPENAI_API_KEY = "";
+      process.env.OPENAI_API_KEY = "sk-test-key";
 
       expect(() => EnvValidationService.execute()).toThrow(
         /Erro na validação das variáveis de ambiente:/
@@ -102,7 +134,6 @@ describe("EnvValidationService", () => {
       expect(() => EnvValidationService.execute()).toThrow(/PORT/);
       expect(() => EnvValidationService.execute()).toThrow(/VERSION/);
       expect(() => EnvValidationService.execute()).toThrow(/MONGODB_URI/);
-      expect(() => EnvValidationService.execute()).toThrow(/OPENAI_API_KEY/);
     });
 
     it("deve lançar erro quando variáveis obrigatórias estão ausentes", () => {
@@ -167,7 +198,7 @@ describe("EnvValidationService", () => {
       process.env.PORT = "invalid";
       process.env.VERSION = "";
       process.env.MONGODB_URI = "not-a-url";
-      process.env.OPENAI_API_KEY = "";
+      process.env.OPENAI_API_KEY = "sk-test-key";
 
       expect(() => EnvValidationService.execute()).toThrow();
       try {
@@ -180,7 +211,6 @@ describe("EnvValidationService", () => {
         expect(errorMessage).toContain("PORT");
         expect(errorMessage).toContain("VERSION");
         expect(errorMessage).toContain("MONGODB_URI");
-        expect(errorMessage).toContain("OPENAI_API_KEY");
       }
     });
   });

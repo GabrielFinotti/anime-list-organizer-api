@@ -1,17 +1,8 @@
-import { z } from "zod";
 import * as dotenv from "dotenv";
+import z from "zod";
+import { EnvSchema, envSchema } from "./envSchema";
 
 dotenv.config();
-
-const envSchema = z.object({
-  PORT: z.string().transform(Number).pipe(z.number().positive()),
-  VERSION: z.string().min(1),
-  MONGODB_URI: z.string().url(),
-  OPENAI_API_KEY: z.string().min(1),
-});
-
-type EnvSchema = z.infer<typeof envSchema>;
-
 export class EnvValidationService {
   private _validatedEnv: EnvSchema | null = null;
 

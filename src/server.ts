@@ -1,28 +1,24 @@
 import express from "express";
-import dotenv from "dotenv";
 import MongoConfig from "@/infrastructure/database/config/mongo.config";
-import validationEnv from "@/infrastructure/utils/validations/env/env.validate";
-
-dotenv.config();
+import EnvValidationService from "@/infrastructure/utils/validations/env/env.validate";
 
 const app = express();
-app.use(express.json());
+const env = EnvValidationService.execute();
 
-app.use(`/api/${process.env.VERSION}`);
+app.use(express.json());
 
 const startServer = async () => {
   try {
-    await validationEnv();
+    await new MongoConfig(env.MONGODB_URI).connectToDatabase();
 
-    await new MongoConfig().connectToDatabase();
-
-    app.listen(process.env.PORT, () => {
+    app.listen(env.PORT, () => {
       console.log(
-        `Servidor rodando na porta ${process.env.PORT}, versão ${process.env.VERSION}`
+        `Servidor rodando na porta ${env.PORT}, versão ${env.VERSION}`
       );
     });
   } catch (error) {
-    console.error(error);
+    console.error("Erro na inicialização do servidor:", error);
+    process.exit(1);
   }
 };
 

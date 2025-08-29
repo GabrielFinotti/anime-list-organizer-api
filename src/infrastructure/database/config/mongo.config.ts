@@ -1,31 +1,21 @@
-import mongoose from "mongoose";
+import mongoose, { MongooseError } from "mongoose";
 
 class MongoConfig {
-  private url!: string;
+  private readonly _url: string;
 
-  constructor() {
-    this.verifyEnvVariables();
-
-    this.url = process.env.MONGODB_URI as string;
+  constructor(url: string) {
+    this._url = url;
   }
 
-  private verifyEnvVariables() {
-    const mongoUri = process.env.MONGODB_URI;
-
-    if (!mongoUri) {
-      throw new Error("Variável de ambiente ausente: MONGODB_URI");
-    }
-  }
-
-  async connectToDatabase() {
+  public async connectToDatabase(): Promise<void> {
     try {
-      await mongoose.connect(this.url, {
+      await mongoose.connect(this._url, {
         dbName: "anime-list",
       });
 
       console.log("Conectado ao banco de dados com sucesso");
     } catch (error) {
-      throw error instanceof Error
+      throw error instanceof MongooseError
         ? error.message
         : `Erro desconhecido ao tentar se conectar ao banco: ${error}`;
     }

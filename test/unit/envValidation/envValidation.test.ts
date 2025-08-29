@@ -1,5 +1,5 @@
 import { jest } from "@jest/globals";
-import EnvValidationService from "../../../src/infrastructure/utils/validations/env/env.validate";
+import EnvValidationService from "@/infrastructure/utils/validations/env/env.validate";
 
 jest.mock("dotenv", () => ({
   config: jest.fn(),

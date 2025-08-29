@@ -10,6 +10,14 @@ const config: Config = {
         tsconfig: {
           target: "esnext",
           module: "esnext",
+          moduleResolution: "node",
+          baseUrl: "./src",
+          paths: {
+            "@/*": ["*"],
+            "@/application/*": ["application/*"],
+            "@/domain/*": ["domain/*"],
+            "@/infrastructure/*": ["infrastructure/*"],
+          },
         },
       },
     ],

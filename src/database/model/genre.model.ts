@@ -5,11 +5,13 @@ type IGenreModule = {
   characteristics: string[];
 } & Document<Types.ObjectId>;
 
-const GenreModelSchema = new Schema<IGenreModule>(
+const genreModelSchema = new Schema<IGenreModule>(
   {
     name: {
       type: String,
       required: true,
+      unique: true,
+      index: true,
     },
     characteristics: {
       type: [String],
@@ -21,6 +23,6 @@ const GenreModelSchema = new Schema<IGenreModule>(
   }
 );
 
-const GenreModel = model<IGenreModule>("Genre", GenreModelSchema);
+const GenreModel = model<IGenreModule>("Genre", genreModelSchema);
 
 export default GenreModel;

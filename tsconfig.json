@@ -16,10 +16,7 @@
     "incremental": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"],
-      "@/application/*": ["src/application/*"],
-      "@/domain/*": ["src/domain/*"],
-      "@/infrastructure/*": ["src/infrastructure/*"]
+      "@/*": ["src/*"]
     }
   },
   "include": ["src"],

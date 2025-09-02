@@ -1,19 +1,24 @@
 import CategoryModel from "@/database/model/category.model";
-import DerivativeModel from "@/database/model/derivate.model";
 import GenreModel from "@/database/model/genre.model";
 import { AnimeDTO } from "@/interface/dto/anime.dto";
 
-const animeNormalization = async (anime: AnimeDTO) => {
+const animeNormalization = async (anime: Partial<AnimeDTO>) => {
   try {
+    const { category, genres } = anime;
+
+    if (!category || !genres) {
+      throw new Error("Category and Genres are required");
+    }
+
     const categoryId = await CategoryModel.findOne({
-      name: anime.category.name,
+      name: category.name,
     });
 
     const genresId = await GenreModel.find({
-      name: { $in: anime.genres.map((genre) => genre.name) },
+      name: { $in: genres.map((genre) => genre.name) },
     });
 
-    if (!categoryId || !genresId)
+    if (!categoryId || genresId.length <= 0)
       throw new Error("Category or Genre not found");
 
     const normalizedAnime = {

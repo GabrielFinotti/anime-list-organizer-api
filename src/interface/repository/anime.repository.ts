@@ -6,9 +6,9 @@ export type IAnimeRepository = {
   delete(id: string): Promise<boolean>;
   deleteAll(): Promise<boolean>;
   findByQuery(
-    name: string,
-    category: string,
-    genre: string
+    name?: string,
+    category?: string,
+    genre?: string
   ): Promise<AnimeDTO[]>;
   findById(id: string): Promise<AnimeDTO | null>;
   findByCategory(category: string): Promise<AnimeDTO[]>;

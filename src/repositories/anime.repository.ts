@@ -1,18 +1,22 @@
 import AnimeModel from "@/database/model/anime.model";
-import CategoryModel from "@/database/model/category.model";
-import GenreModel from "@/database/model/genre.model";
 import { AnimeDTO } from "@/interface/dto/anime.dto";
 import { IAnimeRepository } from "@/interface/repository/anime.repository";
 import animeNormalization from "@/utils/normalize/anime.normalize";
-import { Types } from "mongoose";
+import CategoryRepository from "./category.repository";
+import GenreRepository from "./genre.repository";
 
 type AnimeFilter = {
   name?: { $regex: string; $options: string } | string;
-  category?: Types.ObjectId;
-  genres?: { $in: Types.ObjectId[] };
+  category?: string;
+  genres?: { $in: (string | undefined)[] };
 };
 
 class AnimeRepository implements IAnimeRepository {
+  constructor(
+    private categoryRepository = new CategoryRepository(),
+    private genreRepository = new GenreRepository()
+  ) {}
+
   async create(anime: AnimeDTO) {
     try {
       const normalizedAnime = await animeNormalization(anime);
@@ -108,23 +112,15 @@ class AnimeRepository implements IAnimeRepository {
       }
 
       if (category) {
-        const categoryDoc = await CategoryModel.findOne({ name: category });
+        const categoryDoc = await this.categoryRepository.findByName(category);
 
-        if (categoryDoc) {
-          filter.category = categoryDoc._id;
-        } else {
-          throw new Error("Category not found");
-        }
+        filter.category = categoryDoc.id;
       }
 
       if (genre) {
-        const genreDoc = await GenreModel.findOne({ name: genre });
+        const genreDoc = await this.genreRepository.findByName(genre);
 
-        if (genreDoc) {
-          filter.genres = { $in: [genreDoc._id] };
-        } else {
-          throw new Error("Genre not found");
-        }
+        filter.genres = { $in: [genreDoc.id] };
       }
 
       const filteredAnimes = await AnimeModel.find(filter);
@@ -177,13 +173,9 @@ class AnimeRepository implements IAnimeRepository {
 
   async findByCategory(category: string) {
     try {
-      const categoryDoc = await CategoryModel.findOne({ name: category });
+      const categoryDoc = await this.categoryRepository.findByName(category);
 
-      if (!categoryDoc) {
-        throw new Error("Category not found");
-      }
-
-      const animes = await AnimeModel.find({ category: categoryDoc._id });
+      const animes = await AnimeModel.find({ category: categoryDoc.id });
 
       const formatedAnime: AnimeDTO[] = await Promise.all(
         animes.map(async (anime) => ({
@@ -207,13 +199,9 @@ class AnimeRepository implements IAnimeRepository {
 
   async findByGenre(genre: string) {
     try {
-      const genreDoc = await GenreModel.findOne({ name: genre });
+      const genreDoc = await this.genreRepository.findByName(genre);
 
-      if (!genreDoc) {
-        throw new Error("Genre not found");
-      }
-
-      const animes = await AnimeModel.find({ genres: { $in: [genreDoc._id] } });
+      const animes = await AnimeModel.find({ genres: { $in: [genreDoc.id] } });
 
       const formatedAnime: AnimeDTO[] = await Promise.all(
         animes.map(async (anime) => ({

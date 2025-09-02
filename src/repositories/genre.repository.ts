@@ -8,8 +8,8 @@ class GenreRepository implements IGenreRepository {
       const newGenre = await GenreModel.create(genre);
 
       const createdGenre: GenreDTO = {
-        id: newGenre._id.toString(),
         ...newGenre,
+        id: newGenre._id.toString(),
       };
 
       return createdGenre;
@@ -18,7 +18,7 @@ class GenreRepository implements IGenreRepository {
         throw new Error(`Error creating genre: ${error.message}`);
       }
 
-      throw new Error("Unknown error creating genre");
+      throw new Error("Error creating genre");
     }
   }
 
@@ -32,7 +32,7 @@ class GenreRepository implements IGenreRepository {
         throw new Error(`Error deleting genre: ${error.message}`);
       }
 
-      throw new Error("Unknown error deleting genre");
+      throw new Error("Error deleting genre");
     }
   }
 
@@ -40,13 +40,20 @@ class GenreRepository implements IGenreRepository {
     try {
       const genre = await GenreModel.findOne({ name });
 
-      return genre;
+      if (!genre) throw new Error("Genre not found");
+
+      const formatedGenre: GenreDTO = {
+        ...genre,
+        id: genre._id.toString(),
+      };
+
+      return formatedGenre;
     } catch (error) {
       if (error instanceof Error) {
         throw new Error(`Error finding genre: ${error.message}`);
       }
 
-      throw new Error("Unknown error finding genre");
+      throw new Error("Error finding genre");
     }
   }
 
@@ -54,13 +61,18 @@ class GenreRepository implements IGenreRepository {
     try {
       const genres = await GenreModel.find();
 
-      return genres;
+      const formatedGenres: GenreDTO[] = genres.map((genre) => ({
+        ...genre,
+        id: genre._id.toString(),
+      }));
+
+      return formatedGenres;
     } catch (error) {
       if (error instanceof Error) {
         throw new Error(`Error finding genres: ${error.message}`);
       }
 
-      throw new Error("Unknown error finding genres");
+      throw new Error("Error finding genres");
     }
   }
 }

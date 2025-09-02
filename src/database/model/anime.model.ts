@@ -5,8 +5,8 @@ type IAnimeModule = {
   synopsis: string;
   category: Types.ObjectId;
   genres: Types.ObjectId[];
-  typeOfMaterialOrigen: string;
-  materialOrigenName: string;
+  typeOfMaterialOrigin: string;
+  materialOriginName: string;
   releaseDate: Date;
   isMovie: boolean;
   derivate: Types.ObjectId;
@@ -40,11 +40,11 @@ const animeModelSchema = new Schema<IAnimeModule>(
         required: true,
       },
     ],
-    typeOfMaterialOrigen: {
+    typeOfMaterialOrigin: {
       type: String,
       required: true,
     },
-    materialOrigenName: {
+    materialOriginName: {
       type: String,
       required: true,
     },

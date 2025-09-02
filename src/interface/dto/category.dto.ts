@@ -1,7 +1,7 @@
 export type CategoryDTO = {
   id?: string;
   name: string;
-  translateName: string;
+  translatedName: string;
   targetAudience: string;
   characteristics: string[];
 };

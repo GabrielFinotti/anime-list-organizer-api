@@ -9,7 +9,11 @@ type IAnimeModule = {
   materialOriginName: string;
   releaseDate: Date;
   isMovie: boolean;
-  derivate: Types.ObjectId;
+  derivate: {
+    movies: string[];
+    ovas: string[];
+    specials: string[];
+  };
   lastReleaseSeason: number;
   lastWatchedSeason: number;
   lastWatchedEpisode: number;
@@ -55,12 +59,25 @@ const animeModelSchema = new Schema<IAnimeModule>(
     isMovie: {
       type: Boolean,
       required: true,
-      index: true,  
+      index: true,
     },
     derivate: {
-      type: Schema.Types.ObjectId,
-      ref: "Derivative",
+      type: {
+        movies: {
+          type: [String],
+          required: false,
+        },
+        ovas: {
+          type: [String],
+          required: false,
+        },
+        specials: {
+          type: [String],
+          required: false,
+        },
+      },
       required: false,
+      default: {},
     },
     lastReleaseSeason: {
       type: Number,

@@ -1,7 +1,7 @@
 import { AnimeDTO } from "../dto/anime.dto";
 
 export type IAnimeRepository = {
-  create(anime: Omit<AnimeDTO, "id">): Promise<AnimeDTO>;
+  create(anime: AnimeDTO): Promise<AnimeDTO>;
   update(anime: Partial<AnimeDTO>): Promise<AnimeDTO | null>;
   delete(id: string): Promise<boolean>;
   deleteAll(): Promise<boolean>;

@@ -1,5 +1,5 @@
 export type GenreDTO = {
-  id: string;
+  id?: string;
   name: string;
   characteristics: string[];
 };

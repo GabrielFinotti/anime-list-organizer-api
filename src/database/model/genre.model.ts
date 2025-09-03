@@ -1,11 +1,11 @@
 import { Document, model, Schema, Types } from "mongoose";
 
-type IGenreModule = {
+type IGenreModel = {
   name: string;
   characteristics: string[];
 } & Document<Types.ObjectId>;
 
-const genreModelSchema = new Schema<IGenreModule>(
+const genreModelSchema = new Schema<IGenreModel>(
   {
     name: {
       type: String,
@@ -23,6 +23,6 @@ const genreModelSchema = new Schema<IGenreModule>(
   }
 );
 
-const GenreModel = model<IGenreModule>("Genre", genreModelSchema);
+const GenreModel = model<IGenreModel>("Genre", genreModelSchema);
 
 export default GenreModel;

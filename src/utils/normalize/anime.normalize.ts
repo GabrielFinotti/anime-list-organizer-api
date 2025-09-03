@@ -1,6 +1,6 @@
 import { AnimeDTO } from "@/interface/dto/anime.dto";
-import CategoryRepository from "@/repositories/category.repository";
-import GenreRepository from "@/repositories/genre.repository";
+import CategoryRepository from "@/repository/category.repository";
+import GenreRepository from "@/repository/genre.repository";
 
 const animeNormalization = async (anime: Partial<AnimeDTO>) => {
   try {

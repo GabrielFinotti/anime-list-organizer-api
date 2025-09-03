@@ -1,6 +1,6 @@
 import { Document, model, Schema, Types } from "mongoose";
 
-type IAnimeModule = {
+type IAnimeModel = {
   name: string;
   synopsis: string;
   category: Types.ObjectId;
@@ -17,10 +17,11 @@ type IAnimeModule = {
   lastReleaseSeason: number;
   lastWatchedSeason: number;
   lastWatchedEpisode: number;
+  actualStatus: "publishing" | "completed" | "cancelled" | "in production";
   status: "watching" | "completed" | "in list" | "dropped";
 } & Document<Types.ObjectId>;
 
-const animeModelSchema = new Schema<IAnimeModule>(
+const animeModelSchema = new Schema<IAnimeModel>(
   {
     name: {
       type: String,
@@ -91,6 +92,12 @@ const animeModelSchema = new Schema<IAnimeModule>(
       type: Number,
       required: true,
     },
+    actualStatus: {
+      type: String,
+      enum: ["publishing", "completed", "cancelled", "in production"],
+      required: true,
+      index: true,
+    },
     status: {
       type: String,
       enum: ["watching", "completed", "in list", "dropped"],
@@ -103,6 +110,6 @@ const animeModelSchema = new Schema<IAnimeModule>(
   }
 );
 
-const AnimeModel = model<IAnimeModule>("Anime", animeModelSchema);
+const AnimeModel = model<IAnimeModel>("Anime", animeModelSchema);
 
 export default AnimeModel;

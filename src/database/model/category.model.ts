@@ -1,13 +1,13 @@
 import { Document, model, Schema, Types } from "mongoose";
 
-type ICategoryModule = {
+type ICategoryModel = {
   name: string;
   translatedName: string;
   targetAudience: string;
   characteristics: string[];
 } & Document<Types.ObjectId>;
 
-const categoryModelSchema = new Schema<ICategoryModule>(
+const categoryModelSchema = new Schema<ICategoryModel>(
   {
     name: {
       type: String,
@@ -35,6 +35,6 @@ const categoryModelSchema = new Schema<ICategoryModule>(
   }
 );
 
-const CategoryModel = model<ICategoryModule>("Category", categoryModelSchema);
+const CategoryModel = model<ICategoryModel>("Category", categoryModelSchema);
 
 export default CategoryModel;

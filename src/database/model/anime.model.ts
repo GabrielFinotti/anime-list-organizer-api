@@ -5,10 +5,12 @@ type IAnimeModel = {
   synopsis: string;
   category: Types.ObjectId;
   genres: Types.ObjectId[];
+  adultGenres: Types.ObjectId[];
   typeOfMaterialOrigin: string;
   materialOriginName: string;
   releaseDate: Date;
   isMovie: boolean;
+  isAdult: boolean;
   derivate: {
     movies: string[];
     ovas: string[];
@@ -45,6 +47,16 @@ const animeModelSchema = new Schema<IAnimeModel>(
         required: true,
       },
     ],
+    adultGenres: {
+      type: [
+        {
+          type: Schema.Types.ObjectId,
+          ref: "AdultGenre",
+          required: true,
+        },
+      ],
+      default: [],
+    },
     typeOfMaterialOrigin: {
       type: String,
       required: true,
@@ -58,6 +70,11 @@ const animeModelSchema = new Schema<IAnimeModel>(
       required: true,
     },
     isMovie: {
+      type: Boolean,
+      required: true,
+      index: true,
+    },
+    isAdult: {
       type: Boolean,
       required: true,
       index: true,

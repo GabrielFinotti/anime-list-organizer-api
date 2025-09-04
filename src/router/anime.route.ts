@@ -1,4 +1,6 @@
 import CategoryController from "@/controller/category.controller";
+import GenreController from "@/controller/genre.controller";
+import AdultGenreController from "@/controller/adultGenre.controller";
 import { Router } from "express";
 
 const route = Router();
@@ -10,7 +12,8 @@ const route = Router();
 // route.delete("/animes/delete-all");
 
 route.get("/categories", CategoryController.getAll);
-// route.get("/genres", GenreController.getAll);
+route.get("/genres", GenreController.getAll);
+route.get("/adult-genres", AdultGenreController.getAll);
 
 const animeRoute = route;
 

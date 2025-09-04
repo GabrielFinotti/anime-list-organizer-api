@@ -1,5 +1,6 @@
 import { CategoryDTO } from "./category.dto";
 import { GenreDTO } from "./genre.dto";
+import { AdultGenreDTO } from "./adultGenre.dto";
 
 export type AnimeDTO = {
   id?: string;
@@ -7,10 +8,12 @@ export type AnimeDTO = {
   synopsis: string;
   category: CategoryDTO;
   genres: GenreDTO[];
+  adultGenres: AdultGenreDTO[];
   typeOfMaterialOrigin: string;
   materialOriginName: string;
   releaseDate: string;
   isMovie: boolean;
+  isAdult: boolean;
   derivate?: {
     movies: string[];
     ovas: string[];

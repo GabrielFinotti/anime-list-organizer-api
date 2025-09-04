@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "start": "node dist/server.js",
-    "build": "tsup src/server.ts --format cjs --dts",
+    "build": "tsup src/server.ts --format cjs",
     "dev": "tsx watch src/server.ts"
   },
   "repository": {

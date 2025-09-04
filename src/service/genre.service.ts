@@ -1,5 +1,6 @@
 import { GenreDTO } from "@/interface/dto/genre.dto";
 import GenreRepository from "@/repository/genre.repository";
+import { isObjectIdOrHexString } from "mongoose";
 
 class GenreService {
   constructor(private genreRepository = new GenreRepository()) {}
@@ -26,6 +27,10 @@ class GenreService {
 
   async deleteGenre(id: string) {
     try {
+      if (!isObjectIdOrHexString(id)) {
+        return null;
+      }
+
       return await this.genreRepository.delete(id);
     } catch (error) {
       if (error instanceof Error) {
@@ -55,4 +60,4 @@ class GenreService {
   }
 }
 
-export default new GenreService();
+export default GenreService;

@@ -8,8 +8,9 @@ class GenreRepository implements IGenreRepository {
       const newGenre = await GenreModel.create(genre);
 
       const createdGenre: GenreDTO = {
-        ...newGenre,
         id: newGenre._id.toString(),
+        name: newGenre.name,
+        characteristics: newGenre.characteristics,
       };
 
       return createdGenre;
@@ -43,8 +44,9 @@ class GenreRepository implements IGenreRepository {
       if (!genre) return null;
 
       const formatedGenre: GenreDTO = {
-        ...genre,
         id: genre._id.toString(),
+        name: genre.name,
+        characteristics: genre.characteristics,
       };
 
       return formatedGenre;
@@ -62,8 +64,9 @@ class GenreRepository implements IGenreRepository {
       const genres = await GenreModel.find();
 
       const formatedGenres: GenreDTO[] = genres.map((genre) => ({
-        ...genre,
         id: genre._id.toString(),
+        name: genre.name,
+        characteristics: genre.characteristics,
       }));
 
       return formatedGenres;

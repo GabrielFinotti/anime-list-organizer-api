@@ -8,8 +8,11 @@ class CategoryRepository implements ICategoryRepository {
       const newCategory = await CategoryModel.create(category);
 
       const createdCategory: CategoryDTO = {
-        ...newCategory,
         id: newCategory._id.toString(),
+        name: newCategory.name,
+        translatedName: newCategory.translatedName,
+        targetAudience: newCategory.targetAudience,
+        characteristics: newCategory.characteristics,
       };
 
       return createdCategory;
@@ -43,8 +46,11 @@ class CategoryRepository implements ICategoryRepository {
       if (!category) return null;
 
       const formatedCategory: CategoryDTO = {
-        ...category,
         id: category._id.toString(),
+        name: category.name,
+        translatedName: category.translatedName,
+        targetAudience: category.targetAudience,
+        characteristics: category.characteristics,
       };
 
       return formatedCategory;
@@ -62,8 +68,11 @@ class CategoryRepository implements ICategoryRepository {
       const categories = await CategoryModel.find();
 
       const formatedCategories: CategoryDTO[] = categories.map((category) => ({
-        ...category,
         id: category._id.toString(),
+        name: category.name,
+        translatedName: category.translatedName,
+        targetAudience: category.targetAudience,
+        characteristics: category.characteristics,
       }));
 
       return formatedCategories;

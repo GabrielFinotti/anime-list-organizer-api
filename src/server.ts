@@ -14,7 +14,7 @@ const startServer = async () => {
   try {
     await MongoConfig.connectToDatabase(process.env.MONGO_URI as string);
 
-    // app.use("/api", animeRoute, adminRoute, openAiRoute);
+    app.use("/api/v3", adminRoute, animeRoute);
 
     app.listen(process.env.PORT, () => {
       console.log(`Servidor rodando na porta ${process.env.PORT}`);

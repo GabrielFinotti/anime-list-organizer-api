@@ -1,5 +1,6 @@
 import { CategoryDTO } from "@/interface/dto/category.dto";
 import CategoryRepository from "@/repository/category.repository";
+import { isObjectIdOrHexString } from "mongoose";
 
 class CategoryService {
   constructor(private categoryRepository = new CategoryRepository()) {}
@@ -28,6 +29,10 @@ class CategoryService {
 
   async deleteCategory(id: string) {
     try {
+      if (!isObjectIdOrHexString(id)) {
+        return null;
+      }
+
       return await this.categoryRepository.delete(id);
     } catch (error) {
       if (error instanceof Error) {
@@ -57,4 +62,4 @@ class CategoryService {
   }
 }
 
-export default new CategoryService();
+export default CategoryService;

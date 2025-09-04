@@ -114,13 +114,13 @@ class AnimeRepository implements IAnimeRepository {
       if (category) {
         const categoryDoc = await this.categoryRepository.findByName(category);
 
-        filter.category = categoryDoc.id;
+        if (categoryDoc) filter.category = categoryDoc.id;
       }
 
       if (genre) {
         const genreDoc = await this.genreRepository.findByName(genre);
 
-        filter.genres = { $in: [genreDoc.id] };
+        if (genreDoc) filter.genres = { $in: [genreDoc.id] };
       }
 
       const filteredAnimes = await AnimeModel.find(filter);
@@ -175,6 +175,8 @@ class AnimeRepository implements IAnimeRepository {
     try {
       const categoryDoc = await this.categoryRepository.findByName(category);
 
+      if (!categoryDoc) return [];
+
       const animes = await AnimeModel.find({ category: categoryDoc.id });
 
       const formatedAnime: AnimeDTO[] = await Promise.all(
@@ -200,6 +202,8 @@ class AnimeRepository implements IAnimeRepository {
   async findByGenre(genre: string) {
     try {
       const genreDoc = await this.genreRepository.findByName(genre);
+
+      if (!genreDoc) return [];
 
       const animes = await AnimeModel.find({ genres: { $in: [genreDoc.id] } });
 

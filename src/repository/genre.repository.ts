@@ -40,7 +40,7 @@ class GenreRepository implements IGenreRepository {
     try {
       const genre = await GenreModel.findOne({ name });
 
-      if (!genre) throw new Error("Genre not found");
+      if (!genre) return null;
 
       const formatedGenre: GenreDTO = {
         ...genre,

@@ -40,7 +40,7 @@ class CategoryRepository implements ICategoryRepository {
     try {
       const category = await CategoryModel.findOne({ name });
 
-      if (!category) throw new Error("Category not found");
+      if (!category) return null;
 
       const formatedCategory: CategoryDTO = {
         ...category,

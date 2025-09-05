@@ -1,8 +1,9 @@
 import { Router } from "express";
+import AnimeLookupController from "@/controller/animeLookup.controller";
 
 const route = Router();
 
-route.get("/search/anime/data");
+route.get("/anime/lookup", AnimeLookupController.lookup);
 
 const openAiRoute = route;
 

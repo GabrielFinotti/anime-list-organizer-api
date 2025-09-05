@@ -1,24 +1,36 @@
 import OpenAI from "openai";
 import dotenv from "dotenv";
 import buildPrompt from "./buildPrompt";
+import GenreService from "../../service/genre.service";
+import CategoryService from "../../service/category.service";
+import AdultGenreService from "../../service/adultGenre.service";
 
 dotenv.config();
 
 export type IAnimeLookup = {
   name: string;
   synopsis: string;
-  category: string;
-  genres: string[];
+  category: {
+    name: string;
+  };
+  genres: {
+    name: string;
+  }[];
+  adultGenres: {
+    name: string;
+  }[];
   typeOfMaterialOrigin: string;
   materialOriginName: string;
   releaseDate: string;
-  isAMovie: boolean;
-  derivates: {
+  isMovie: boolean;
+  isAdult: boolean;
+  derivate?: {
     movies: string[];
-    ova: string[];
+    ovas: string[];
     specials: string[];
-  } | null;
-  lastReleaseSeason: number | null;
+  };
+  lastReleaseSeason: number;
+  actualStatus: string;
 };
 
 class AnimeLookupService {
@@ -68,6 +80,26 @@ class AnimeLookupService {
           ? v.trim()
           : "Dados não encontrados";
 
+      const parseNameArray = (arr: any): { name: string }[] => {
+        if (!Array.isArray(arr)) return [];
+        return arr
+          .map((item) => {
+            if (typeof item === "string" && item.trim() !== "") {
+              return { name: item.trim() };
+            }
+            if (
+              item &&
+              typeof item === "object" &&
+              typeof item.name === "string" &&
+              item.name.trim() !== ""
+            ) {
+              return { name: item.name.trim() };
+            }
+            return null;
+          })
+          .filter((v): v is { name: string } => v !== null);
+      };
+
       const arrString = (v: any): string[] =>
         Array.isArray(v)
           ? [
@@ -80,21 +112,30 @@ class AnimeLookupService {
             ]
           : [];
 
-      const derivatesRaw = (parsed as any).derivates;
-      let derivates: IAnimeLookup["derivates"] = null;
+      const derivateRaw = (parsed as any).derivate;
+      let derivate: IAnimeLookup["derivate"];
 
-      if (derivatesRaw && typeof derivatesRaw === "object") {
-        const movies = arrString(derivatesRaw.movies);
-        const ova = arrString(derivatesRaw.ova);
-        const specials = arrString(derivatesRaw.specials);
+      if (derivateRaw && typeof derivateRaw === "object") {
+        const movies = arrString(derivateRaw.movies);
+        const ovas = arrString(derivateRaw.ovas);
+        const specials = arrString(derivateRaw.specials);
 
-        if (movies.length || ova.length || specials.length)
-          derivates = { movies, ova, specials };
+        if (movies.length || ovas.length || specials.length) {
+          derivate = { movies, ovas, specials };
+        }
       }
 
-      const genres = arrString((parsed as any).genres).map((g) =>
-        g.toLowerCase()
-      );
+      const genres = parseNameArray((parsed as any).genres);
+      const adultGenres = parseNameArray((parsed as any).adultGenres);
+
+      const categoryRaw = (parsed as any).category;
+      const category =
+        categoryRaw &&
+        typeof categoryRaw === "object" &&
+        typeof categoryRaw.name === "string" &&
+        categoryRaw.name.trim() !== ""
+          ? { name: categoryRaw.name.trim() }
+          : { name: "Dados não encontrados" };
 
       const releaseDateRaw = (parsed as any).releaseDate;
       const fallbackDateStr = "1900-01-01";
@@ -118,24 +159,26 @@ class AnimeLookupService {
       }
 
       const lastReleaseSeasonRaw = (parsed as any).lastReleaseSeason;
-
       const lastReleaseSeason =
         typeof lastReleaseSeasonRaw === "number" &&
         Number.isFinite(lastReleaseSeasonRaw)
           ? lastReleaseSeasonRaw
-          : null;
+          : 0;
 
       return {
         name: safeString((parsed as any).name),
         synopsis: safeString((parsed as any).synopsis),
-        category: safeString((parsed as any).category),
-        genres: genres.length ? genres : ["Dados não encontrados"],
+        category,
+        genres: genres.length ? genres : [{ name: "Dados não encontrados" }],
+        adultGenres: adultGenres.length ? adultGenres : [],
         typeOfMaterialOrigin: safeString((parsed as any).typeOfMaterialOrigin),
         materialOriginName: safeString((parsed as any).materialOriginName),
         releaseDate,
-        isAMovie: Boolean((parsed as any).isAMovie),
-        derivates,
+        isMovie: Boolean((parsed as any).isMovie),
+        isAdult: Boolean((parsed as any).isAdult),
+        ...(derivate && { derivate }),
         lastReleaseSeason,
+        actualStatus: safeString((parsed as any).actualStatus),
       };
     } catch {
       return null;
@@ -143,7 +186,35 @@ class AnimeLookupService {
   }
 
   async lookup(title: string): Promise<IAnimeLookup | null> {
-    const prompt = buildPrompt(title.trim());
+    const genreService = new GenreService();
+    const categoryService = new CategoryService();
+    const adultGenreService = new AdultGenreService();
+
+    const [genres, categories, adultGenres] = await Promise.all([
+      genreService.getAllGenres(),
+      categoryService.getAllCategories(),
+      adultGenreService.getAllAdultGenres(),
+    ]);
+
+    const availableGenres = genres ? genres.map((g) => g.name) : [];
+    const availableCategories = categories ? categories.map((c) => c.name) : [];
+    const availableAdultGenres = adultGenres
+      ? adultGenres.map((ag) => ag.name)
+      : [];
+    const availableStatuses = [
+      "publishing",
+      "completed",
+      "cancelled",
+      "in production",
+    ];
+
+    const prompt = buildPrompt(
+      title.trim(),
+      availableGenres,
+      availableCategories,
+      availableAdultGenres,
+      availableStatuses
+    );
 
     const lookup = await this.client.responses.create({
       model: "gpt-5-mini",

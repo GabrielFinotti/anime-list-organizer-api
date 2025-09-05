@@ -21,7 +21,7 @@ class AnimeService {
         throw error.message;
       }
 
-      throw new Error("Error creating category");
+      throw new Error("Error creating anime");
     }
   }
 

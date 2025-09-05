@@ -1,6 +1,6 @@
 # Anime List Organizer API
 
-![Version](https://img.shields.io/badge/version-3.0.0-blue.svg)
+![Version](https://img.shields.io/badge/version-3.1.0-blue.svg)
 ![Status](https://img.shields.io/badge/status-active-success.svg)
 ![Node](https://img.shields.io/badge/node-%3E=18.x-green)
 ![TypeScript](https://img.shields.io/badge/types-TypeScript-informational)
@@ -54,7 +54,7 @@ src/
 ├── repository/     # Abstração de acesso a dados
 ├── model/          # Schemas Mongoose e entidades
 ├── router/         # Definição de rotas
-├── middleware/     # Middlewares Express (vazio atualmente)
+├── middleware/     # Middlewares Express (ex.: autenticação básica)
 ├── api/
 │   └── openai/     # Integração com OpenAI para lookup
 ├── interface/
@@ -115,6 +115,8 @@ Crie um arquivo `.env` na raiz do projeto com as seguintes variáveis:
 | `PORT` | ✅ | Porta do servidor Express | `3333` |
 | `MONGODB_URI` | ✅ | String de conexão MongoDB | `mongodb://localhost:27017/anime-db` |
 | `OPENAI_API_KEY` | ✅ | Chave da API OpenAI | `sk-xxxxx` |
+| `BASIC_USERNAME` | ✅ | Nome de usuário para Basic Auth | `admin` |
+| `BASIC_PASSWORD` | ✅ | Senha para Basic Auth | `password123` |
 | `VERSION` | ❌ | Versão da API (padrão: v3) | `v3` |
 
 **Exemplo de `.env`:**
@@ -123,6 +125,8 @@ Crie um arquivo `.env` na raiz do projeto com as seguintes variáveis:
 PORT=3333
 MONGODB_URI=mongodb://localhost:27017/anime-list-organizer
 OPENAI_API_KEY=sk-your-openai-api-key-here
+BASIC_USERNAME=admin
+BASIC_PASSWORD=password123
 VERSION=v3
 ```
 
@@ -374,13 +378,27 @@ Este endpoint utiliza GPT-5-mini com busca web para obter metadados precisos e n
 
 ## 🔐 Autenticação
 
-**Nota:** A autenticação não está implementada nesta versão. Os endpoints estão abertos para desenvolvimento/teste.
+A API utiliza autenticação básica (Basic Auth) para proteger os endpoints da versão v3. Todas as requisições para `/api/v3` devem incluir o header `Authorization` com credenciais codificadas em Base64.
 
-**Planejado para futuras versões:**
+### Como usar
 
-- Autenticação Basic Auth
-- JWT para sessões
-- Controle de acesso baseado em roles
+1. Codifique suas credenciais em Base64: `username:password` (ex.: `admin:password123`)
+2. Inclua no header: `Authorization: Basic <base64-encoded-credentials>`
+
+**Exemplo com curl:**
+
+```bash
+curl -H "Authorization: Basic YWRtaW46cGFzc3dvcmQxMjM=" http://localhost:3333/api/v3/animes
+```
+
+### Configuração
+
+Adicione as seguintes variáveis ao seu `.env`:
+
+- `BASIC_USERNAME`: Nome de usuário para autenticação
+- `BASIC_PASSWORD`: Senha para autenticação
+
+**Nota:** Em produção, use HTTPS para proteger as credenciais durante a transmissão.
 
 ## 📜 Scripts
 
@@ -406,7 +424,7 @@ Este endpoint utiliza GPT-5-mini com busca web para obter metadados precisos e n
 - ✅ CRUD completo para animes
 - ✅ Lookup via OpenAI
 - ✅ Suporte a categorias, gêneros e gêneros adultos
-- 🔄 Implementar autenticação (Basic Auth/JWT)
+- ✅ Implementar autenticação (Basic Auth)
 - 🔄 Adicionar testes unitários e integração
 - 🔄 Implementar paginação e filtros avançados
 - 🔄 Cache para resultados de lookup (Redis)

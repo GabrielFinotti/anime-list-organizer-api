@@ -55,6 +55,7 @@ const animeNormalization = async (anime: Partial<AnimeDTO>) => {
       category: categoryId.id,
       genres: genresId.map((genre) => genre.id),
       adultGenres: adultGenresId.map((adultGenre) => adultGenre.id),
+      releaseDate: new Date(anime.releaseDate!),
     };
 
     return normalizedAnime;

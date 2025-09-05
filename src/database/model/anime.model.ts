@@ -28,6 +28,7 @@ const animeModelSchema = new Schema<IAnimeModel>(
     name: {
       type: String,
       required: true,
+      unique: true,
       index: true,
     },
     synopsis: {
@@ -80,20 +81,23 @@ const animeModelSchema = new Schema<IAnimeModel>(
       index: true,
     },
     derivate: {
-      type: {
-        movies: {
-          type: [String],
-          required: false,
+      type: new Schema(
+        {
+          movies: {
+            type: [String],
+            required: false,
+          },
+          ovas: {
+            type: [String],
+            required: false,
+          },
+          specials: {
+            type: [String],
+            required: false,
+          },
         },
-        ovas: {
-          type: [String],
-          required: false,
-        },
-        specials: {
-          type: [String],
-          required: false,
-        },
-      },
+        { _id: false }
+      ),
       required: false,
       default: {},
     },

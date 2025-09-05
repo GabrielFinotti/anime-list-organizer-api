@@ -1,13 +1,12 @@
 {
   "name": "anime-list-organizer-api",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "description": "API Dedicada para o Anime List Organizer",
   "main": "server.js",
   "scripts": {
-    "build": "tsup src/server.ts --format cjs --dts",
-    "dev": "tsx watch src/server.ts",
     "start": "node dist/server.js",
-    "typecheck": "tsc --noEmit"
+    "build": "tsup src/server.ts --format cjs",
+    "dev": "tsx watch src/server.ts"
   },
   "repository": {
     "type": "git",
@@ -23,6 +22,7 @@
   "dependencies": {
     "dotenv": "^17.2.1",
     "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.17.2",
     "openai": "^5.15.0",
     "zod": "^3.25.76"

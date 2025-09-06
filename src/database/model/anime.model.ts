@@ -20,7 +20,7 @@ type IAnimeModel = {
   lastWatchedSeason: number;
   lastWatchedEpisode: number;
   actualStatus: "publishing" | "completed" | "cancelled" | "in production";
-  status: "watching" | "completed" | "in list" | "dropped";
+  status: "watching" | "watched" | "in list" | "dropped";
 } & Document<Types.ObjectId>;
 
 const animeModelSchema = new Schema<IAnimeModel>(
@@ -121,7 +121,7 @@ const animeModelSchema = new Schema<IAnimeModel>(
     },
     status: {
       type: String,
-      enum: ["watching", "completed", "in list", "dropped"],
+      enum: ["watching", "watched", "in list", "dropped"],
       required: true,
       index: true,
     },

@@ -23,5 +23,5 @@ export type AnimeDTO = {
   lastWatchedSeason: number;
   lastWatchedEpisode: number;
   actualStatus: "publishing" | "completed" | "cancelled" | "in production";
-  status: "watching" | "completed" | "in list" | "dropped";
+  status: "watching" | "watched" | "in list" | "dropped";
 };

@@ -25,17 +25,13 @@ class AnimeLookupController {
         });
       }
 
-      return res.status(200).json({
-        message: "Dados do anime encontrados com sucesso",
-        data: animeData,
-      });
+      return res.status(200).json(animeData);
     } catch (error) {
       console.error("Erro no lookup do anime:", error);
 
       if (error instanceof Error) {
         return res.status(500).json({
-          message: "Erro interno do servidor",
-          error: error.message,
+          message: error.message,
         });
       }
 

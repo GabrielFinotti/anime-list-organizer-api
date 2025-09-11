@@ -1,0 +1,46 @@
+version: "3.8"
+
+services:
+  api:
+    container_name: anime-list-api
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "${PORT}:${PORT}"
+    env_file:
+      - .env
+    environment:
+      - NODE_ENV=production
+      - MONGODB_URI=mongodb://mongodb:27017/anime-list-organizer
+    depends_on:
+      - mongodb
+    volumes:
+      - ./logs:/app/logs
+    restart: unless-stopped
+    networks:
+      - anime-network
+
+  mongodb:
+    image: mongo
+    container_name: anime-mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+      - mongodb_config:/data/configdb
+    environment:
+      - MONGO_INITDB_DATABASE=anime-list-organizer
+    restart: unless-stopped
+    networks:
+      - anime-network
+
+volumes:
+  mongodb_data:
+    driver: local
+  mongodb_config:
+    driver: local
+
+networks:
+  anime-network:
+    driver: bridge

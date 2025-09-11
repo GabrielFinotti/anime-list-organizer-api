@@ -410,56 +410,6 @@ Adicione as seguintes variáveis ao seu `.env`:
 | `npm start` | Executa build gerado (`node dist/server.js`) |
 | `npm run typecheck` | Verifica tipos TypeScript |
 
-## 🐳 Docker (Produção)
-
-### Setup Rápido
-
-1. **Configure o ambiente:**
-
-   ```bash
-   cp .env.example .env
-   # Edite .env com suas configurações
-   ```
-
-2. **Execute o setup automático:**
-
-   ```bash
-   chmod +x setup-raspberry-pi.sh
-   ./setup-raspberry-pi.sh
-   ```
-
-### Scripts Disponíveis
-
-| Comando | Descrição |
-|---------|-----------|
-| `npm run docker:setup` | Setup completo automático |
-| `npm run docker:up` | Iniciar serviços |
-| `npm run docker:down` | Parar serviços |
-| `npm run docker:logs` | Ver logs |
-| `npm run docker:restart` | Reiniciar serviços |
-| `npm run docker:clean` | Limpeza do sistema |
-
-### Acesso
-
-- **API**: <http://localhost:3333/api/v3>
-- **Health Check**: <http://localhost:3333/api/v3/health>
-- **MongoDB**: localhost:27017
-
-### Configurações Essenciais (.env)
-
-```env
-OPENAI_API_KEY=sk-your-openai-api-key-here
-BASIC_USERNAME=admin
-BASIC_PASSWORD=your-secure-password
-NODE_OPTIONS=--max-old-space-size=512  # Para Raspberry Pi
-```
-
-### Para Desenvolvimento
-
-Use npm run dev para desenvolvimento local sem Docker.
-
-📄 **Documentação completa**: DOCKER-PRODUCTION.md
-
 ## 🧩 Padrões e Decisões
 
 - **Validação:** Preparado para usar Zod em DTOs e schemas
@@ -476,7 +426,7 @@ Use npm run dev para desenvolvimento local sem Docker.
 - ✅ Lookup via OpenAI
 - ✅ Suporte a categorias, gêneros e gêneros adultos
 - ✅ Implementar autenticação (Basic Auth)
-- ✅ Docker e Compose
+- 🔄 Docker e Compose
 - 🔄 Adicionar testes unitários e integração
 - 🔄 Implementar paginação e filtros avançados
 - 🔄 Cache para resultados de lookup (Redis)

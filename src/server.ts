@@ -14,7 +14,7 @@ app.use(express.json());
 app.use(
   cors({
     allowedHeaders: "*",
-    origin: "https://animelist.api.ps2blog.com",
+    origin: process.env.CORS_ORIGIN,
   })
 );
 
@@ -22,7 +22,7 @@ const startServer = async () => {
   try {
     await MongoConfig.connectToDatabase(process.env.MONGODB_URI as string);
 
-    app.get("/api/v3/health", (req, res) => {
+    app.get(`/api/${process.env.VERSION}/health`, (req, res) => {
       res.status(200).json({
         status: "ok",
         timestamp: new Date().toISOString(),

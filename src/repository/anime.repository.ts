@@ -39,9 +39,7 @@ class AnimeRepository implements IAnimeRepository {
         adultGenres: newAnime.adultGenres as unknown as AdultGenreDTO[],
         typeOfMaterialOrigin: newAnime.typeOfMaterialOrigin,
         materialOriginName: newAnime.materialOriginName,
-        releaseDate: newAnime.releaseDate
-          .toLocaleDateString("pt-BR")
-          .padStart(10, "0"),
+        releaseDate: newAnime.releaseDate.toISOString(),
         isMovie: newAnime.isMovie,
         isAdult: newAnime.isAdult,
         derivate: newAnime.derivate,
@@ -89,9 +87,7 @@ class AnimeRepository implements IAnimeRepository {
         adultGenres: updateAnime.adultGenres as unknown as AdultGenreDTO[],
         typeOfMaterialOrigin: updateAnime.typeOfMaterialOrigin,
         materialOriginName: updateAnime.materialOriginName,
-        releaseDate: updateAnime.releaseDate
-          .toLocaleDateString("pt-BR")
-          .padStart(10, "0"),
+        releaseDate: updateAnime.releaseDate.toISOString(),
         isMovie: updateAnime.isMovie,
         isAdult: updateAnime.isAdult,
         derivate: updateAnime.derivate,
@@ -175,9 +171,7 @@ class AnimeRepository implements IAnimeRepository {
             adultGenres: anime.adultGenres as unknown as AdultGenreDTO[],
             typeOfMaterialOrigin: anime.typeOfMaterialOrigin,
             materialOriginName: anime.materialOriginName,
-            releaseDate: anime.releaseDate
-              .toLocaleDateString("pt-BR")
-              .padStart(10, "0"),
+            releaseDate: anime.releaseDate.toISOString(),
             isMovie: anime.isMovie,
             isAdult: anime.isAdult,
             derivate: anime.derivate,
@@ -219,9 +213,7 @@ class AnimeRepository implements IAnimeRepository {
         adultGenres: anime.adultGenres as unknown as AdultGenreDTO[],
         typeOfMaterialOrigin: anime.typeOfMaterialOrigin,
         materialOriginName: anime.materialOriginName,
-        releaseDate: anime.releaseDate
-          .toLocaleDateString("pt-BR")
-          .padStart(10, "0"),
+        releaseDate: anime.releaseDate.toISOString(),
         isMovie: anime.isMovie,
         isAdult: anime.isAdult,
         derivate: anime.derivate,
@@ -263,9 +255,7 @@ class AnimeRepository implements IAnimeRepository {
             adultGenres: anime.adultGenres as unknown as AdultGenreDTO[],
             typeOfMaterialOrigin: anime.typeOfMaterialOrigin,
             materialOriginName: anime.materialOriginName,
-            releaseDate: anime.releaseDate
-              .toLocaleDateString("pt-BR")
-              .padStart(10, "0"),
+            releaseDate: anime.releaseDate.toISOString(),
             isMovie: anime.isMovie,
             isAdult: anime.isAdult,
             derivate: anime.derivate,
@@ -309,9 +299,7 @@ class AnimeRepository implements IAnimeRepository {
             adultGenres: anime.adultGenres as unknown as AdultGenreDTO[],
             typeOfMaterialOrigin: anime.typeOfMaterialOrigin,
             materialOriginName: anime.materialOriginName,
-            releaseDate: anime.releaseDate
-              .toLocaleDateString("pt-BR")
-              .padStart(10, "0"),
+            releaseDate: anime.releaseDate.toISOString(),
             isMovie: anime.isMovie,
             isAdult: anime.isAdult,
             derivate: anime.derivate,
@@ -359,9 +347,7 @@ class AnimeRepository implements IAnimeRepository {
             adultGenres: anime.adultGenres as unknown as AdultGenreDTO[],
             typeOfMaterialOrigin: anime.typeOfMaterialOrigin,
             materialOriginName: anime.materialOriginName,
-            releaseDate: anime.releaseDate
-              .toLocaleDateString("pt-BR")
-              .padStart(10, "0"),
+            releaseDate: anime.releaseDate.toISOString(),
             isMovie: anime.isMovie,
             isAdult: anime.isAdult,
             derivate: anime.derivate,

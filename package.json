@@ -1,21 +1,12 @@
 {
   "name": "anime-list-organizer-api",
-  "version": "3.1.1",
+  "version": "3.1.0",
   "description": "API Dedicada para o Anime List Organizer",
   "main": "server.js",
   "scripts": {
     "start": "node dist/server.js",
     "build": "tsup src/server.ts --format cjs",
-    "dev": "tsx watch src/server.ts",
-    "docker:build": "docker build -t anime-list-api .",
-    "docker:up": "docker-compose up -d",
-    "docker:down": "docker-compose down",
-    "docker:logs": "docker-compose logs -f",
-    "docker:logs:app": "docker-compose logs -f app",
-    "docker:logs:mongo": "docker-compose logs -f mongo",
-    "docker:restart": "docker-compose restart",
-    "docker:clean": "docker system prune -f && docker volume prune -f",
-    "docker:setup": "cp .env.example .env && mkdir -p data/mongo && docker-compose up -d"
+    "dev": "tsx watch src/server.ts"
   },
   "repository": {
     "type": "git",

@@ -1,0 +1,3 @@
+animelist.api.ps2blog.com {
+    reverse_proxy anime-list-api:3333
+}

@@ -3,18 +3,29 @@ version: "3.8"
 services:
   api:
     container_name: anime-list-api
-    build:
-      context: .
-      dockerfile: Dockerfile
-    ports:
-      - "${PORT}:${PORT}"
-    env_file:
-      - .env
-    environment:
-      - NODE_ENV=production
-    restart: unless-stopped
+    build: .
+    expose:
+      - "3333"
     networks:
       - anime-network
+    restart: unless-stopped
+    env_file:
+      - .env
+
+  caddy:
+    image: caddy:alpine
+    container_name: caddy
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - ./caddy_data:/data
+      - ./caddy_config:/config
+    networks:
+      - anime-network
+
 networks:
   anime-network:
     driver: bridge

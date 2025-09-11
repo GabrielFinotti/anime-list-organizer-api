@@ -33,7 +33,7 @@ COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/package.json ./
 
 # Expose port
-EXPOSE 3000
+EXPOSE 3333
 
 # Create logs directory
 RUN mkdir -p logs

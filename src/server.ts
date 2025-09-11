@@ -22,15 +22,6 @@ const startServer = async () => {
   try {
     await MongoConfig.connectToDatabase(process.env.MONGODB_URI as string);
 
-    app.get(`/api/${process.env.VERSION}/health`, (req, res) => {
-      res.status(200).json({
-        status: "ok",
-        timestamp: new Date().toISOString(),
-        version: process.env.VERSION,
-        uptime: process.uptime(),
-      });
-    });
-
     app.use(
       `/api/${process.env.VERSION}`,
       basicAuth,

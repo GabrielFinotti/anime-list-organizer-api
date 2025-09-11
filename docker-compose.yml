@@ -22,7 +22,7 @@ services:
       - anime-network
 
   mongodb:
-    image: mongo:4.4
+    image: mongo:4.0
     container_name: anime-mongodb
     ports:
       - "27017:27017"

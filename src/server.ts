@@ -11,7 +11,12 @@ dotenv.config();
 
 const app = express();
 app.use(express.json());
-app.use(cors({ allowedHeaders: "*", origin: "*" }));
+app.use(
+  cors({
+    allowedHeaders: "*",
+    origin: "https://animelist.api.ps2blog.com",
+  })
+);
 
 const startServer = async () => {
   try {

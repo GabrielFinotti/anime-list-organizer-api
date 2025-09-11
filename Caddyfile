@@ -1,7 +1,0 @@
-animelist.api.ps2blog.com {
-    reverse_proxy anime-list-api:3333
-}
-
-animelist.ps2blog.com {
-    reverse_proxy anime-list-app:3001
-}

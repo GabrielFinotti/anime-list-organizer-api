@@ -6,7 +6,16 @@
   "scripts": {
     "start": "node dist/server.js",
     "build": "tsup src/server.ts --format cjs",
-    "dev": "tsx watch src/server.ts"
+    "dev": "tsx watch src/server.ts",
+    "docker:build": "docker build -t anime-list-api .",
+    "docker:up": "docker-compose up -d",
+    "docker:down": "docker-compose down",
+    "docker:logs": "docker-compose logs -f",
+    "docker:logs:app": "docker-compose logs -f app",
+    "docker:logs:mongo": "docker-compose logs -f mongo",
+    "docker:restart": "docker-compose restart",
+    "docker:clean": "docker system prune -f && docker volume prune -f",
+    "docker:setup": "cp .env.example .env && mkdir -p data/mongo && docker-compose up -d"
   },
   "repository": {
     "type": "git",
@@ -20,6 +29,7 @@
   },
   "homepage": "https://github.com/GabrielFinotti/anime-list-organizer-api#readme",
   "dependencies": {
+    "cors": "^2.8.5",
     "dotenv": "^17.2.1",
     "express": "^5.1.0",
     "jsonwebtoken": "^9.0.2",
@@ -28,6 +38,7 @@
     "zod": "^3.25.76"
   },
   "devDependencies": {
+    "@types/cors": "^2.8.19",
     "@types/express": "^4.17.21",
     "@types/node": "^20.14.11",
     "tsup": "^8.5.0",

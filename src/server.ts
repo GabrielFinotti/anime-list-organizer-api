@@ -1,5 +1,6 @@
 import express from "express";
 import dotenv from "dotenv";
+import cors from "cors";
 import MongoConfig from "@/database/config/mongo.config";
 import adminRoute from "@/router/admin.route";
 import animeRoute from "@/router/anime.route";
@@ -10,12 +11,28 @@ dotenv.config();
 
 const app = express();
 app.use(express.json());
+app.use(cors({ allowedHeaders: "*", origin: "*" }));
 
 const startServer = async () => {
   try {
-    await MongoConfig.connectToDatabase(process.env.MONGO_URI as string);
+    await MongoConfig.connectToDatabase(process.env.MONGODB_URI as string);
 
-    app.use("/api/v3", basicAuth, adminRoute, animeRoute, openAiRoute);
+    app.get("/api/v3/health", (req, res) => {
+      res.status(200).json({
+        status: "ok",
+        timestamp: new Date().toISOString(),
+        version: process.env.VERSION,
+        uptime: process.uptime(),
+      });
+    });
+
+    app.use(
+      `/api/${process.env.VERSION}`,
+      basicAuth,
+      adminRoute,
+      animeRoute,
+      openAiRoute
+    );
 
     app.listen(process.env.PORT, () => {
       console.log(`Servidor rodando na porta ${process.env.PORT}`);

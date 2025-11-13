@@ -2,7 +2,7 @@ import Id from '../value-objects/id.value-object.js';
 import Name from '../value-objects/name.value-object.js';
 
 type CategoryProps = {
-  _id: Id;
+  id: Id;
   name: Name;
   description: string;
   createdAt: Date;
@@ -17,7 +17,7 @@ class Category {
   private readonly _updatedAt: Date;
 
   private constructor(props: CategoryProps) {
-    this._id = props._id;
+    this._id = props.id;
     this._name = props.name;
     this._description = props.description;
     this._createdAt = props.createdAt;
@@ -46,9 +46,10 @@ class Category {
 
   static create(name: string, description: string) {
     if (typeof description !== 'string') throw new Error('Description must be a string');
-    const nomralizedDescription = description.trim();
 
-    this.validateDescription(nomralizedDescription);
+    const normalizedDescription = description.trim();
+
+    this.validateDescription(normalizedDescription);
 
     const id = Id.generateRandomId();
     const newName = Name.create(name);
@@ -56,9 +57,9 @@ class Category {
     const updatedAt = new Date();
 
     return new Category({
-      _id: id,
+      id,
       name: newName,
-      description: nomralizedDescription,
+      description: normalizedDescription,
       createdAt,
       updatedAt,
     });

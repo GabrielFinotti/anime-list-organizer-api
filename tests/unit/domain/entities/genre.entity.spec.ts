@@ -7,13 +7,13 @@ describe('Genre Entity', () => {
       const genre = Genre.create(
         'Action',
         'Animes with action-packed scenes and battle sequences',
-        false
+        false,
       );
 
       expect(genre.id).toBeDefined();
       expect(genre.name.value).toBe('action');
       expect(genre.description).toBe('Animes with action-packed scenes and battle sequences');
-      expect(genre.isAdult).toBe(false);
+      expect(genre.isAdultContent).toBe(false);
       expect(genre.createdAt).toBeInstanceOf(Date);
       expect(genre.updatedAt).toBeInstanceOf(Date);
     });
@@ -37,16 +37,24 @@ describe('Genre Entity', () => {
     });
 
     it('should throw error when description is not a string', () => {
-      expect(() => Genre.create('Thriller', 123 as any, true)).toThrow('Description must be a string');
+      expect(() => Genre.create('Thriller', 123 as any, true)).toThrow(
+        'Description must be a string',
+      );
     });
 
     it('should throw error when description is empty or whitespace', () => {
-      expect(() => Genre.create('Horror', '', true)).toThrow('Description must be at least 10 characters long');
-      expect(() => Genre.create('Fantasy', '   ', false)).toThrow('Description must be at least 10 characters long');
+      expect(() => Genre.create('Horror', '', true)).toThrow(
+        'Description must be at least 10 characters long',
+      );
+      expect(() => Genre.create('Fantasy', '   ', false)).toThrow(
+        'Description must be at least 10 characters long',
+      );
     });
 
     it('should throw error when description is less than 10 characters', () => {
-      expect(() => Genre.create('Sci-Fi', 'Too short', false)).toThrow('Description must be at least 10 characters long');
+      expect(() => Genre.create('Sci-Fi', 'Too short', false)).toThrow(
+        'Description must be at least 10 characters long',
+      );
     });
   });
 
@@ -54,7 +62,11 @@ describe('Genre Entity', () => {
     let genre: Genre;
 
     beforeEach(() => {
-      genre = Genre.create('Slice of Life', 'Daily life stories with minimal conflict and drama', false);
+      genre = Genre.create(
+        'Slice of Life',
+        'Daily life stories with minimal conflict and drama',
+        false,
+      );
     });
 
     it('should return id through getter', () => {
@@ -70,8 +82,8 @@ describe('Genre Entity', () => {
       expect(genre.description).toBe('Daily life stories with minimal conflict and drama');
     });
 
-    it('should return isAdult through getter', () => {
-      expect(genre.isAdult).toBe(false);
+    it('should return isAdultContent through getter', () => {
+      expect(genre.isAdultContent).toBe(false);
     });
 
     it('should return createdAt through getter', () => {

@@ -10,11 +10,11 @@ class Name {
   }
 
   static create(name: string) {
-    const nomralizedName = name.toLowerCase().trim();
+    const normalizedName = name.toLowerCase().trim();
 
-    this.validate(nomralizedName);
+    this.validate(normalizedName);
 
-    return new Name(nomralizedName);
+    return new Name(normalizedName);
   }
 
   private static validate(name: string) {

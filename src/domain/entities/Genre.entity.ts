@@ -2,10 +2,10 @@ import Id from '../value-objects/id.value-object.js';
 import Name from '../value-objects/name.value-object.js';
 
 type GenreProps = {
-  _id: Id;
+  id: Id;
   name: Name;
   description: string;
-  isAdult: boolean;
+  isAdultContent: boolean;
   createdAt: Date;
   updatedAt: Date;
 };
@@ -14,15 +14,15 @@ class Genre {
   private readonly _id: Id;
   private readonly _name: Name;
   private readonly _description: string;
-  private readonly _isAdult: boolean;
+  private readonly _isAdultContent: boolean;
   private readonly _createdAt: Date;
   private readonly _updatedAt: Date;
 
   private constructor(props: GenreProps) {
-    this._id = props._id;
+    this._id = props.id;
     this._name = props.name;
-    this._description = props.description;
-    this._isAdult = props.isAdult;
+    this._description = props.description; // No change needed here
+    this._isAdultContent = props.isAdultContent;
     this._createdAt = props.createdAt;
     this._updatedAt = props.updatedAt;
   }
@@ -39,8 +39,8 @@ class Genre {
     return this._description;
   }
 
-  get isAdult() {
-    return this._isAdult;
+  get isAdultContent() {
+    return this._isAdultContent;
   }
 
   get createdAt() {
@@ -51,11 +51,12 @@ class Genre {
     return this._updatedAt;
   }
 
-  static create(name: string, description: string, isAdult: boolean) {
+  static create(name: string, description: string, isAdultContent: boolean) {
     if (typeof description !== 'string') throw new Error('Description must be a string');
-    const nomralizedDescription = description.trim();
 
-    this.validateDescription(nomralizedDescription);
+    const normalizedDescription = description.trim();
+
+    this.validateDescription(normalizedDescription);
 
     const id = Id.generateRandomId();
     const newName = Name.create(name);
@@ -63,10 +64,10 @@ class Genre {
     const updatedAt = new Date();
 
     return new Genre({
-      _id: id,
+      id,
       name: newName,
-      description: nomralizedDescription,
-      isAdult,
+      description: normalizedDescription,
+      isAdultContent,
       createdAt,
       updatedAt,
     });

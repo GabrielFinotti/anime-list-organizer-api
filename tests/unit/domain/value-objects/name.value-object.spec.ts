@@ -18,7 +18,9 @@ describe('Name Value Object', () => {
     });
 
     it('should throw error when name is empty', () => {
-      expect(() => Name.create('')).toThrow('Name cannot be empty');
+      expect(() => Name.create('')).toThrow(
+        'Name must be at least 3 characters long and at most 100 characters long'
+      );
     });
 
     it('should throw error when name is less than 3 characters', () => {
@@ -54,6 +56,20 @@ describe('Name Value Object', () => {
     it('should return the normalized name value', () => {
       const name = Name.create('THRILLER');
       expect(name.value).toBe('thriller');
+    });
+  });
+
+  describe('equals', () => {
+    it('should return true when names are equal', () => {
+      const name1 = Name.create('Action');
+      const name2 = Name.create('action');
+      expect(name1.equals(name2)).toBe(true);
+    });
+
+    it('should return false when names are different', () => {
+      const name1 = Name.create('Action');
+      const name2 = Name.create('Comedy');
+      expect(name1.equals(name2)).toBe(false);
     });
   });
 });

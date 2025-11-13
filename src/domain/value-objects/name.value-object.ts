@@ -18,11 +18,15 @@ class Name {
   }
 
   private static validate(name: string) {
-    if (name.length === 0) throw new Error('Name cannot be empty');
+    if (typeof name !== 'string') throw new Error('Name must be a string');
 
     if (name.length < 3 || name.length > 100) {
       throw new Error('Name must be at least 3 characters long and at most 100 characters long');
     }
+  }
+
+  equals(other: Name) {
+    return this._name === other._name;
   }
 }
 

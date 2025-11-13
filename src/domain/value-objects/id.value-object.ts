@@ -1,4 +1,4 @@
-import { ulid } from 'ulid';
+import { ulid, isValid } from 'ulid';
 
 class Id {
   private readonly _id: string;
@@ -18,15 +18,17 @@ class Id {
   }
 
   private static validate(id: string) {
-    if (typeof id !== 'string' || id.trim().length === 0) {
-      throw new Error('ID must be a non-empty string');
-    }
+    if (!isValid(id)) throw new Error('ID must be a valid ULID');
   }
 
   static generateRandomId() {
     const randomId = ulid();
 
     return new Id(randomId);
+  }
+
+  equals(other: Id) {
+    return this._id === other._id;
   }
 }
 

@@ -23,16 +23,8 @@ describe('Category Entity', () => {
       expect(category1.id.value).not.toBe(category2.id.value);
     });
 
-    it('should use provided id when given', () => {
-      const providedId = 'custom-id-123';
-      const category = Category.create(
-        'Comedy',
-        'Funny animes designed to make you laugh',
-        providedId
-      );
-
-      expect(category.id.value).toBe(providedId);
-    });
+    // The Category.create signature was refactored to always generate an ID
+    // so we no longer accept a provided id as argument — test removed
 
     it('should set createdAt and updatedAt to current time', () => {
       const beforeCreation = new Date();

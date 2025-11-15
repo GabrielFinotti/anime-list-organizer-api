@@ -27,6 +27,7 @@
   },
   "homepage": "https://github.com/GabrielFinotti/anime-list-organizer-api#readme",
   "devDependencies": {
+    "@types/bcrypt": "^6.0.0",
     "@types/jest": "^30.0.0",
     "jest": "^30.2.0",
     "prettier": "^3.6.2",
@@ -36,6 +37,7 @@
     "typescript": "^5.9.3"
   },
   "dependencies": {
+    "bcrypt": "^6.0.0",
     "cors": "^2.8.5",
     "express": "^5.1.0",
     "mongoose": "^8.19.3",

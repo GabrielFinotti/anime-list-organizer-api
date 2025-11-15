@@ -39,8 +39,8 @@ class Anime {
   private readonly _createdAt: Date;
   private _updatedAt: Date;
 
-  private static ANIME_TYPES = ['serie', 'movie', 'mixed'];
-  private static PRODUCTION_TYPES = ['original', 'adaptation'];
+  private static readonly ANIME_TYPES = ['serie', 'movie', 'mixed'];
+  private static readonly PRODUCTION_TYPES = ['original', 'adaptation'];
 
   private constructor(props: AnimeProps) {
     this._id = props.id;

@@ -21,7 +21,7 @@ class Genre {
   private constructor(props: GenreProps) {
     this._id = props.id;
     this._name = props.name;
-    this._description = props.description; // No change needed here
+    this._description = props.description;
     this._isAdultContent = props.isAdultContent;
     this._createdAt = props.createdAt;
     this._updatedAt = props.updatedAt;

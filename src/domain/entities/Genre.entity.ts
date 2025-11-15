@@ -1,10 +1,11 @@
+import Description from '../value-objects/description.value-object.js';
 import Id from '../value-objects/id.value-object.js';
 import Name from '../value-objects/name.value-object.js';
 
 type GenreProps = {
   id: Id;
   name: Name;
-  description: string;
+  description: Description;
   isAdultContent: boolean;
   createdAt: Date;
   updatedAt: Date;
@@ -13,7 +14,7 @@ type GenreProps = {
 class Genre {
   private readonly _id: Id;
   private readonly _name: Name;
-  private readonly _description: string;
+  private readonly _description: Description;
   private readonly _isAdultContent: boolean;
   private readonly _createdAt: Date;
   private readonly _updatedAt: Date;
@@ -52,29 +53,28 @@ class Genre {
   }
 
   static create(name: string, description: string, isAdultContent: boolean) {
-    if (typeof description !== 'string') throw new Error('Description must be a string');
-
-    const normalizedDescription = description.trim();
-
-    this.validateDescription(normalizedDescription);
+    this.validateIsAdultContent(isAdultContent);
 
     const id = Id.generateRandomId();
     const newName = Name.create(name);
+    const newDescription = Description.create(description);
     const createdAt = new Date();
     const updatedAt = new Date();
 
     return new Genre({
       id,
       name: newName,
-      description: normalizedDescription,
+      description: newDescription,
       isAdultContent,
       createdAt,
       updatedAt,
     });
   }
 
-  private static validateDescription(description: string) {
-    if (description.length < 10) throw new Error('Description must be at least 10 characters long');
+  private static validateIsAdultContent(value: boolean) {
+    if (typeof value !== 'boolean') {
+      throw new Error('Adult content flag must be a boolean.');
+    }
   }
 
   equals(other: Genre) {

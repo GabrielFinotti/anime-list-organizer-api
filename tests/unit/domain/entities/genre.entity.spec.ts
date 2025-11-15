@@ -1,5 +1,6 @@
 import Genre from '../../../../src/domain/entities/Genre.entity';
 import Id from '../../../../src/domain/value-objects/id.value-object';
+import Description from '../../../../src/domain/value-objects/description.value-object';
 
 describe('Genre Entity', () => {
   describe('create', () => {
@@ -12,7 +13,8 @@ describe('Genre Entity', () => {
 
       expect(genre.id).toBeDefined();
       expect(genre.name.value).toBe('action');
-      expect(genre.description).toBe('Animes with action-packed scenes and battle sequences');
+      expect(genre.description).toBeInstanceOf(Description);
+      expect(genre.description.value).toBe('Animes with action-packed scenes and battle sequences');
       expect(genre.isAdultContent).toBe(false);
       expect(genre.createdAt).toBeInstanceOf(Date);
       expect(genre.updatedAt).toBeInstanceOf(Date);
@@ -44,16 +46,16 @@ describe('Genre Entity', () => {
 
     it('should throw error when description is empty or whitespace', () => {
       expect(() => Genre.create('Horror', '', true)).toThrow(
-        'Description must be at least 10 characters long',
+        'Description must be between 10 and 800 characters',
       );
       expect(() => Genre.create('Fantasy', '   ', false)).toThrow(
-        'Description must be at least 10 characters long',
+        'Description must be between 10 and 800 characters',
       );
     });
 
     it('should throw error when description is less than 10 characters', () => {
       expect(() => Genre.create('Sci-Fi', 'Too short', false)).toThrow(
-        'Description must be at least 10 characters long',
+        'Description must be between 10 and 800 characters',
       );
     });
   });
@@ -79,7 +81,8 @@ describe('Genre Entity', () => {
     });
 
     it('should return description through getter', () => {
-      expect(genre.description).toBe('Daily life stories with minimal conflict and drama');
+      expect(genre.description).toBeInstanceOf(Description);
+      expect(genre.description.value).toBe('Daily life stories with minimal conflict and drama');
     });
 
     it('should return isAdultContent through getter', () => {

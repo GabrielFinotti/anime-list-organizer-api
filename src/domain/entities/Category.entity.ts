@@ -1,10 +1,11 @@
+import Description from '../value-objects/description.value-object.js';
 import Id from '../value-objects/id.value-object.js';
 import Name from '../value-objects/name.value-object.js';
 
 type CategoryProps = {
   id: Id;
   name: Name;
-  description: string;
+  description: Description;
   createdAt: Date;
   updatedAt: Date;
 };
@@ -12,7 +13,7 @@ type CategoryProps = {
 class Category {
   private readonly _id: Id;
   private readonly _name: Name;
-  private readonly _description: string;
+  private readonly _description: Description;
   private readonly _createdAt: Date;
   private readonly _updatedAt: Date;
 
@@ -45,28 +46,19 @@ class Category {
   }
 
   static create(name: string, description: string) {
-    if (typeof description !== 'string') throw new Error('Description must be a string');
-
-    const normalizedDescription = description.trim();
-
-    this.validateDescription(normalizedDescription);
-
     const id = Id.generateRandomId();
     const newName = Name.create(name);
+    const newDescription = Description.create(description);
     const createdAt = new Date();
     const updatedAt = new Date();
 
     return new Category({
       id,
       name: newName,
-      description: normalizedDescription,
+      description: newDescription,
       createdAt,
       updatedAt,
     });
-  }
-
-  private static validateDescription(description: string) {
-    if (description.length < 10) throw new Error('Description must be at least 10 characters long');
   }
 
   equals(other: Category) {

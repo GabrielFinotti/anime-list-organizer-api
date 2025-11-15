@@ -14,7 +14,11 @@ describe('AnimeStatus Value Object', () => {
       const genre = Genre.create('Adventure', 'Adventures', false);
 
       const movie = Movie.create({ name: 'Movie 1', releaseDate: new Date(2020, 0, 1) });
-      const season = Season.create({ seasonNumber: 1, releaseDate: new Date(2020, 0, 1), totalEpisodes: 12 });
+      const season = Season.create({
+        seasonNumber: 1,
+        releaseDate: new Date(2020, 0, 1),
+        totalEpisodes: 12,
+      });
 
       const anime = Anime.create({
         imageUrl: 'http://example.com/image.png',
@@ -30,9 +34,20 @@ describe('AnimeStatus Value Object', () => {
       });
 
       const ms = MovieStatus.create({ movies: movie, status: 'watching', isLiked: true });
-      const ss = SeasonStatus.create({ season, status: 'watching', lastEpisodeWatched: 1, isLiked: true });
+      const ss = SeasonStatus.create({
+        season,
+        status: 'watching',
+        lastEpisodeWatched: 1,
+        isLiked: true,
+      });
 
-      const as = AnimeStatus.create({ anime, status: 'watching', moviesStatus: [ms], seasonsStatus: [ss], isLiked: true });
+      const as = AnimeStatus.create({
+        anime,
+        status: 'watching',
+        moviesStatus: [ms],
+        seasonsStatus: [ss],
+        isLiked: true,
+      });
 
       expect(as.anime).toBeInstanceOf(Anime);
       expect(as.status).toBe('watching');
@@ -54,12 +69,20 @@ describe('AnimeStatus Value Object', () => {
         animeType: 'serie',
         productionType: 'original',
         movies: [],
-        seasons: [Season.create({ seasonNumber: 1, releaseDate: new Date(2020, 0, 1), totalEpisodes: 5 })],
+        seasons: [
+          Season.create({ seasonNumber: 1, releaseDate: new Date(2020, 0, 1), totalEpisodes: 5 }),
+        ],
         isAdultContent: false,
       });
 
       expect(() =>
-        AnimeStatus.create({ anime, status: 'unknown' as any, moviesStatus: [], seasonsStatus: [], isLiked: false }),
+        AnimeStatus.create({
+          anime,
+          status: 'unknown' as any,
+          moviesStatus: [],
+          seasonsStatus: [],
+          isLiked: false,
+        }),
       ).toThrow('Invalid status: unknown, must be one of watching, finished, dropped, in_list');
     });
 
@@ -76,13 +99,21 @@ describe('AnimeStatus Value Object', () => {
         animeType: 'serie',
         productionType: 'original',
         movies: [],
-        seasons: [Season.create({ seasonNumber: 1, releaseDate: new Date(2019,0,1), totalEpisodes: 4 })],
+        seasons: [
+          Season.create({ seasonNumber: 1, releaseDate: new Date(2019, 0, 1), totalEpisodes: 4 }),
+        ],
         isAdultContent: false,
       });
 
       expect(() =>
         // @ts-expect-error invalid typed value to test runtime validation
-        AnimeStatus.create({ anime, status: 'watching', moviesStatus: [], seasonsStatus: [], isLiked: 'nope' }),
+        AnimeStatus.create({
+          anime,
+          status: 'watching',
+          moviesStatus: [],
+          seasonsStatus: [],
+          isLiked: 'nope',
+        }),
       ).toThrow('isLiked must be a boolean value');
     });
 
@@ -91,7 +122,11 @@ describe('AnimeStatus Value Object', () => {
       const genre = Genre.create('Gaku', 'Genre description for equals test', false);
 
       const movie = Movie.create({ name: 'Same', releaseDate: new Date(2021, 2, 2) });
-      const season = Season.create({ seasonNumber: 1, releaseDate: new Date(2020, 2, 2), totalEpisodes: 5 });
+      const season = Season.create({
+        seasonNumber: 1,
+        releaseDate: new Date(2020, 2, 2),
+        totalEpisodes: 5,
+      });
 
       const anime1 = Anime.create({
         imageUrl: 'http://example.com/a.png',
@@ -123,14 +158,42 @@ describe('AnimeStatus Value Object', () => {
       (anime2 as any)['_id'] = anime1['id'];
 
       const ms1 = MovieStatus.create({ movies: movie, status: 'watching', isLiked: true });
-      const ss1 = SeasonStatus.create({ season, status: 'finished', lastEpisodeWatched: 5, isLiked: false });
+      const ss1 = SeasonStatus.create({
+        season,
+        status: 'finished',
+        lastEpisodeWatched: 5,
+        isLiked: false,
+      });
 
       const ms2 = MovieStatus.create({ movies: movie, status: 'watching', isLiked: true });
-      const ss2 = SeasonStatus.create({ season, status: 'finished', lastEpisodeWatched: 5, isLiked: false });
+      const ss2 = SeasonStatus.create({
+        season,
+        status: 'finished',
+        lastEpisodeWatched: 5,
+        isLiked: false,
+      });
 
-      const a1 = AnimeStatus.create({ anime: anime1, status: 'watching', moviesStatus: [ms1], seasonsStatus: [ss1], isLiked: true });
-      const a2 = AnimeStatus.create({ anime: anime2, status: 'watching', moviesStatus: [ms2], seasonsStatus: [ss2], isLiked: true });
-      const a3 = AnimeStatus.create({ anime: anime1, status: 'finished', moviesStatus: [ms2], seasonsStatus: [ss2], isLiked: true });
+      const a1 = AnimeStatus.create({
+        anime: anime1,
+        status: 'watching',
+        moviesStatus: [ms1],
+        seasonsStatus: [ss1],
+        isLiked: true,
+      });
+      const a2 = AnimeStatus.create({
+        anime: anime2,
+        status: 'watching',
+        moviesStatus: [ms2],
+        seasonsStatus: [ss2],
+        isLiked: true,
+      });
+      const a3 = AnimeStatus.create({
+        anime: anime1,
+        status: 'finished',
+        moviesStatus: [ms2],
+        seasonsStatus: [ss2],
+        isLiked: true,
+      });
 
       expect(a1.equals(a2)).toBe(true);
       expect(a1.equals(a3)).toBe(false);

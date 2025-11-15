@@ -1,5 +1,6 @@
 import Category from '../../../../src/domain/entities/Category.entity';
 import Id from '../../../../src/domain/value-objects/id.value-object';
+import Description from '../../../../src/domain/value-objects/description.value-object';
 
 describe('Category Entity', () => {
   describe('create', () => {
@@ -11,7 +12,10 @@ describe('Category Entity', () => {
 
       expect(category.id).toBeDefined();
       expect(category.name.value).toBe('action');
-      expect(category.description).toBe('Animes with action-packed scenes and battle sequences');
+      expect(category.description).toBeInstanceOf(Description);
+      expect(category.description.value).toBe(
+        'Animes with action-packed scenes and battle sequences',
+      );
       expect(category.createdAt).toBeInstanceOf(Date);
       expect(category.updatedAt).toBeInstanceOf(Date);
     });
@@ -43,19 +47,19 @@ describe('Category Entity', () => {
 
     it('should throw error when description is empty', () => {
       expect(() => Category.create('Horror', '')).toThrow(
-        'Description must be at least 10 characters long',
+        'Description must be between 10 and 800 characters',
       );
     });
 
     it('should throw error when description is whitespace only', () => {
       expect(() => Category.create('Fantasy', '   ')).toThrow(
-        'Description must be at least 10 characters long',
+        'Description must be between 10 and 800 characters',
       );
     });
 
     it('should throw error when description is less than 10 characters', () => {
       expect(() => Category.create('Sci-Fi', 'Too short')).toThrow(
-        'Description must be at least 10 characters long',
+        'Description must be between 10 and 800 characters',
       );
     });
   });
@@ -80,7 +84,8 @@ describe('Category Entity', () => {
     });
 
     it('should return description through getter', () => {
-      expect(category.description).toBe('Daily life stories with minimal conflict and drama');
+      expect(category.description).toBeInstanceOf(Description);
+      expect(category.description.value).toBe('Daily life stories with minimal conflict and drama');
     });
 
     it('should return createdAt through getter', () => {

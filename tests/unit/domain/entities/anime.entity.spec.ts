@@ -62,7 +62,7 @@ describe('Anime Entity', () => {
       expect(anime.animeType).toBe('movie');
       expect(anime.movies.length).toBe(1);
       expect(anime.seasons.length).toBe(0);
-      expect(anime.imageUrl).toBe('http://example.com/movie.png');
+      expect(anime.imageUrl.value).toBe('http://example.com/movie.png');
       expect(anime.name.value).toBe('cool movie');
     });
 
@@ -165,13 +165,19 @@ describe('Anime Entity', () => {
           synopsis: 'short',
           category,
           genres: [genre],
-          animeType: 'mixed',
+          animeType: 'serie',
           productionType: 'original',
           movies: [],
-          seasons: [],
+          seasons: [
+            Season.create({
+              seasonNumber: 1,
+              releaseDate: new Date(2020, 1, 1),
+              totalEpisodes: 10,
+            }),
+          ],
           isAdultContent: false,
         }),
-      ).toThrow('Synopsis must be at least 10 characters long');
+      ).toThrow('Description must be between 10 and 800 characters');
     });
 
     it('should throw on duplicate genres', () => {
@@ -429,7 +435,7 @@ describe('Anime Entity', () => {
 
       anime.updateCommonInfo({ name: 'Updated', synopsis: 'Updated long synopsis' });
       expect(anime.name.value).toBe('updated');
-      expect(anime.synopsis).toBe('Updated long synopsis');
+      expect(anime.synopsis.value).toBe('Updated long synopsis');
       expect(anime.updatedAt.getTime()).toBeGreaterThanOrEqual(before.getTime());
 
       expect(() => anime.updateCommonInfo({ synopsis: 123 as any })).toThrow(
@@ -440,9 +446,9 @@ describe('Anime Entity', () => {
       );
 
       anime.updateImageUrl('  https://example.com/new.png  ');
-      expect(anime.imageUrl).toBe('https://example.com/new.png');
+      expect(anime.imageUrl.value).toBe('https://example.com/new.png');
 
-      expect(() => anime.updateImageUrl(123 as any)).toThrow('Image URL must be a string');
+      expect(() => anime.updateImageUrl(123 as any)).toThrow('URL must be a non-empty string');
     });
 
     it('equals should compare properly', () => {

@@ -1,7 +1,9 @@
+import Description from '../value-objects/description.value-object.js';
 import Id from '../value-objects/id.value-object.js';
 import Movie from '../value-objects/movie.value-object.js';
 import Name from '../value-objects/name.value-object.js';
 import Season from '../value-objects/season.value-object.js';
+import Url from '../value-objects/url.value-object.js';
 import Category from './Category.entity.js';
 import Genre from './Genre.entity.js';
 
@@ -10,9 +12,9 @@ type ProductionType = 'original' | 'adaptation';
 
 type AnimeProps = {
   id: Id;
-  imageUrl: string;
+  imageUrl: Url;
   name: Name;
-  synopsis: string;
+  synopsis: Description;
   category: Category;
   genres: Genre[];
   animeType: AnimeType;
@@ -26,9 +28,9 @@ type AnimeProps = {
 
 class Anime {
   private readonly _id: Id;
-  private _imageUrl: string;
+  private _imageUrl: Url;
   private _name: Name;
-  private _synopsis: string;
+  private _synopsis: Description;
   private _category: Category;
   private _genres: Genre[];
   private _animeType: AnimeType;
@@ -127,7 +129,6 @@ class Anime {
     isAdultContent: boolean;
   }) {
     if (typeof data.animeType !== 'string') throw new Error('Anime type must be a string');
-    if (typeof data.synopsis !== 'string') throw new Error('Synopsis must be a string');
 
     if (data.genres.length === 0) {
       throw new Error('At least one genre must be provided');
@@ -139,10 +140,7 @@ class Anime {
 
     const normalizedAnimeType = data.animeType.toLowerCase().trim();
     const normalizedProductionType = data.productionType.toLowerCase().trim();
-    const normalizedSynopsis = data.synopsis.trim();
 
-    this.validateImageUrl(data.imageUrl);
-    this.validateSynopsis(normalizedSynopsis);
     this.validateEnumFields(normalizedAnimeType, normalizedProductionType);
     this.validateBooleanFields(data.isAdultContent, 'Adult content flag');
     this.ensureUniqueGenres(data.genres);
@@ -153,9 +151,9 @@ class Anime {
     data.seasons.length > 0 && this.ensureUniqueSeasons(data.seasons);
 
     const id = Id.generateRandomId();
-    const imageUrl = data.imageUrl.trim();
+    const imageUrl = Url.create(data.imageUrl);
     const name = Name.create(data.name);
-    const synopsis = normalizedSynopsis;
+    const synopsis = Description.create(data.synopsis);
     const category = data.category;
     const genres = data.genres;
     const animeType = normalizedAnimeType as AnimeType;
@@ -181,10 +179,6 @@ class Anime {
       createdAt,
       updatedAt,
     });
-  }
-
-  private static validateSynopsis(synopsis: string) {
-    if (synopsis.length < 10) throw new Error('Synopsis must be at least 10 characters long');
   }
 
   private static validateBooleanFields(field: boolean, fieldName: string) {
@@ -256,12 +250,6 @@ class Anime {
 
     if (animeType !== 'movie' && seasons.length === 0) {
       throw new Error('Series and mixed types must have at least one season');
-    }
-  }
-
-  private static validateImageUrl(imageUrl: string) {
-    if (typeof imageUrl !== 'string') {
-      throw new Error('Image URL must be a string');
     }
   }
 
@@ -371,19 +359,12 @@ class Anime {
 
     data.name !== undefined && (this._name = Name.create(data.name));
     data.category !== undefined && (this._category = data.category);
+    data.synopsis !== undefined && (this._synopsis = Description.create(data.synopsis));
 
     if (data.isAdultContent !== undefined) {
       Anime.validateBooleanFields(data.isAdultContent, 'Adult content flag');
 
       this._isAdultContent = data.isAdultContent;
-    }
-
-    if (data.synopsis !== undefined) {
-      const normalizedSynopsis = data.synopsis.trim();
-
-      Anime.validateSynopsis(normalizedSynopsis);
-
-      this._synopsis = normalizedSynopsis;
     }
 
     if (data.animeType !== undefined || data.productionType !== undefined) {
@@ -406,9 +387,7 @@ class Anime {
   }
 
   updateImageUrl(newImageUrl: string) {
-    Anime.validateImageUrl(newImageUrl);
-
-    this._imageUrl = newImageUrl.trim();
+    this._imageUrl = Url.create(newImageUrl);
     this._updatedAt = new Date();
   }
 

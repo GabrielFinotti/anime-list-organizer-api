@@ -106,13 +106,12 @@ describe('AnimeStatus Value Object', () => {
       });
 
       expect(() =>
-        // @ts-expect-error invalid typed value to test runtime validation
         AnimeStatus.create({
           anime,
           status: 'watching',
           moviesStatus: [],
           seasonsStatus: [],
-          isLiked: 'nope',
+          isLiked: 'nope' as any,
         }),
       ).toThrow('isLiked must be a boolean value');
     });

@@ -6,9 +6,9 @@ describe('MovieStatus Value Object', () => {
     it('should create a MovieStatus with valid data', () => {
       const movie = Movie.create({ name: 'My Movie', releaseDate: new Date(2023, 10, 5) });
 
-      const ms = MovieStatus.create({ movies: movie, status: 'watching', isLiked: true });
+      const ms = MovieStatus.create({ movie: movie, status: 'watching', isLiked: true });
 
-      expect(ms.movies).toBeInstanceOf(Movie);
+      expect(ms.movie).toBeInstanceOf(Movie);
       expect(ms.status).toBe('watching');
       expect(ms.isLiked).toBe(true);
     });
@@ -17,7 +17,7 @@ describe('MovieStatus Value Object', () => {
       const movie = Movie.create({ name: 'My Movie', releaseDate: new Date(2023, 10, 5) });
 
       expect(() =>
-        MovieStatus.create({ movies: movie, status: 'dropped' as any, isLiked: false }),
+        MovieStatus.create({ movie: movie, status: 'dropped' as any, isLiked: false }),
       ).toThrow('Invalid status: dropped, must be one of watching, finished, in_list');
     });
 
@@ -25,7 +25,7 @@ describe('MovieStatus Value Object', () => {
       const movie = Movie.create({ name: 'My Movie', releaseDate: new Date(2023, 10, 5) });
 
       expect(() =>
-        MovieStatus.create({ movies: movie, status: 'watching', isLiked: 'yes' as any }),
+        MovieStatus.create({ movie: movie, status: 'watching', isLiked: 'yes' as any }),
       ).toThrow('isLiked must be a boolean value');
     });
 
@@ -33,9 +33,9 @@ describe('MovieStatus Value Object', () => {
       const date = new Date(2022, 6, 15);
       const m1 = Movie.create({ name: 'Same', releaseDate: date });
       const m2 = Movie.create({ name: 'Same', releaseDate: date });
-      const ms1 = MovieStatus.create({ movies: m1, status: 'watching', isLiked: true });
-      const ms2 = MovieStatus.create({ movies: m2, status: 'watching', isLiked: true });
-      const ms3 = MovieStatus.create({ movies: m2, status: 'finished', isLiked: false });
+      const ms1 = MovieStatus.create({ movie: m1, status: 'watching', isLiked: true });
+      const ms2 = MovieStatus.create({ movie: m2, status: 'watching', isLiked: true });
+      const ms3 = MovieStatus.create({ movie: m2, status: 'finished', isLiked: false });
 
       expect(ms1.equals(ms2)).toBe(true);
       expect(ms1.equals(ms3)).toBe(false);

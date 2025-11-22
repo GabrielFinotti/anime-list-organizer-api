@@ -7,6 +7,7 @@ class SeasonStatus {
   private readonly _status: Status;
   private readonly _lastEpisodeWatched: number;
   private readonly _isLiked: boolean;
+
   private static readonly validStatuses = ['watching', 'finished', 'in_list'];
 
   private constructor(props: {

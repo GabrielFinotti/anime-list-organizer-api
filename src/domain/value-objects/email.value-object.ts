@@ -1,5 +1,6 @@
 class Email {
   private readonly _value: string;
+
   private static readonly EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
   private constructor(value: string) {
@@ -11,13 +12,16 @@ class Email {
   }
 
   static create(email: string) {
-    this.validateEmail(email);
+    if (typeof email !== 'string') throw new Error('Email must be a string');
 
-    return new Email(email);
+    const normalizedEmail = email.toLowerCase().trim();
+
+    this.validateEmail(normalizedEmail);
+
+    return new Email(normalizedEmail);
   }
 
   private static validateEmail(email: string) {
-    if (typeof email !== 'string') throw new Error('Email must be a string');
     if (!this.EMAIL_REGEX.test(email)) throw new Error('Invalid email format');
   }
 

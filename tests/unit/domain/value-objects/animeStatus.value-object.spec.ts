@@ -33,7 +33,7 @@ describe('AnimeStatus Value Object', () => {
         isAdultContent: false,
       });
 
-      const ms = MovieStatus.create({ movies: movie, status: 'watching', isLiked: true });
+      const ms = MovieStatus.create({ movie: movie, status: 'watching', isLiked: true });
       const ss = SeasonStatus.create({
         season,
         status: 'watching',
@@ -156,7 +156,7 @@ describe('AnimeStatus Value Object', () => {
       // use same anime id to simulate same anime in both objects
       (anime2 as any)['_id'] = anime1['id'];
 
-      const ms1 = MovieStatus.create({ movies: movie, status: 'watching', isLiked: true });
+      const ms1 = MovieStatus.create({ movie: movie, status: 'watching', isLiked: true });
       const ss1 = SeasonStatus.create({
         season,
         status: 'finished',
@@ -164,7 +164,7 @@ describe('AnimeStatus Value Object', () => {
         isLiked: false,
       });
 
-      const ms2 = MovieStatus.create({ movies: movie, status: 'watching', isLiked: true });
+      const ms2 = MovieStatus.create({ movie: movie, status: 'watching', isLiked: true });
       const ss2 = SeasonStatus.create({
         season,
         status: 'finished',

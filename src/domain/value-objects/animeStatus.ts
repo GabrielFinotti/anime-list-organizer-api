@@ -10,6 +10,7 @@ class AnimeStatus {
   private readonly _moviesStatus: MovieStatus[];
   private readonly _seasonsStatus: SeasonStatus[];
   private readonly _isLiked: boolean;
+
   private static readonly validStatuses = ['watching', 'finished', 'dropped', 'in_list'];
 
   private constructor(props: {

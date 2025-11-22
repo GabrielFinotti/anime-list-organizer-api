@@ -2,6 +2,7 @@ import bcrypt from 'bcrypt';
 
 class Password {
   private readonly _value: string;
+
   private static readonly PASSWORD_REGEX = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[^A-Za-z0-9]).+$/;
 
   private constructor(value: string) {
@@ -13,6 +14,8 @@ class Password {
   }
 
   static create(password: string) {
+    if (typeof password !== 'string') throw new Error('Password must be a string');
+
     const normalizedPassword = password.trim();
 
     this.validatePassword(normalizedPassword);
@@ -23,8 +26,6 @@ class Password {
   }
 
   private static validatePassword(password: string) {
-    if (typeof password !== 'string') throw new Error('Password must be a string');
-
     const errorMessages: string[] = [];
 
     if (password.length < 6 || password.length > 20) {

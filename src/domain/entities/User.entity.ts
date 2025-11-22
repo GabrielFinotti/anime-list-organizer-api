@@ -2,8 +2,10 @@ import AnimeStatus from '../value-objects/animeStatus.js';
 import Description from '../value-objects/description.value-object.js';
 import Email from '../value-objects/email.value-object.js';
 import Id from '../value-objects/id.value-object.js';
+import MovieStatus from '../value-objects/movieStatus.value-object.js';
 import Name from '../value-objects/name.value-object.js';
 import Password from '../value-objects/password.value-object.js';
+import SeasonStatus from '../value-objects/seasonStatus.value-object.js';
 import Url from '../value-objects/url.value-object.js';
 import Anime from './Anime.entity.js';
 
@@ -47,6 +49,7 @@ class User {
   private readonly _role: Role;
   private readonly _createdAt: Date;
   private _updatedAt: Date;
+
   private static readonly VALID_ROLES: Role[] = ['user', 'admin'];
 
   private constructor(props: UserProps) {
@@ -56,8 +59,8 @@ class User {
     this._email = props.email;
     this._password = props.password;
     this._biography = props.biography;
-    this._animeList = props.animeList;
-    this._favoriteAnimes = props.favoriteAnimes;
+    this._animeList = { ...props.animeList };
+    this._favoriteAnimes = { ...props.favoriteAnimes };
     this._role = props.role;
     this._createdAt = props.createdAt;
     this._updatedAt = props.updatedAt;
@@ -156,6 +159,183 @@ class User {
     if (!this.VALID_ROLES.includes(role)) {
       throw new Error(`Invalid role: ${role}`);
     }
+  }
+
+  addAnimeToAnimeList(anime: Anime) {
+    const alreadyExists = this._animeList.list.some((animeStatus) =>
+      animeStatus.anime.equals(anime),
+    );
+
+    if (alreadyExists) throw new Error('Anime is already in the anime list');
+
+    const moviesStatus = this.createMoviesStatusForAnime(anime.movies);
+    const seasonsStatus = this.createSeasonsStatusForAnime(anime.seasons);
+
+    const newAnimeStatus = AnimeStatus.create({
+      anime,
+      status: 'in_list',
+      moviesStatus,
+      seasonsStatus,
+      isLiked: false,
+    });
+
+    this._animeList.list.push(newAnimeStatus);
+    this._animeList.updatedAt = new Date();
+    this._updatedAt = new Date();
+  }
+
+  private createMoviesStatusForAnime(movies: Anime['movies']) {
+    const animeMovieStatus: MovieStatus[] = [];
+
+    movies.forEach((movie) => {
+      const movieStatus = MovieStatus.create({
+        movie,
+        status: 'in_list',
+        isLiked: false,
+      });
+
+      animeMovieStatus.push(movieStatus);
+    });
+
+    return animeMovieStatus;
+  }
+
+  private createSeasonsStatusForAnime(seasons: Anime['seasons']) {
+    const animeSeasonStatus: SeasonStatus[] = [];
+
+    seasons.forEach((season) => {
+      const seasonStatus = SeasonStatus.create({
+        season,
+        status: 'in_list',
+        lastEpisodeWatched: 0,
+        isLiked: false,
+      });
+
+      animeSeasonStatus.push(seasonStatus);
+    });
+
+    return animeSeasonStatus;
+  }
+
+  removeAnimeFromAnimeList(anime: Anime) {
+    const exists = this._animeList.list.some((animeStatus) => animeStatus.anime.equals(anime));
+
+    if (!exists) throw new Error('Anime is not in the anime list');
+
+    this._animeList.list = this._animeList.list.filter(
+      (animeStatus) => !animeStatus.anime.equals(anime),
+    );
+    this._animeList.updatedAt = new Date();
+    this._updatedAt = new Date();
+  }
+
+  updateMovieStatus(anime: Anime, movieStatus: MovieStatus) {
+    const animeStatus = this._animeList.list.find((status) => status.anime.equals(anime));
+
+    if (!animeStatus) throw new Error('Anime not found in anime list');
+
+    const movieBelongsToAnime = anime.movies.some((m) => m.equals(movieStatus.movie));
+
+    if (!movieBelongsToAnime) throw new Error('Movie does not belong to the anime');
+
+    const movieStatusIndex = animeStatus.moviesStatus.findIndex((ms) =>
+      ms.movie.equals(movieStatus.movie),
+    );
+
+    if (movieStatusIndex === -1) throw new Error('Movie not found in anime status');
+
+    const updatedMoviesStatus = animeStatus.moviesStatus.map((ms) =>
+      ms.movie.equals(movieStatus.movie) ? movieStatus : ms,
+    );
+
+    const updatedAnimeStatus = AnimeStatus.create({
+      anime: animeStatus.anime,
+      status: animeStatus.status,
+      moviesStatus: updatedMoviesStatus,
+      seasonsStatus: animeStatus.seasonsStatus,
+      isLiked: animeStatus.isLiked,
+    });
+
+    const animeIndex = this._animeList.list.findIndex((s) => s.anime.equals(anime));
+
+    this._animeList.list[animeIndex] = updatedAnimeStatus;
+    this._animeList.updatedAt = new Date();
+    this._updatedAt = new Date();
+  }
+
+  updateSeasonStatus(anime: Anime, seasonStatus: SeasonStatus) {
+    const animeStatus = this._animeList.list.find((status) => status.anime.equals(anime));
+
+    if (!animeStatus) throw new Error('Anime not found in anime list');
+
+    const seasonBelongsToAnime = anime.seasons.some((s) => s.equals(seasonStatus.season));
+
+    if (!seasonBelongsToAnime) throw new Error('Season does not belong to the anime');
+
+    const seasonStatusIndex = animeStatus.seasonsStatus.findIndex((ss) =>
+      ss.season.equals(seasonStatus.season),
+    );
+
+    if (seasonStatusIndex === -1) throw new Error('Season not found in anime status');
+
+    const updatedSeasonsStatus = animeStatus.seasonsStatus.map((ss) =>
+      ss.season.equals(seasonStatus.season) ? seasonStatus : ss,
+    );
+
+    const updatedAnimeStatusForSeason = AnimeStatus.create({
+      anime: animeStatus.anime,
+      status: animeStatus.status,
+      moviesStatus: animeStatus.moviesStatus,
+      seasonsStatus: updatedSeasonsStatus,
+      isLiked: animeStatus.isLiked,
+    });
+
+    const animeIndexSeason = this._animeList.list.findIndex((s) => s.anime.equals(anime));
+    this._animeList.list[animeIndexSeason] = updatedAnimeStatusForSeason;
+    this._animeList.updatedAt = new Date();
+    this._updatedAt = new Date();
+  }
+  addAnimeToFavorites(anime: Anime) {
+    const alreadyFavorited = this._favoriteAnimes.list.some((favAnime) => favAnime.equals(anime));
+
+    if (alreadyFavorited) throw new Error('Anime is already in favorites');
+
+    this._favoriteAnimes.list.push(anime);
+    this._favoriteAnimes.updatedAt = new Date();
+    this._updatedAt = new Date();
+  }
+
+  removeAnimeFromFavorites(anime: Anime) {
+    const exists = this._favoriteAnimes.list.some((favAnime) => favAnime.equals(anime));
+
+    if (!exists) throw new Error('Anime is not in favorites');
+
+    this._favoriteAnimes.list = this._favoriteAnimes.list.filter(
+      (favAnime) => !favAnime.equals(anime),
+    );
+    this._favoriteAnimes.updatedAt = new Date();
+    this._updatedAt = new Date();
+  }
+
+  updateProfileImage(newImageUrl: string) {
+    const updatedUrl = Url.create(newImageUrl);
+
+    this._imageUrl = updatedUrl;
+    this._updatedAt = new Date();
+  }
+
+  updateCommonInfo(data: {
+    username?: string;
+    email?: string;
+    password?: string;
+    biography?: string;
+  }) {
+    if (data.username) this._username = Name.create(data.username);
+    if (data.email) this._email = Email.create(data.email);
+    if (data.password) this._password = Password.create(data.password);
+    if (data.biography) this._biography = Description.create(data.biography);
+
+    this._updatedAt = new Date();
   }
 
   equals(other: User) {

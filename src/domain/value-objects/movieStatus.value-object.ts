@@ -6,15 +6,16 @@ class MovieStatus {
   private readonly _movie: Movie;
   private readonly _status: Status;
   private readonly _isLiked: boolean;
+
   private static readonly validStatuses = ['watching', 'finished', 'in_list'];
 
-  private constructor(props: { movies: Movie; status: Status; isLiked: boolean }) {
-    this._movie = props.movies;
+  private constructor(props: { movie: Movie; status: Status; isLiked: boolean }) {
+    this._movie = props.movie;
     this._status = props.status;
     this._isLiked = props.isLiked;
   }
 
-  get movies() {
+  get movie() {
     return this._movie;
   }
 
@@ -26,17 +27,17 @@ class MovieStatus {
     return this._isLiked;
   }
 
-  static create(data: { movies: Movie; status: Status; isLiked: boolean }) {
+  static create(data: { movie: Movie; status: Status; isLiked: boolean }) {
     const normalizedStatus = data.status.toLowerCase().trim();
 
     this.validateStatus(normalizedStatus);
     this.validateIsLiked(data.isLiked);
 
-    const movies = data.movies;
+    const movie = data.movie;
     const status = normalizedStatus as Status;
     const isLiked = data.isLiked;
 
-    return new MovieStatus({ movies, status, isLiked });
+    return new MovieStatus({ movie, status, isLiked });
   }
 
   private static validateStatus(status: string) {

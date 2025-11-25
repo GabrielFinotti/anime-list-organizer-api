@@ -9,7 +9,7 @@ app.use(express.json());
 
 const startServer = async () => {
   try {
-    await MongoConfig.newConnection(env.env.MONGO_URI, 'anime_list');
+    await MongoConfig.newConnection(env.env.MONGO_URI, env.env.MONGO_NAME);
 
     app.listen(Number(env.env.PORT), () => {
       console.log(`Server running on port ${env.env.PORT}`);

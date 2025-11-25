@@ -10,7 +10,7 @@ class MongoConfig {
       if (typeof dbName !== 'string' || dbName.length === 0) {
         throw new Error('Invalid Database Name');
       }
-      
+
       const hasDbInUrl = /\/[^\/?]+(\?|$)/.test(url);
       const fullUrl = hasDbInUrl ? url : `${url}/${dbName}`;
 

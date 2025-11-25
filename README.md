@@ -1,4 +1,3 @@
-
 # Desenvolvimento com Docker (hot reload)
 
 Este projeto inclui um `docker-compose.dev.yml` para rodar a API em modo de desenvolvimento com hot reload (usando `tsx watch`) e um serviço do MongoDB.
@@ -30,7 +29,7 @@ Após iniciado, a API será exposta na porta `3000`. O MongoDB não será expost
 Observações:
 
 - O hot reload funciona via `tsx watch` (já configurado no script `dev`). Certifique-se de não ter `node_modules` locais em conflito ao usar volumes.
-  
+
 Atenção:
 
 - Agora o MongoDB está configurado como "interno" no `docker-compose.dev.yml`: não haverá mapeamento de porta para o host. Para acessar o banco diretamente a partir do host (para depuração), use `docker compose exec mongo mongosh` ou exponha temporariamente a porta se necessário.

@@ -25,7 +25,9 @@ describe('Password Value Object', () => {
     });
 
     it('should throw when password is too short (less than 6)', () => {
-      expect(() => Password.create('A1!')).toThrow('Password must be between 6 and 20 characters long');
+      expect(() => Password.create('A1!')).toThrow(
+        'Password must be between 6 and 20 characters long',
+      );
     });
 
     it('should throw when password lacks number/letter/special char', () => {

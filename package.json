@@ -8,6 +8,7 @@
     "start": "node dist/server.js",
     "build": "tsup src/server.ts",
     "dev": "tsx watch src/server.ts",
+    "dev:docker": "docker compose -f docker-compose.dev.yml up --build",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
@@ -28,6 +29,7 @@
   "homepage": "https://github.com/GabrielFinotti/anime-list-organizer-api#readme",
   "devDependencies": {
     "@types/bcrypt": "^6.0.0",
+    "@types/express": "^5.0.5",
     "@types/jest": "^30.0.0",
     "jest": "^30.2.0",
     "prettier": "^3.6.2",
@@ -39,6 +41,7 @@
   "dependencies": {
     "bcrypt": "^6.0.0",
     "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
     "express": "^5.1.0",
     "mongoose": "^8.19.3",
     "ulid": "^3.0.1"

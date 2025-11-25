@@ -1,0 +1,26 @@
+services:
+  mongo:
+    image: mongo:latest
+    container_name: mongo-dev
+    expose:
+      - "27017"
+    volumes:
+      - mongo_data:/data/db
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: api-dev
+    command: npm run dev
+    env_file: .env
+    ports:
+      - "${PORT}:3000"
+    volumes:
+      - ./:/app
+      - /app/node_modules
+    depends_on:
+      - mongo
+
+volumes:
+  mongo_data:

@@ -65,4 +65,24 @@ describe('Password Value Object', () => {
       expect(p1.equals(p2)).toBe(false);
     });
   });
+
+  describe('createFromHash', () => {
+    it('should create a Password from a hash and compare correctly', () => {
+      const plain = 'Abc123!';
+      const hashed = Password.create(plain).value;
+
+      const fromHash = Password.createFromHash(hashed);
+
+      expect(fromHash).toBeDefined();
+      // equals should be true because they use the same underlying hash
+      expect(fromHash.equals(Password.createFromHash(hashed))).toBe(true);
+      expect(fromHash.comparePassword(plain)).toBe(true);
+    });
+
+    it('should throw when hash is not a string', () => {
+      expect(() => Password.createFromHash(123 as any)).toThrow(
+        'Hashed password must be a string',
+      );
+    });
+  });
 });

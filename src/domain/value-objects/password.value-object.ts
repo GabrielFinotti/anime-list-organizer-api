@@ -25,6 +25,12 @@ class Password {
     return new Password(hashedPassword);
   }
 
+  static createFromHash(hashedPassword: string) {
+    if (typeof hashedPassword !== 'string') throw new Error('Hashed password must be a string');
+
+    return new Password(hashedPassword);
+  }
+
   private static validatePassword(password: string) {
     const errorMessages: string[] = [];
 

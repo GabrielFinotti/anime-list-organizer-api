@@ -495,5 +495,53 @@ describe('Anime Entity', () => {
 
       expect(anime1.equals(anime2)).toBe(false);
     });
+
+    it('toDomain should reconstruct an Anime from a persistence-like structure', () => {
+      const category = Category.create('Action', 'Action category');
+      const genre = Genre.create('Adventure', 'Adventure desc', false);
+
+      const movie = Movie.create({ name: 'Film Y', releaseDate: new Date(2022, 1, 1) });
+      const season = Season.create({ seasonNumber: 1, releaseDate: new Date(2021, 1, 1), totalEpisodes: 10 });
+
+      const original = Anime.create({
+        imageUrl: 'http://example.com/recon.png',
+        name: 'Recon Anime',
+        synopsis: 'Long enough synopsis for recon test',
+        category,
+        genres: [genre],
+        animeType: 'mixed',
+        productionType: 'original',
+        movies: [movie],
+        seasons: [season],
+        isAdultContent: false,
+      });
+
+      const doc = {
+        id: original.id.value,
+        imageUrl: original.imageUrl.value,
+        name: original.name.value,
+        synopsis: original.synopsis.value,
+        category: category,
+        genres: [genre],
+        animeType: original.animeType,
+        productionType: original.productionType,
+        movies: original.movies,
+        seasons: original.seasons,
+        isAdultContent: original.isAdultContent,
+        createdAt: original.createdAt,
+        updatedAt: original.updatedAt,
+      } as any;
+
+      const reconstructed = Anime.toDomain(doc);
+
+      expect(reconstructed).toBeDefined();
+      expect(reconstructed.id.value).toBe(original.id.value);
+      expect(reconstructed.imageUrl.value).toBe(original.imageUrl.value);
+      expect(reconstructed.name.value).toBe(original.name.value);
+      expect(reconstructed.genres.length).toBe(1);
+      expect(reconstructed.movies.length).toBe(1);
+      expect(reconstructed.seasons.length).toBe(1);
+      expect(reconstructed.animeType).toBe(original.animeType);
+    });
   });
 });

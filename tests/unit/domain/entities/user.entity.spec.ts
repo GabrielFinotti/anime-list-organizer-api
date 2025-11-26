@@ -191,4 +191,32 @@ describe('User Entity', () => {
     expect(user.email.value).toBe('a@b.com');
     expect(user.biography.value).toBe('New biography here');
   });
+
+  it('toDomain should reconstruct a User from a persistence-like object', () => {
+    const user = User.create(defaultUserData);
+
+    const doc = {
+      id: user.id.value,
+      imageUrl: user.imageUrl.value,
+      username: user.username.value,
+      email: user.email.value,
+      password: user.password.value,
+      biography: user.biography.value,
+      animeList: user.animeList,
+      favoriteAnimes: user.favoriteAnimes,
+      role: user.role,
+      createdAt: user.createdAt,
+      updatedAt: user.updatedAt,
+    } as any;
+
+    const reconstructed = User.toDomain(doc);
+
+    expect(reconstructed).toBeDefined();
+    expect(reconstructed.id.value).toBe(user.id.value);
+    expect(reconstructed.imageUrl.value).toBe(user.imageUrl.value);
+    expect(reconstructed.username.value).toBe(user.username.value);
+    expect(reconstructed.email.value).toBe(user.email.value);
+    expect(reconstructed.biography.value).toBe(user.biography.value);
+    expect(reconstructed.role).toBe(user.role);
+  });
 });

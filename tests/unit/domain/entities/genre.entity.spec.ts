@@ -107,4 +107,29 @@ describe('Genre Entity', () => {
       }).toThrow();
     });
   });
+
+  describe('toDomain', () => {
+    it('should reconstruct a Genre from a persistence-like object', () => {
+      const original = Genre.create('Horror', 'Scary stories and suspense', true);
+
+      const doc = {
+        id: original.id.value,
+        name: original.name.value,
+        description: original.description.value,
+        isAdultContent: original.isAdultContent,
+        createdAt: original.createdAt,
+        updatedAt: original.updatedAt,
+      } as any;
+
+      const reconstructed = Genre.toDomain(doc);
+
+      expect(reconstructed).toBeDefined();
+      expect(reconstructed.id.value).toBe(original.id.value);
+      expect(reconstructed.name.value).toBe(original.name.value);
+      expect(reconstructed.description.value).toBe(original.description.value);
+      expect(reconstructed.isAdultContent).toBe(true);
+      expect(reconstructed.createdAt.getTime()).toBe(original.createdAt.getTime());
+      expect(reconstructed.updatedAt.getTime()).toBe(original.updatedAt.getTime());
+    });
+  });
 });

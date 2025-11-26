@@ -106,4 +106,27 @@ describe('Category Entity', () => {
       }).toThrow();
     });
   });
+
+  describe('toDomain', () => {
+    it('should reconstruct a Category from a persistence-like object', () => {
+      const original = Category.create('Adventure', 'Explorative and journey focused');
+
+      const doc = {
+        id: original.id.value,
+        name: original.name.value,
+        description: original.description.value,
+        createdAt: original.createdAt,
+        updatedAt: original.updatedAt,
+      } as any;
+
+      const reconstructed = Category.toDomain(doc);
+
+      expect(reconstructed).toBeDefined();
+      expect(reconstructed.id.value).toBe(original.id.value);
+      expect(reconstructed.name.value).toBe(original.name.value);
+      expect(reconstructed.description.value).toBe(original.description.value);
+      expect(reconstructed.createdAt.getTime()).toBe(original.createdAt.getTime());
+      expect(reconstructed.updatedAt.getTime()).toBe(original.updatedAt.getTime());
+    });
+  });
 });

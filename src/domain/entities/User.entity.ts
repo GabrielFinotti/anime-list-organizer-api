@@ -338,6 +338,40 @@ class User {
     this._updatedAt = new Date();
   }
 
+  static toDomain(data: {
+    id: string;
+    imageUrl: string;
+    username: string;
+    email: string;
+    password: string;
+    biography: string;
+    animeList: {
+      list: AnimeStatus[];
+      updatedAt: Date;
+    };
+    favoriteAnimes: {
+      list: Anime[];
+      updatedAt: Date;
+    };
+    role: Role;
+    createdAt: Date;
+    updatedAt: Date;
+  }) {
+    return new User({
+      id: Id.create(data.id),
+      imageUrl: Url.create(data.imageUrl),
+      username: Name.create(data.username),
+      email: Email.create(data.email),
+      password: Password.createFromHash(data.password),
+      biography: Description.create(data.biography),
+      animeList: data.animeList,
+      favoriteAnimes: data.favoriteAnimes,
+      role: data.role,
+      createdAt: data.createdAt,
+      updatedAt: data.updatedAt,
+    });
+  }
+
   equals(other: User) {
     return this._id.equals(other._id);
   }

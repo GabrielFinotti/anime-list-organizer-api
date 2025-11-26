@@ -61,6 +61,22 @@ class Category {
     });
   }
 
+  static toDomain(doc: {
+    id: string;
+    name: string;
+    description: string;
+    createdAt: Date;
+    updatedAt: Date;
+  }) {
+    return new Category({
+      id: Id.create(doc.id),
+      name: Name.create(doc.name),
+      description: Description.create(doc.description),
+      createdAt: doc.createdAt,
+      updatedAt: doc.updatedAt,
+    });
+  }
+
   equals(other: Category) {
     return this._id.equals(other.id);
   }

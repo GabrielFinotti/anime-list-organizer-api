@@ -391,6 +391,38 @@ class Anime {
     this._updatedAt = new Date();
   }
 
+  static toDomain(data: {
+    id: string;
+    imageUrl: string;
+    name: string;
+    synopsis: string;
+    category: Category;
+    genres: Genre[];
+    animeType: AnimeType;
+    productionType: ProductionType;
+    movies: Movie[];
+    seasons: Season[];
+    isAdultContent: boolean;
+    createdAt: Date;
+    updatedAt: Date;
+  }) {
+    return new Anime({
+      id: Id.create(data.id),
+      imageUrl: Url.create(data.imageUrl),
+      name: Name.create(data.name),
+      synopsis: Description.create(data.synopsis),
+      category: data.category,
+      genres: data.genres,
+      animeType: data.animeType,
+      productionType: data.productionType,
+      movies: data.movies,
+      seasons: data.seasons,
+      isAdultContent: data.isAdultContent,
+      createdAt: data.createdAt,
+      updatedAt: data.updatedAt,
+    });
+  }
+
   equals(other: Anime) {
     return this._id.equals(other._id);
   }

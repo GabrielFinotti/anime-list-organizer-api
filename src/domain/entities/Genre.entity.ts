@@ -71,6 +71,24 @@ class Genre {
     });
   }
 
+  static toDomain(doc: {
+    id: string;
+    name: string;
+    description: string;
+    isAdultContent: boolean;
+    createdAt: Date;
+    updatedAt: Date;
+  }) {
+    return new Genre({
+      id: Id.create(doc.id),
+      name: Name.create(doc.name),
+      description: Description.create(doc.description),
+      isAdultContent: doc.isAdultContent,
+      createdAt: doc.createdAt,
+      updatedAt: doc.updatedAt,
+    });
+  }
+
   private static validateIsAdultContent(value: boolean) {
     if (typeof value !== 'boolean') {
       throw new Error('Adult content flag must be a boolean.');

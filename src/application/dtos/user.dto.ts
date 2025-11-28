@@ -55,3 +55,55 @@ export type UserOutputDTO = {
   createdAt: Date;
   updatedAt: Date;
 };
+
+// ============================================
+// INPUT DTOs para Use Cases
+// ============================================
+
+export type UpdateUserInputDTO = {
+  id: string;
+  username?: string;
+  email?: string;
+  password?: string;
+  biography?: string;
+  imageUrl?: string;
+};
+
+export type AddAnimeToListInputDTO = {
+  userId: string;
+  animeId: string;
+};
+
+export type RemoveAnimeFromListInputDTO = {
+  userId: string;
+  animeId: string;
+};
+
+export type ToggleAnimeLikeInputDTO = {
+  userId: string;
+  animeId: string;
+};
+
+export type UpdateMovieStatusInputDTO = {
+  userId: string;
+  animeId: string;
+  movie: {
+    name: string;
+    releaseDate: Date;
+  };
+  status: 'watching' | 'finished' | 'in_list';
+  isLiked: boolean;
+};
+
+export type UpdateSeasonStatusInputDTO = {
+  userId: string;
+  animeId: string;
+  season: {
+    seasonNumber: number;
+    releaseDate: Date;
+    totalEpisodes: number;
+  };
+  status: 'watching' | 'finished' | 'in_list';
+  lastEpisodeWatched: number;
+  isLiked: boolean;
+};

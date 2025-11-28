@@ -55,7 +55,7 @@ describe('UserPersistenceMapper', () => {
       expect(document.password).toBe(user.password.value);
       expect(document.biography).toBe('This is a test biography for the user');
       expect(document.animeList.list).toHaveLength(0);
-      expect(document.favoriteAnimes.list).toHaveLength(0);
+      expect((document as any).favoriteAnimes).toBeUndefined();
       expect(document.role).toBe('user');
     });
 
@@ -96,12 +96,11 @@ describe('UserPersistenceMapper', () => {
       });
 
       user.addAnimeToAnimeList(anime);
-      user.addAnimeToFavorites(anime);
+      user.updateAnimeLikeStatus(anime);
 
       const document = UserPersistenceMapper.toPersistence(user);
 
-      expect(document.favoriteAnimes.list).toHaveLength(1);
-      expect(document.favoriteAnimes.list[0]).toBe(anime.id.value);
+      expect(document.animeList.list[0].isLiked).toBe(true);
     });
 
     it('should handle admin role', async () => {
@@ -133,26 +132,21 @@ describe('UserPersistenceMapper', () => {
           list: [],
           updatedAt: now,
         },
-        favoriteAnimes: {
-          list: [],
-          updatedAt: now,
-        },
+        // favoriteAnimes removed from persistence model; likes come from animeList.isLiked
         role: 'user',
         createdAt: now,
         updatedAt: now,
       };
 
       const animesMap = new Map<string, Anime>();
-      const favoritesMap = new Map<string, Anime>();
-
-      const user = UserPersistenceMapper.toDomain(doc, animesMap, favoritesMap);
+      const user = UserPersistenceMapper.toDomain(doc, animesMap);
 
       expect(user.id.value).toBe(validUserId);
       expect(user.username.value).toBe('testuser');
       expect(user.email.value).toBe('test@example.com');
       expect(user.biography?.value).toBe('This is a test biography');
       expect(user.animeList.list).toHaveLength(0);
-      expect(user.favoriteAnimes.list).toHaveLength(0);
+      expect(user.favoriteAnimes).toHaveLength(0);
       expect(user.role).toBe('user');
     });
 
@@ -191,10 +185,7 @@ describe('UserPersistenceMapper', () => {
           ],
           updatedAt: now,
         },
-        favoriteAnimes: {
-          list: [],
-          updatedAt: now,
-        },
+        // favoriteAnimes omitted; derive favorites from animeList.isLiked
         role: 'user',
         createdAt: now,
         updatedAt: now,
@@ -204,7 +195,7 @@ describe('UserPersistenceMapper', () => {
       animesMap.set(anime.id.value, anime);
       const favoritesMap = new Map<string, Anime>();
 
-      const user = UserPersistenceMapper.toDomain(doc, animesMap, favoritesMap);
+      const user = UserPersistenceMapper.toDomain(doc, animesMap);
 
       expect(user.animeList.list).toHaveLength(1);
       expect(user.animeList.list[0].anime.id.value).toBe(anime.id.value);
@@ -238,10 +229,6 @@ describe('UserPersistenceMapper', () => {
           ],
           updatedAt: now,
         },
-        favoriteAnimes: {
-          list: [anime.id.value],
-          updatedAt: now,
-        },
         role: 'user',
         createdAt: now,
         updatedAt: now,
@@ -249,13 +236,11 @@ describe('UserPersistenceMapper', () => {
 
       const animesMap = new Map<string, Anime>();
       animesMap.set(anime.id.value, anime);
-      const favoritesMap = new Map<string, Anime>();
-      favoritesMap.set(anime.id.value, anime);
 
-      const user = UserPersistenceMapper.toDomain(doc, animesMap, favoritesMap);
+      const user = UserPersistenceMapper.toDomain(doc, animesMap);
 
-      expect(user.favoriteAnimes.list).toHaveLength(1);
-      expect(user.favoriteAnimes.list[0].id.value).toBe(anime.id.value);
+      expect(user.favoriteAnimes.length).toBe(1);
+      expect(user.favoriteAnimes[0].id.value).toBe(anime.id.value);
     });
 
     it('should throw error when anime not found in animesMap', () => {
@@ -278,20 +263,16 @@ describe('UserPersistenceMapper', () => {
           ],
           updatedAt: now,
         },
-        favoriteAnimes: {
-          list: [],
-          updatedAt: now,
-        },
+        // favoriteAnimes omitted
         role: 'user',
         createdAt: now,
         updatedAt: now,
       };
 
       const animesMap = new Map<string, Anime>();
-      const favoritesMap = new Map<string, Anime>();
 
       expect(() => {
-        UserPersistenceMapper.toDomain(doc, animesMap, favoritesMap);
+        UserPersistenceMapper.toDomain(doc, animesMap);
       }).toThrow(`Anime not found: ${validAnimeId}`);
     });
 
@@ -307,19 +288,14 @@ describe('UserPersistenceMapper', () => {
           list: [],
           updatedAt: now,
         },
-        favoriteAnimes: {
-          list: [],
-          updatedAt: now,
-        },
+        // favoriteAnimes omitted
         role: 'admin',
         createdAt: now,
         updatedAt: now,
       };
 
       const animesMap = new Map<string, Anime>();
-      const favoritesMap = new Map<string, Anime>();
-
-      const user = UserPersistenceMapper.toDomain(doc, animesMap, favoritesMap);
+      const user = UserPersistenceMapper.toDomain(doc, animesMap);
 
       expect(user.role).toBe('admin');
     });
@@ -336,11 +312,7 @@ describe('UserPersistenceMapper', () => {
       });
 
       const document = UserPersistenceMapper.toPersistence(originalUser);
-      const reconstructedUser = UserPersistenceMapper.toDomain(
-        document as UserDocument,
-        new Map(),
-        new Map(),
-      );
+      const reconstructedUser = UserPersistenceMapper.toDomain(document as UserDocument, new Map());
 
       expect(reconstructedUser.id.value).toBe(originalUser.id.value);
       expect(reconstructedUser.username.value).toBe(originalUser.username.value);
@@ -368,11 +340,7 @@ describe('UserPersistenceMapper', () => {
       const animesMap = new Map<string, Anime>();
       animesMap.set(anime.id.value, anime);
 
-      const reconstructedUser = UserPersistenceMapper.toDomain(
-        document as UserDocument,
-        animesMap,
-        new Map(),
-      );
+      const reconstructedUser = UserPersistenceMapper.toDomain(document as UserDocument, animesMap);
 
       expect(reconstructedUser.animeList.list).toHaveLength(1);
       expect(reconstructedUser.animeList.list[0].anime.id.value).toBe(

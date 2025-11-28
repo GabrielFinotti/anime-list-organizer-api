@@ -36,13 +36,11 @@ class UserMapper {
         })),
         updatedAt: user.animeList.updatedAt,
       },
-      favoriteAnimes: {
-        list: user.favoriteAnimes.list.map((anime) => ({
-          id: anime.id.value,
-          name: anime.name.value,
-        })),
-        updatedAt: user.favoriteAnimes.updatedAt,
-      },
+      favoriteAnimes: user.favoriteAnimes.map((anime) => ({
+        id: anime.id.value,
+        name: anime.name.value,
+        imageUrl: anime.imageUrl.value,
+      })),
       role: user.role,
       createdAt: user.createdAt,
       updatedAt: user.updatedAt,

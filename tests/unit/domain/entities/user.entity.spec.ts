@@ -22,7 +22,7 @@ describe('User Entity', () => {
     expect(user.id).toBeDefined();
     expect(user.role).toBe('user');
     expect(user.animeList.list.length).toBe(0);
-    expect(user.favoriteAnimes.list.length).toBe(0);
+    expect(user.favoriteAnimes.length).toBe(0);
   });
 
   it('should add and remove anime from animeList', () => {
@@ -68,7 +68,7 @@ describe('User Entity', () => {
     expect(() => user.removeAnimeFromAnimeList(anime)).toThrow('Anime is not in the anime list');
   });
 
-  it('should add and remove anime from favorites', () => {
+  it('should add and remove anime from favorites using updateAnimeLikeStatus', () => {
     const user = User.create(defaultUserData);
 
     const category = Category.create('Action', 'Action description');
@@ -88,15 +88,32 @@ describe('User Entity', () => {
       isAdultContent: false,
     });
 
-    user.addAnimeToFavorites(anime);
-    expect(user.favoriteAnimes.list.length).toBe(1);
-    expect(user.favoriteAnimes.list[0].equals(anime)).toBe(true);
+    user.addAnimeToAnimeList(anime);
+    user.updateAnimeLikeStatus(anime);
+    expect(user.favoriteAnimes.length).toBe(1);
+    expect(user.favoriteAnimes[0].equals(anime)).toBe(true);
 
-    expect(() => user.addAnimeToFavorites(anime)).toThrow('Anime is already in favorites');
+    // toggling again will remove it from favorites
+    user.updateAnimeLikeStatus(anime);
+    expect(user.favoriteAnimes.length).toBe(0);
 
-    user.removeAnimeFromFavorites(anime);
-    expect(user.favoriteAnimes.list.length).toBe(0);
-    expect(() => user.removeAnimeFromFavorites(anime)).toThrow('Anime is not in favorites');
+    // toggling an anime not in the list should throw
+    const anotherAnime = Anime.create({
+      imageUrl: 'http://example.com/a2.png',
+      name: 'NotInList',
+      synopsis: 'Not in list',
+      category,
+      genres: [genre],
+      animeType: 'serie',
+      productionType: 'original',
+      movies: [],
+      seasons: [
+        Season.create({ seasonNumber: 1, releaseDate: new Date(2021, 0, 1), totalEpisodes: 4 }),
+      ],
+      isAdultContent: false,
+    });
+
+    expect(() => user.updateAnimeLikeStatus(anotherAnime)).toThrow('Anime not found in anime list');
   });
 
   it('should update movie and season statuses (and validate belong to anime)', () => {

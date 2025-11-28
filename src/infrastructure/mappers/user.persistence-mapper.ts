@@ -49,10 +49,6 @@ export type UserDocument = {
     list: AnimeStatusDocument[];
     updatedAt: Date;
   };
-  favoriteAnimes: {
-    list: string[];
-    updatedAt: Date;
-  };
   role: 'user' | 'admin';
   createdAt: Date;
   updatedAt: Date;
@@ -84,10 +80,6 @@ export type UserPersistenceData = {
     }[];
     updatedAt: Date;
   };
-  favoriteAnimes: {
-    list: string[];
-    updatedAt: Date;
-  };
   role: 'user' | 'admin';
   createdAt: Date;
   updatedAt: Date;
@@ -97,7 +89,6 @@ class UserPersistenceMapper {
   static toDomain(
     doc: UserDocument,
     animesMap: Map<string, Anime>,
-    favoriteAnimesMap: Map<string, Anime>,
   ): User {
     const animeListDomain = doc.animeList.list.map((animeStatusDoc) => {
       const anime = animesMap.get(animeStatusDoc.anime);
@@ -143,10 +134,6 @@ class UserPersistenceMapper {
       });
     });
 
-    const favoriteAnimesDomain = doc.favoriteAnimes.list
-      .map((animeId) => favoriteAnimesMap.get(animeId))
-      .filter((anime): anime is Anime => anime !== undefined);
-
     return User.toDomain({
       id: doc._id,
       imageUrl: doc.imageUrl,
@@ -157,10 +144,6 @@ class UserPersistenceMapper {
       animeList: {
         list: animeListDomain,
         updatedAt: doc.animeList.updatedAt,
-      },
-      favoriteAnimes: {
-        list: favoriteAnimesDomain,
-        updatedAt: doc.favoriteAnimes.updatedAt,
       },
       role: doc.role,
       createdAt: doc.createdAt,
@@ -201,10 +184,6 @@ class UserPersistenceMapper {
           isLiked: animeStatus.isLiked,
         })),
         updatedAt: user.animeList.updatedAt,
-      },
-      favoriteAnimes: {
-        list: user.favoriteAnimes.list.map((anime) => anime.id.value),
-        updatedAt: user.favoriteAnimes.updatedAt,
       },
       role: user.role,
       createdAt: user.createdAt,

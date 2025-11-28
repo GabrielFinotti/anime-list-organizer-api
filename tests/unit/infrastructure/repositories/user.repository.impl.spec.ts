@@ -65,10 +65,7 @@ describe('UserRepositoryImpl', () => {
       ],
       updatedAt: new Date('2024-01-01'),
     },
-    favoriteAnimes: {
-      list: ['01KB3H4ZMGGDDK6MSS8SQ8GXQ6'],
-      updatedAt: new Date('2024-01-01'),
-    },
+    // favoriteAnimes removed — favorites are derived from animeList.isLiked
     role: 'user' as const,
     createdAt: new Date('2024-01-01'),
     updatedAt: new Date('2024-01-01'),
@@ -180,7 +177,7 @@ describe('UserRepositoryImpl', () => {
       const animesMap = new Map<string, Anime>();
       animesMap.set('01KB3H4ZMGGDDK6MSS8SQ8GXQ6', mockAnime);
 
-      const user = UserPersistenceMapper.toDomain(mockUserDoc, animesMap, animesMap);
+      const user = UserPersistenceMapper.toDomain(mockUserDoc, animesMap);
 
       (UserModel.create as jest.Mock).mockResolvedValue(mockUserDoc);
 
@@ -196,7 +193,7 @@ describe('UserRepositoryImpl', () => {
       const animesMap = new Map<string, Anime>();
       animesMap.set('01KB3H4ZMGGDDK6MSS8SQ8GXQ6', mockAnime);
 
-      const user = UserPersistenceMapper.toDomain(mockUserDoc, animesMap, animesMap);
+      const user = UserPersistenceMapper.toDomain(mockUserDoc, animesMap);
 
       (UserModel.findByIdAndUpdate as jest.Mock).mockResolvedValue(mockUserDoc);
 
@@ -228,10 +225,7 @@ describe('UserRepositoryImpl', () => {
           list: [],
           updatedAt: new Date('2024-01-01'),
         },
-        favoriteAnimes: {
-          list: [],
-          updatedAt: new Date('2024-01-01'),
-        },
+        // favoriteAnimes removed
       };
 
       (UserModel.findById as jest.Mock).mockReturnValue({
@@ -242,7 +236,7 @@ describe('UserRepositoryImpl', () => {
 
       expect(result).not.toBeNull();
       expect(result?.animeList.list).toHaveLength(0);
-      expect(result?.favoriteAnimes.list).toHaveLength(0);
+      expect(result?.favoriteAnimes).toHaveLength(0);
     });
 
     it('should not duplicate anime fetch when anime is in both lists', async () => {

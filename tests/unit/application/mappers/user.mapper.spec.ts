@@ -19,6 +19,6 @@ describe('UserMapper', () => {
     expect(response.biography).toBe(user.biography?.value);
     expect(response.imageUrl).toBe(user.imageUrl?.value);
     expect(response.animeList.list).toEqual([]);
-    expect(response.favoriteAnimes.list).toEqual([]);
+    expect(response.favoriteAnimes).toEqual([]);
   });
 });

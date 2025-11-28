@@ -52,9 +52,8 @@ class UserRepositoryImpl implements IUserRepository {
 
   private async mapToDomain(doc: UserDocument): Promise<User> {
     const animeIds = doc.animeList.list.map((item) => item.anime);
-    const favoriteAnimeIds = doc.favoriteAnimes.list;
 
-    const allAnimeIds = [...new Set([...animeIds, ...favoriteAnimeIds])];
+    const allAnimeIds = [...new Set([...animeIds])];
 
     const animesMap = new Map<string, Anime>();
 
@@ -68,17 +67,7 @@ class UserRepositoryImpl implements IUserRepository {
       }),
     );
 
-    const favoriteAnimesMap = new Map<string, Anime>();
-
-    favoriteAnimeIds.forEach((animeId) => {
-      const anime = animesMap.get(animeId);
-
-      if (anime) {
-        favoriteAnimesMap.set(animeId, anime);
-      }
-    });
-
-    return UserPersistenceMapper.toDomain(doc, animesMap, favoriteAnimesMap);
+    return UserPersistenceMapper.toDomain(doc, animesMap);
   }
 }
 

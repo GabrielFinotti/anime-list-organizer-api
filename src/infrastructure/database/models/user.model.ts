@@ -12,10 +12,6 @@ type IUserDocument = Document & {
     list: IAnimeStatusSchema[];
     updatedAt: Date;
   };
-  favoriteAnimes: {
-    list: string[];
-    updatedAt: Date;
-  };
   role: 'user' | 'admin';
 };
 
@@ -29,10 +25,6 @@ const userSchema = new Schema<IUserDocument>(
     biography: { type: String, required: true },
     animeList: {
       list: [animeStatusSchema],
-      updatedAt: { type: Date, required: true },
-    },
-    favoriteAnimes: {
-      list: [{ type: String, ref: 'Anime' }],
       updatedAt: { type: Date, required: true },
     },
     role: { type: String, enum: ['user', 'admin'], required: true },

@@ -22,10 +22,6 @@ type UserProps = {
     list: AnimeStatus[];
     updatedAt: Date;
   };
-  favoriteAnimes: {
-    list: Anime[];
-    updatedAt: Date;
-  };
   role: Role;
   createdAt: Date;
   updatedAt: Date;
@@ -42,10 +38,6 @@ class User {
     list: AnimeStatus[];
     updatedAt: Date;
   };
-  private _favoriteAnimes: {
-    list: Anime[];
-    updatedAt: Date;
-  };
   private readonly _role: Role;
   private readonly _createdAt: Date;
   private _updatedAt: Date;
@@ -60,7 +52,6 @@ class User {
     this._password = props.password;
     this._biography = props.biography;
     this._animeList = { ...props.animeList };
-    this._favoriteAnimes = { ...props.favoriteAnimes };
     this._role = props.role;
     this._createdAt = props.createdAt;
     this._updatedAt = props.updatedAt;
@@ -95,7 +86,11 @@ class User {
   }
 
   get favoriteAnimes() {
-    return { ...this._favoriteAnimes };
+    return [
+      ...this._animeList.list
+        .filter((animeStatus) => animeStatus.isLiked)
+        .map((status) => status.anime),
+    ];
   }
 
   get role() {
@@ -132,10 +127,6 @@ class User {
       list: [],
       updatedAt: new Date(),
     };
-    const favoriteAnimes = {
-      list: [],
-      updatedAt: new Date(),
-    };
     const role = normalizedRole;
     const createdAt = new Date();
     const updatedAt = new Date();
@@ -148,7 +139,6 @@ class User {
       password,
       biography,
       animeList,
-      favoriteAnimes,
       role,
       createdAt,
       updatedAt,
@@ -159,29 +149,6 @@ class User {
     if (!this.VALID_ROLES.includes(role)) {
       throw new Error(`Invalid role: ${role}`);
     }
-  }
-
-  addAnimeToAnimeList(anime: Anime) {
-    const alreadyExists = this._animeList.list.some((animeStatus) =>
-      animeStatus.anime.equals(anime),
-    );
-
-    if (alreadyExists) throw new Error('Anime is already in the anime list');
-
-    const moviesStatus = this.createMoviesStatusForAnime(anime.movies);
-    const seasonsStatus = this.createSeasonsStatusForAnime(anime.seasons);
-
-    const newAnimeStatus = AnimeStatus.create({
-      anime,
-      status: 'in_list',
-      moviesStatus,
-      seasonsStatus,
-      isLiked: false,
-    });
-
-    this._animeList.list.push(newAnimeStatus);
-    this._animeList.updatedAt = new Date();
-    this._updatedAt = new Date();
   }
 
   private createMoviesStatusForAnime(movies: Anime['movies']) {
@@ -217,6 +184,29 @@ class User {
     return animeSeasonStatus;
   }
 
+  addAnimeToAnimeList(anime: Anime) {
+    const alreadyExists = this._animeList.list.some((animeStatus) =>
+      animeStatus.anime.equals(anime),
+    );
+
+    if (alreadyExists) throw new Error('Anime is already in the anime list');
+
+    const moviesStatus = this.createMoviesStatusForAnime(anime.movies);
+    const seasonsStatus = this.createSeasonsStatusForAnime(anime.seasons);
+
+    const newAnimeStatus = AnimeStatus.create({
+      anime,
+      status: 'in_list',
+      moviesStatus,
+      seasonsStatus,
+      isLiked: false,
+    });
+
+    this._animeList.list.push(newAnimeStatus);
+    this._animeList.updatedAt = new Date();
+    this._updatedAt = new Date();
+  }
+
   removeAnimeFromAnimeList(anime: Anime) {
     const exists = this._animeList.list.some((animeStatus) => animeStatus.anime.equals(anime));
 
@@ -225,6 +215,26 @@ class User {
     this._animeList.list = this._animeList.list.filter(
       (animeStatus) => !animeStatus.anime.equals(anime),
     );
+    this._animeList.updatedAt = new Date();
+    this._updatedAt = new Date();
+  }
+
+  updateAnimeLikeStatus(anime: Anime) {
+    const animeStatus = this._animeList.list.find((status) => status.anime.equals(anime));
+
+    if (!animeStatus) throw new Error('Anime not found in anime list');
+
+    const updatedAnimeStatus = AnimeStatus.create({
+      anime: animeStatus.anime,
+      status: animeStatus.status,
+      moviesStatus: animeStatus.moviesStatus,
+      seasonsStatus: animeStatus.seasonsStatus,
+      isLiked: !animeStatus.isLiked,
+    });
+
+    const animeIndex = this._animeList.list.findIndex((s) => s.anime.equals(anime));
+
+    this._animeList.list[animeIndex] = updatedAnimeStatus;
     this._animeList.updatedAt = new Date();
     this._updatedAt = new Date();
   }
@@ -295,27 +305,6 @@ class User {
     this._animeList.updatedAt = new Date();
     this._updatedAt = new Date();
   }
-  addAnimeToFavorites(anime: Anime) {
-    const alreadyFavorited = this._favoriteAnimes.list.some((favAnime) => favAnime.equals(anime));
-
-    if (alreadyFavorited) throw new Error('Anime is already in favorites');
-
-    this._favoriteAnimes.list.push(anime);
-    this._favoriteAnimes.updatedAt = new Date();
-    this._updatedAt = new Date();
-  }
-
-  removeAnimeFromFavorites(anime: Anime) {
-    const exists = this._favoriteAnimes.list.some((favAnime) => favAnime.equals(anime));
-
-    if (!exists) throw new Error('Anime is not in favorites');
-
-    this._favoriteAnimes.list = this._favoriteAnimes.list.filter(
-      (favAnime) => !favAnime.equals(anime),
-    );
-    this._favoriteAnimes.updatedAt = new Date();
-    this._updatedAt = new Date();
-  }
 
   updateProfileImage(newImageUrl: string) {
     const updatedUrl = Url.create(newImageUrl);
@@ -349,10 +338,6 @@ class User {
       list: AnimeStatus[];
       updatedAt: Date;
     };
-    favoriteAnimes: {
-      list: Anime[];
-      updatedAt: Date;
-    };
     role: Role;
     createdAt: Date;
     updatedAt: Date;
@@ -365,7 +350,6 @@ class User {
       password: Password.createFromHash(data.password),
       biography: Description.create(data.biography),
       animeList: data.animeList,
-      favoriteAnimes: data.favoriteAnimes,
       role: data.role,
       createdAt: data.createdAt,
       updatedAt: data.updatedAt,

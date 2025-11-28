@@ -47,9 +47,10 @@ export type UserOutputDTO = {
     updatedAt: Date;
   };
   favoriteAnimes: {
-    list: { id: string; name: string }[];
-    updatedAt: Date;
-  };
+    id: string;
+    name: string;
+    imageUrl: string;
+  }[];
   role: string;
   createdAt: Date;
   updatedAt: Date;

@@ -5,6 +5,7 @@ export class NotFoundError extends ApplicationError {
     const message = identifier
       ? `${resource} with identifier '${identifier}' not found`
       : `${resource} not found`;
+
     super(message, 404);
   }
 }

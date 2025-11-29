@@ -328,9 +328,7 @@ describe('AnimePersistenceMapper', () => {
       );
 
       expect(reconstructedAnime.movies).toHaveLength(1);
-      expect(reconstructedAnime.movies[0].title.value).toBe(
-        originalAnime.movies[0].title.value,
-      );
+      expect(reconstructedAnime.movies[0].title.value).toBe(originalAnime.movies[0].title.value);
     });
   });
 });

@@ -44,10 +44,6 @@ export type AnimeOutputDTO = {
   updatedAt: Date;
 };
 
-// ============================================
-// INPUT DTOs para Use Cases
-// ============================================
-
 export type UpdateAnimeInputDTO = {
   id: string;
   name?: string;

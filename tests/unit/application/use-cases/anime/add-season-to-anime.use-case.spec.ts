@@ -23,7 +23,9 @@ describe('AddSeasonToAnimeUseCase', () => {
       animeType: 'serie',
       productionType: 'original',
       movies: [],
-      seasons: [Season.create({ seasonNumber: 1, releaseDate: new Date('2002-10-03'), totalEpisodes: 50 })],
+      seasons: [
+        Season.create({ seasonNumber: 1, releaseDate: new Date('2002-10-03'), totalEpisodes: 50 }),
+      ],
       isAdultContent: false,
     });
 

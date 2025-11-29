@@ -56,10 +56,6 @@ export type UserOutputDTO = {
   updatedAt: Date;
 };
 
-// ============================================
-// INPUT DTOs para Use Cases
-// ============================================
-
 export type UpdateUserInputDTO = {
   id: string;
   username?: string;

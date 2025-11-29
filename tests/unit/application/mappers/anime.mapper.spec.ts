@@ -10,7 +10,11 @@ describe('AnimeMapper', () => {
     const category = Category.create('Action', 'Action description');
     const genre = Genre.create('Adventure', 'Adventure desc', false);
     const movie = Movie.create({ name: 'M A', releaseDate: new Date(2023, 1, 1) });
-    const season = Season.create({ seasonNumber: 1, releaseDate: new Date(2022, 0, 1), totalEpisodes: 8 });
+    const season = Season.create({
+      seasonNumber: 1,
+      releaseDate: new Date(2022, 0, 1),
+      totalEpisodes: 8,
+    });
 
     const anime = Anime.create({
       imageUrl: 'http://example.com/pic.png',

@@ -80,9 +80,7 @@ describe('Password Value Object', () => {
     });
 
     it('should throw when hash is not a string', () => {
-      expect(() => Password.createFromHash(123 as any)).toThrow(
-        'Hashed password must be a string',
-      );
+      expect(() => Password.createFromHash(123 as any)).toThrow('Hashed password must be a string');
     });
   });
 });

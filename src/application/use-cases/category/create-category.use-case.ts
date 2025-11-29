@@ -8,9 +8,7 @@ export class CreateCategoryUseCase {
   constructor(private readonly categoryRepository: ICategoryRepository) {}
 
   async execute(input: CategoryInputDTO): Promise<CategoryOutputDTO> {
-    const existingCategory = await this.categoryRepository.findByName(
-      input.name,
-    );
+    const existingCategory = await this.categoryRepository.findByName(input.name);
 
     if (existingCategory) {
       throw new ConflictError('Category', 'name', input.name);

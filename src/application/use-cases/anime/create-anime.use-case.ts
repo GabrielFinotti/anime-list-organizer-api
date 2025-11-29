@@ -28,9 +28,7 @@ export class CreateAnimeUseCase {
       throw new NotFoundError('Category', input.categoryId);
     }
 
-    const genres = await Promise.all(
-      input.genreIds.map((id) => this.genreRepository.findById(id)),
-    );
+    const genres = await Promise.all(input.genreIds.map((id) => this.genreRepository.findById(id)));
 
     const missingGenreIndex = genres.findIndex((g) => g === null);
 

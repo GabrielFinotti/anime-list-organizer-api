@@ -1,5 +1,6 @@
 import express from 'express';
 import MongoConfig from './infrastructure/database/config/mongo.config.js';
+import RedisClient from './infrastructure/cache/redis.client.js';
 import StartEnv from './infrastructure/env/startEnv.config.js';
 
 const env = StartEnv.getInstance();
@@ -9,10 +10,11 @@ app.use(express.json());
 
 const startServer = async () => {
   try {
-    await MongoConfig.newConnection(env.env.MONGO_URI, env.env.MONGO_NAME);
+    await MongoConfig.newConnection();
+    await RedisClient.getInstance().connect();
 
-    app.listen(Number(env.env.PORT), () => {
-      console.log(`Server running on port ${env.env.PORT}`);
+    app.listen(Number(env.value.PORT), () => {
+      console.log(`Server running on port ${env.value.PORT}`);
     });
   } catch (error) {
     if (error instanceof Error) {

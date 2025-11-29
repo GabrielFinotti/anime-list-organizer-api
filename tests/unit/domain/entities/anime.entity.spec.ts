@@ -501,7 +501,11 @@ describe('Anime Entity', () => {
       const genre = Genre.create('Adventure', 'Adventure desc', false);
 
       const movie = Movie.create({ name: 'Film Y', releaseDate: new Date(2022, 1, 1) });
-      const season = Season.create({ seasonNumber: 1, releaseDate: new Date(2021, 1, 1), totalEpisodes: 10 });
+      const season = Season.create({
+        seasonNumber: 1,
+        releaseDate: new Date(2021, 1, 1),
+        totalEpisodes: 10,
+      });
 
       const original = Anime.create({
         imageUrl: 'http://example.com/recon.png',

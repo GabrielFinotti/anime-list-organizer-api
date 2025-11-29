@@ -343,9 +343,7 @@ describe('UserPersistenceMapper', () => {
       const reconstructedUser = UserPersistenceMapper.toDomain(document as UserDocument, animesMap);
 
       expect(reconstructedUser.animeList.list).toHaveLength(1);
-      expect(reconstructedUser.animeList.list[0].anime.id.value).toBe(
-        anime.id.value,
-      );
+      expect(reconstructedUser.animeList.list[0].anime.id.value).toBe(anime.id.value);
     });
   });
 });

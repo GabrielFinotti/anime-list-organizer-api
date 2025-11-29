@@ -86,10 +86,7 @@ export type UserPersistenceData = {
 };
 
 class UserPersistenceMapper {
-  static toDomain(
-    doc: UserDocument,
-    animesMap: Map<string, Anime>,
-  ): User {
+  static toDomain(doc: UserDocument, animesMap: Map<string, Anime>): User {
     const animeListDomain = doc.animeList.list.map((animeStatusDoc) => {
       const anime = animesMap.get(animeStatusDoc.anime);
 

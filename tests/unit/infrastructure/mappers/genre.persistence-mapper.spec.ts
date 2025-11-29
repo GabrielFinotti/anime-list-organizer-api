@@ -71,23 +71,15 @@ describe('GenrePersistenceMapper', () => {
 
   describe('round-trip conversion', () => {
     it('should preserve data through toPersistence -> toDomain cycle', () => {
-      const originalGenre = Genre.create(
-        'Romance',
-        'Love stories and relationships',
-        false,
-      );
+      const originalGenre = Genre.create('Romance', 'Love stories and relationships', false);
 
       const document = GenrePersistenceMapper.toPersistence(originalGenre);
       const reconstructedGenre = GenrePersistenceMapper.toDomain(document);
 
       expect(reconstructedGenre.id.value).toBe(originalGenre.id.value);
       expect(reconstructedGenre.name.value).toBe(originalGenre.name.value);
-      expect(reconstructedGenre.description.value).toBe(
-        originalGenre.description.value,
-      );
-      expect(reconstructedGenre.isAdultContent).toBe(
-        originalGenre.isAdultContent,
-      );
+      expect(reconstructedGenre.description.value).toBe(originalGenre.description.value);
+      expect(reconstructedGenre.isAdultContent).toBe(originalGenre.isAdultContent);
     });
 
     it('should preserve data through toDomain -> toPersistence cycle', () => {

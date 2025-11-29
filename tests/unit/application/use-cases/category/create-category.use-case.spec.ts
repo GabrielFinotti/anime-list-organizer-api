@@ -47,7 +47,9 @@ describe('CreateCategoryUseCase', () => {
     mockCategoryRepository.findByName.mockResolvedValue(existingCategory);
 
     await expect(useCase.execute(input)).rejects.toThrow(ConflictError);
-    await expect(useCase.execute(input)).rejects.toThrow("Category with name 'Action' already exists");
+    await expect(useCase.execute(input)).rejects.toThrow(
+      "Category with name 'Action' already exists",
+    );
     expect(mockCategoryRepository.create).not.toHaveBeenCalled();
   });
 });

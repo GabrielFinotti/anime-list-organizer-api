@@ -66,19 +66,14 @@ describe('CategoryPersistenceMapper', () => {
 
   describe('round-trip conversion', () => {
     it('should preserve data through toPersistence -> toDomain cycle', () => {
-      const originalCategory = Category.create(
-        'Kodomo',
-        'Anime for children audiences',
-      );
+      const originalCategory = Category.create('Kodomo', 'Anime for children audiences');
 
       const document = CategoryPersistenceMapper.toPersistence(originalCategory);
       const reconstructedCategory = CategoryPersistenceMapper.toDomain(document);
 
       expect(reconstructedCategory.id.value).toBe(originalCategory.id.value);
       expect(reconstructedCategory.name.value).toBe(originalCategory.name.value);
-      expect(reconstructedCategory.description.value).toBe(
-        originalCategory.description.value,
-      );
+      expect(reconstructedCategory.description.value).toBe(originalCategory.description.value);
     });
 
     it('should preserve data through toDomain -> toPersistence cycle', () => {
@@ -91,8 +86,7 @@ describe('CategoryPersistenceMapper', () => {
       };
 
       const category = CategoryPersistenceMapper.toDomain(originalDoc);
-      const reconstructedDoc =
-        CategoryPersistenceMapper.toPersistence(category);
+      const reconstructedDoc = CategoryPersistenceMapper.toPersistence(category);
 
       expect(reconstructedDoc._id).toBe(originalDoc._id);
       expect(reconstructedDoc.name).toBe(originalDoc.name);

@@ -7,7 +7,9 @@ type StartEnvProps = {
   PORT: string;
   MONGO_URI: string;
   MONGO_NAME: string;
+  REDIS_URL: string;
   SECRET_KEY: string;
+  TOKEN_EXPIRATION: string;
 };
 
 class StartEnv {
@@ -19,7 +21,7 @@ class StartEnv {
     this._env = props;
   }
 
-  get env() {
+  get value() {
     return this._env;
   }
 
@@ -37,7 +39,9 @@ class StartEnv {
       PORT: process.env.PORT,
       MONGO_URI: process.env.MONGO_URI,
       MONGO_NAME: process.env.MONGO_NAME,
+      REDIS_URL: process.env.REDIS_URL,
       SECRET_KEY: process.env.SECRET_KEY,
+      TOKEN_EXPIRATION: process.env.TOKEN_EXPIRATION,
     };
 
     if (Object.values(envProps).some((value) => value === undefined)) {

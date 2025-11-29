@@ -112,7 +112,9 @@ describe('CategoryRepositoryImpl', () => {
 
       await repository.create(category);
 
-      expect(CategoryModel.create).toHaveBeenCalledWith(CategoryPersistenceMapper.toPersistence(category));
+      expect(CategoryModel.create).toHaveBeenCalledWith(
+        CategoryPersistenceMapper.toPersistence(category),
+      );
     });
   });
 

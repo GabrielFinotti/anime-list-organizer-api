@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "start": "node dist/server.js",
-    "build": "tsup src/server.ts",
+    "build": "tsup",
     "dev": "tsx watch src/server.ts",
     "dev:docker": "docker compose -f docker-compose.dev.yml down && docker compose -f docker-compose.dev.yml up --build",
     "test": "jest",

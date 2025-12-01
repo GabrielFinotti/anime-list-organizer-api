@@ -1,6 +1,6 @@
 import { LogoutUseCase } from '../../../../../src/application/use-cases/auth/logout.use-case';
 import JwtService from '../../../../../src/infrastructure/services/jwt.service';
-import TokenBlacklistService from '../../../../../src/infrastructure/services/token-blacklist.service';
+import TokenBlacklistService from '../../../../../src/infrastructure/services/tokenBlacklist.service';
 
 describe('LogoutUseCase', () => {
   let useCase: LogoutUseCase;

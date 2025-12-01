@@ -1,5 +1,5 @@
 import JwtService from '../../../infrastructure/services/jwt.service.js';
-import TokenBlacklistService from '../../../infrastructure/services/token-blacklist.service.js';
+import TokenBlacklistService from '../../../infrastructure/services/tokenBlacklist.service.js';
 import { LogoutInputDTO } from '../../dtos/auth.dto.js';
 
 export class LogoutUseCase {

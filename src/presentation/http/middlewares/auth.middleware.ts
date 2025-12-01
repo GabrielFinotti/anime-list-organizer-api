@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import JwtService from '../../../infrastructure/services/jwt.service.js';
-import TokenBlacklistService from '../../../infrastructure/services/token-blacklist.service.js';
+import TokenBlacklistService from '../../../infrastructure/services/tokenBlacklist.service.js';
 import { UnauthorizedError } from '../../../application/errors/unauthorized.error.js';
 
 declare global {
@@ -12,11 +12,7 @@ declare global {
   }
 }
 
-export const authMiddleware = async (
-  req: Request,
-  _res: Response,
-  next: NextFunction,
-): Promise<void> => {
+const authMiddleware = async (req: Request, _res: Response, next: NextFunction): Promise<void> => {
   try {
     const authHeader = req.headers.authorization;
 
@@ -53,7 +49,7 @@ export const authMiddleware = async (
 
     if (error instanceof Error) {
       next(new UnauthorizedError(error.message));
-      
+
       return;
     }
 

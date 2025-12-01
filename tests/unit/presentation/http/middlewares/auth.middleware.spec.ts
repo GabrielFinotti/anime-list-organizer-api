@@ -18,7 +18,7 @@ jest.mock('../../../../../src/infrastructure/services/jwt.service', () => {
   };
 });
 
-jest.mock('../../../../../src/infrastructure/services/token-blacklist.service', () => {
+jest.mock('../../../../../src/infrastructure/services/tokenBlacklist.service', () => {
   return {
     __esModule: true,
     default: {
@@ -31,7 +31,7 @@ jest.mock('../../../../../src/infrastructure/services/token-blacklist.service', 
   };
 });
 
-import { authMiddleware } from '../../../../../src/presentation/http/middlewares/auth.middleware';
+import authMiddleware from '../../../../../src/presentation/http/middlewares/auth.middleware';
 
 describe('authMiddleware', () => {
   let mockRequest: Partial<Request>;

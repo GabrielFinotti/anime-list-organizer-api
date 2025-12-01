@@ -20,7 +20,7 @@ jest.mock('../../../../src/infrastructure/cache/redis.client', () => {
   };
 });
 
-import TokenBlacklistService from '../../../../src/infrastructure/services/token-blacklist.service';
+import TokenBlacklistService from '../../../../src/infrastructure/services/tokenBlacklist.service';
 
 describe('TokenBlacklistService', () => {
   let tokenBlacklistService: TokenBlacklistService;

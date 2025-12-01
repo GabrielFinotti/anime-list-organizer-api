@@ -1,42 +1,19 @@
 import { Request, Response, NextFunction } from 'express';
 import { UnauthorizedError } from '../../../../../src/application/errors/unauthorized.error';
-
-// Mock dos services - declarar fora para jest poder hoistear
-const mockVerifyToken = jest.fn();
-const mockIsBlacklisted = jest.fn();
-
-jest.mock('../../../../../src/infrastructure/services/jwt.service', () => {
-  return {
-    __esModule: true,
-    default: {
-      getInstance: () => ({
-        verifyToken: mockVerifyToken,
-        generateToken: jest.fn(),
-        getTokenRemainingTTL: jest.fn(),
-      }),
-    },
-  };
-});
-
-jest.mock('../../../../../src/infrastructure/services/tokenBlacklist.service', () => {
-  return {
-    __esModule: true,
-    default: {
-      getInstance: () => ({
-        isBlacklisted: mockIsBlacklisted,
-        addToBlacklist: jest.fn(),
-        removeFromBlacklist: jest.fn(),
-      }),
-    },
-  };
-});
-
-import authMiddleware from '../../../../../src/presentation/http/middlewares/auth.middleware';
+import {
+  IJwtService,
+  TokenPayload,
+} from '../../../../../src/application/services/jwt.service.interface';
+import { ITokenBlacklistService } from '../../../../../src/application/services/token-blacklist.service.interface';
+import { makeAuthMiddleware } from '../../../../../src/presentation/http/middlewares/auth.middleware';
 
 describe('authMiddleware', () => {
   let mockRequest: Partial<Request>;
   let mockResponse: Partial<Response>;
   let mockNext: jest.MockedFunction<NextFunction>;
+  let mockJwtService: jest.Mocked<IJwtService>;
+  let mockTokenBlacklistService: jest.Mocked<ITokenBlacklistService>;
+  let authMiddleware: ReturnType<typeof makeAuthMiddleware>;
 
   beforeEach(() => {
     mockRequest = {
@@ -44,6 +21,20 @@ describe('authMiddleware', () => {
     };
     mockResponse = {};
     mockNext = jest.fn();
+
+    mockJwtService = {
+      generateToken: jest.fn(),
+      verifyToken: jest.fn(),
+      getTokenRemainingTTL: jest.fn(),
+    };
+
+    mockTokenBlacklistService = {
+      addToBlacklist: jest.fn(),
+      isBlacklisted: jest.fn(),
+      removeFromBlacklist: jest.fn(),
+    };
+
+    authMiddleware = makeAuthMiddleware(mockJwtService, mockTokenBlacklistService);
 
     jest.clearAllMocks();
   });
@@ -87,11 +78,11 @@ describe('authMiddleware', () => {
   describe('Token blacklist validation', () => {
     it('should call next with UnauthorizedError when token is blacklisted', async () => {
       mockRequest.headers = { authorization: 'Bearer blacklisted-token' };
-      mockIsBlacklisted.mockResolvedValue(true);
+      mockTokenBlacklistService.isBlacklisted.mockResolvedValue(true);
 
       await authMiddleware(mockRequest as Request, mockResponse as Response, mockNext);
 
-      expect(mockIsBlacklisted).toHaveBeenCalledWith('blacklisted-token');
+      expect(mockTokenBlacklistService.isBlacklisted).toHaveBeenCalledWith('blacklisted-token');
       expect(mockNext).toHaveBeenCalledWith(expect.any(UnauthorizedError));
       expect(mockNext).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -104,8 +95,8 @@ describe('authMiddleware', () => {
   describe('Token verification', () => {
     it('should call next with UnauthorizedError when token is invalid', async () => {
       mockRequest.headers = { authorization: 'Bearer invalid-token' };
-      mockIsBlacklisted.mockResolvedValue(false);
-      mockVerifyToken.mockImplementation(() => {
+      mockTokenBlacklistService.isBlacklisted.mockResolvedValue(false);
+      mockJwtService.verifyToken.mockImplementation(() => {
         throw new Error('Invalid token');
       });
 
@@ -121,8 +112,8 @@ describe('authMiddleware', () => {
 
     it('should call next with UnauthorizedError when token is expired', async () => {
       mockRequest.headers = { authorization: 'Bearer expired-token' };
-      mockIsBlacklisted.mockResolvedValue(false);
-      mockVerifyToken.mockImplementation(() => {
+      mockTokenBlacklistService.isBlacklisted.mockResolvedValue(false);
+      mockJwtService.verifyToken.mockImplementation(() => {
         throw new Error('Token expired');
       });
 
@@ -139,15 +130,15 @@ describe('authMiddleware', () => {
 
   describe('Successful authentication', () => {
     it('should set userId and userRole on request and call next for valid token', async () => {
-      const validPayload = {
+      const validPayload: TokenPayload = {
         userId: 'user-123',
         email: 'test@example.com',
         role: 'user' as const,
       };
 
       mockRequest.headers = { authorization: 'Bearer valid-token' };
-      mockIsBlacklisted.mockResolvedValue(false);
-      mockVerifyToken.mockReturnValue(validPayload);
+      mockTokenBlacklistService.isBlacklisted.mockResolvedValue(false);
+      mockJwtService.verifyToken.mockReturnValue(validPayload);
 
       await authMiddleware(mockRequest as Request, mockResponse as Response, mockNext);
 
@@ -157,15 +148,15 @@ describe('authMiddleware', () => {
     });
 
     it('should correctly handle admin role', async () => {
-      const adminPayload = {
+      const adminPayload: TokenPayload = {
         userId: 'admin-123',
         email: 'admin@example.com',
         role: 'admin' as const,
       };
 
       mockRequest.headers = { authorization: 'Bearer admin-token' };
-      mockIsBlacklisted.mockResolvedValue(false);
-      mockVerifyToken.mockReturnValue(adminPayload);
+      mockTokenBlacklistService.isBlacklisted.mockResolvedValue(false);
+      mockJwtService.verifyToken.mockReturnValue(adminPayload);
 
       await authMiddleware(mockRequest as Request, mockResponse as Response, mockNext);
 
@@ -178,10 +169,10 @@ describe('authMiddleware', () => {
   describe('Error handling', () => {
     it('should pass through UnauthorizedError directly', async () => {
       mockRequest.headers = { authorization: 'Bearer test-token' };
-      mockIsBlacklisted.mockResolvedValue(false);
+      mockTokenBlacklistService.isBlacklisted.mockResolvedValue(false);
 
       const unauthorizedError = new UnauthorizedError('Custom unauthorized message');
-      mockVerifyToken.mockImplementation(() => {
+      mockJwtService.verifyToken.mockImplementation(() => {
         throw unauthorizedError;
       });
 
@@ -192,8 +183,8 @@ describe('authMiddleware', () => {
 
     it('should wrap generic errors in UnauthorizedError', async () => {
       mockRequest.headers = { authorization: 'Bearer test-token' };
-      mockIsBlacklisted.mockResolvedValue(false);
-      mockVerifyToken.mockImplementation(() => {
+      mockTokenBlacklistService.isBlacklisted.mockResolvedValue(false);
+      mockJwtService.verifyToken.mockImplementation(() => {
         throw new Error('Some generic error');
       });
 

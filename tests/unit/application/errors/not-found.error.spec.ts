@@ -47,7 +47,9 @@ describe('NotFoundError', () => {
   it('should handle UUID identifiers', () => {
     const error = new NotFoundError('User', '550e8400-e29b-41d4-a716-446655440000');
 
-    expect(error.message).toBe("User with identifier '550e8400-e29b-41d4-a716-446655440000' not found");
+    expect(error.message).toBe(
+      "User with identifier '550e8400-e29b-41d4-a716-446655440000' not found",
+    );
   });
 
   it('should handle empty string identifier', () => {

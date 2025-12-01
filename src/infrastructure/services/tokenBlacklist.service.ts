@@ -1,8 +1,10 @@
 import RedisClient from '../cache/redis.client.js';
+import { ITokenBlacklistService } from '../../application/services/token-blacklist.service.interface.js';
 
-class TokenBlacklistService {
+class TokenBlacklistService implements ITokenBlacklistService {
   private readonly redisClient: RedisClient;
   private readonly BLACKLIST_PREFIX = 'blacklist:';
+
   private static instance: TokenBlacklistService;
 
   private constructor() {
@@ -35,7 +37,7 @@ class TokenBlacklistService {
 
   async removeFromBlacklist(token: string): Promise<void> {
     const key = this.getBlacklistKey(token);
-    
+
     await this.redisClient.del(key);
   }
 

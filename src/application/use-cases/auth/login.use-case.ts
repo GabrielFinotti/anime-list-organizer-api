@@ -1,12 +1,12 @@
 import { IUserRepository } from '../../../domain/repositories/user.repository.js';
-import JwtService from '../../../infrastructure/services/jwt.service.js';
+import { IJwtService } from '../../services/jwt.service.interface.js';
 import { LoginInputDTO, LoginOutputDTO } from '../../dtos/auth.dto.js';
 import { UnauthorizedError } from '../../errors/unauthorized.error.js';
 
 export class LoginUseCase {
   constructor(
     private readonly userRepository: IUserRepository,
-    private readonly jwtService: JwtService,
+    private readonly jwtService: IJwtService,
   ) {}
 
   async execute(input: LoginInputDTO): Promise<LoginOutputDTO> {

@@ -23,7 +23,10 @@ describe('errorHandler middleware', () => {
     errorHandler(appError, mockRequest as Request, mockResponse as Response, mockNext);
 
     expect(mockResponse.status).toHaveBeenCalledWith(404);
-    expect(mockResponse.json).toHaveBeenCalledWith({ error: appError.name, message: appError.message });
+    expect(mockResponse.json).toHaveBeenCalledWith({
+      error: appError.name,
+      message: appError.message,
+    });
   });
 
   it('should respond with InternalServerError when a generic Error is thrown', () => {
@@ -34,7 +37,10 @@ describe('errorHandler middleware', () => {
 
     expect(consoleErrorSpy).toHaveBeenCalledWith('Unexpected error:', genericError);
     expect(mockResponse.status).toHaveBeenCalledWith(500);
-    expect(mockResponse.json).toHaveBeenCalledWith({ error: 'InternalServerError', message: 'An unexpected error occurred' });
+    expect(mockResponse.json).toHaveBeenCalledWith({
+      error: 'InternalServerError',
+      message: 'An unexpected error occurred',
+    });
 
     consoleErrorSpy.mockRestore();
   });

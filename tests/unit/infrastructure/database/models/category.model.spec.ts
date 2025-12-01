@@ -36,7 +36,7 @@ describe('CategoryModel', () => {
     });
 
     it('should create timestamps automatically', async () => {
-      const category = await CategoryModel.create(validCategoryData) as any;
+      const category = (await CategoryModel.create(validCategoryData)) as any;
 
       expect(category.createdAt).toBeDefined();
       expect(category.updatedAt).toBeDefined();
@@ -127,7 +127,7 @@ describe('CategoryModel', () => {
     it('should update category fields', async () => {
       await CategoryModel.updateOne(
         { _id: validCategoryData._id },
-        { description: 'Updated description' }
+        { description: 'Updated description' },
       );
 
       const category = await CategoryModel.findById(validCategoryData._id);
@@ -135,27 +135,24 @@ describe('CategoryModel', () => {
     });
 
     it('should update name field', async () => {
-      await CategoryModel.updateOne(
-        { _id: validCategoryData._id },
-        { name: 'Updated Name' }
-      );
+      await CategoryModel.updateOne({ _id: validCategoryData._id }, { name: 'Updated Name' });
 
       const category = await CategoryModel.findById(validCategoryData._id);
       expect(category!.name).toBe('Updated Name');
     });
 
     it('should update updatedAt on modification', async () => {
-      const original = await CategoryModel.findById(validCategoryData._id) as any;
+      const original = (await CategoryModel.findById(validCategoryData._id)) as any;
       const originalUpdatedAt = original!.updatedAt;
 
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await new Promise((resolve) => setTimeout(resolve, 100));
 
       await CategoryModel.updateOne(
         { _id: validCategoryData._id },
-        { description: 'New description' }
+        { description: 'New description' },
       );
 
-      const updated = await CategoryModel.findById(validCategoryData._id) as any;
+      const updated = (await CategoryModel.findById(validCategoryData._id)) as any;
       expect(updated!.updatedAt.getTime()).toBeGreaterThanOrEqual(originalUpdatedAt.getTime());
     });
   });

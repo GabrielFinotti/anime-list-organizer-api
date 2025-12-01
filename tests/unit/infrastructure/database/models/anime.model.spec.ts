@@ -87,7 +87,7 @@ describe('AnimeModel', () => {
     });
 
     it('should create timestamps automatically', async () => {
-      const anime = await AnimeModel.create(validAnimeData) as any;
+      const anime = (await AnimeModel.create(validAnimeData)) as any;
 
       expect(anime.createdAt).toBeDefined();
       expect(anime.updatedAt).toBeDefined();
@@ -227,27 +227,21 @@ describe('AnimeModel', () => {
     });
 
     it('should update anime fields', async () => {
-      await AnimeModel.updateOne(
-        { _id: validAnimeData._id },
-        { synopsis: 'Updated synopsis' }
-      );
+      await AnimeModel.updateOne({ _id: validAnimeData._id }, { synopsis: 'Updated synopsis' });
 
       const anime = await AnimeModel.findById(validAnimeData._id);
       expect(anime!.synopsis).toBe('Updated synopsis');
     });
 
     it('should update updatedAt on modification', async () => {
-      const original = await AnimeModel.findById(validAnimeData._id) as any;
+      const original = (await AnimeModel.findById(validAnimeData._id)) as any;
       const originalUpdatedAt = original!.updatedAt;
 
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await new Promise((resolve) => setTimeout(resolve, 100));
 
-      await AnimeModel.updateOne(
-        { _id: validAnimeData._id },
-        { synopsis: 'New synopsis' }
-      );
+      await AnimeModel.updateOne({ _id: validAnimeData._id }, { synopsis: 'New synopsis' });
 
-      const updated = await AnimeModel.findById(validAnimeData._id) as any;
+      const updated = (await AnimeModel.findById(validAnimeData._id)) as any;
       expect(updated!.updatedAt.getTime()).toBeGreaterThanOrEqual(originalUpdatedAt.getTime());
     });
   });

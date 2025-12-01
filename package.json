@@ -1,7 +1,7 @@
 {
-  "name": "anime-list-organizer-api",
+  "name": "anime-timeline-api",
   "version": "4.0.0-alpha.1",
-  "description": "API Dedicada para o Anime List Organizer",
+  "description": "API Dedicada para o Anime Timeline",
   "main": "server.js",
   "type": "module",
   "scripts": {

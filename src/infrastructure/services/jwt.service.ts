@@ -1,18 +1,13 @@
 import jwt, { JsonWebTokenError, TokenExpiredError, SignOptions } from 'jsonwebtoken';
 import StartEnv from '../env/startEnv.config.js';
-
-export type TokenPayload = {
-  userId: string;
-  email: string;
-  role: 'user' | 'admin';
-};
+import { IJwtService, TokenPayload } from '../../application/services/jwt.service.interface.js';
 
 type DecodedToken = TokenPayload & {
   iat: number;
   exp: number;
 };
 
-class JwtService {
+class JwtService implements IJwtService {
   private readonly secretKey: string;
   private readonly tokenExpiration: string;
   private static instance: JwtService;

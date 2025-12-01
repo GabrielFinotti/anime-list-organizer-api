@@ -38,7 +38,7 @@ describe('GenreModel', () => {
     });
 
     it('should create timestamps automatically', async () => {
-      const genre = await GenreModel.create(validGenreData) as any;
+      const genre = (await GenreModel.create(validGenreData)) as any;
 
       expect(genre.createdAt).toBeDefined();
       expect(genre.updatedAt).toBeDefined();
@@ -171,7 +171,7 @@ describe('GenreModel', () => {
     it('should update genre description', async () => {
       await GenreModel.updateOne(
         { _id: validGenreData._id },
-        { description: 'Updated description' }
+        { description: 'Updated description' },
       );
 
       const genre = await GenreModel.findById(validGenreData._id);
@@ -179,37 +179,28 @@ describe('GenreModel', () => {
     });
 
     it('should update genre name', async () => {
-      await GenreModel.updateOne(
-        { _id: validGenreData._id },
-        { name: 'Updated Name' }
-      );
+      await GenreModel.updateOne({ _id: validGenreData._id }, { name: 'Updated Name' });
 
       const genre = await GenreModel.findById(validGenreData._id);
       expect(genre!.name).toBe('Updated Name');
     });
 
     it('should update isAdultContent flag', async () => {
-      await GenreModel.updateOne(
-        { _id: validGenreData._id },
-        { isAdultContent: true }
-      );
+      await GenreModel.updateOne({ _id: validGenreData._id }, { isAdultContent: true });
 
       const genre = await GenreModel.findById(validGenreData._id);
       expect(genre!.isAdultContent).toBe(true);
     });
 
     it('should update updatedAt on modification', async () => {
-      const original = await GenreModel.findById(validGenreData._id) as any;
+      const original = (await GenreModel.findById(validGenreData._id)) as any;
       const originalUpdatedAt = original!.updatedAt;
 
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await new Promise((resolve) => setTimeout(resolve, 100));
 
-      await GenreModel.updateOne(
-        { _id: validGenreData._id },
-        { description: 'New description' }
-      );
+      await GenreModel.updateOne({ _id: validGenreData._id }, { description: 'New description' });
 
-      const updated = await GenreModel.findById(validGenreData._id) as any;
+      const updated = (await GenreModel.findById(validGenreData._id)) as any;
       expect(updated!.updatedAt.getTime()).toBeGreaterThanOrEqual(originalUpdatedAt.getTime());
     });
   });

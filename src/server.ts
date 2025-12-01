@@ -11,6 +11,7 @@ app.use(express.json());
 const startServer = async () => {
   try {
     await MongoConfig.newConnection();
+
     await RedisClient.getInstance().connect();
 
     app.listen(Number(env.value.PORT), () => {

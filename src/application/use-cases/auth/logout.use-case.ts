@@ -1,11 +1,11 @@
-import JwtService from '../../../infrastructure/services/jwt.service.js';
-import TokenBlacklistService from '../../../infrastructure/services/tokenBlacklist.service.js';
+import { IJwtService } from '../../services/jwt.service.interface.js';
+import { ITokenBlacklistService } from '../../services/token-blacklist.service.interface.js';
 import { LogoutInputDTO } from '../../dtos/auth.dto.js';
 
 export class LogoutUseCase {
   constructor(
-    private readonly jwtService: JwtService,
-    private readonly tokenBlacklistService: TokenBlacklistService,
+    private readonly jwtService: IJwtService,
+    private readonly tokenBlacklistService: ITokenBlacklistService,
   ) {}
 
   async execute(input: LogoutInputDTO): Promise<void> {

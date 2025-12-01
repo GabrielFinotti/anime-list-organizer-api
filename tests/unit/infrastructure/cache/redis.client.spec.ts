@@ -51,10 +51,13 @@ describe('RedisClient', () => {
     });
 
     it('should create Redis client with correct configuration', () => {
-      expect(Redis).toHaveBeenCalledWith('redis://localhost:6379', expect.objectContaining({
-        maxRetriesPerRequest: 3,
-        lazyConnect: true,
-      }));
+      expect(Redis).toHaveBeenCalledWith(
+        'redis://localhost:6379',
+        expect.objectContaining({
+          maxRetriesPerRequest: 3,
+          lazyConnect: true,
+        }),
+      );
     });
 
     it('should register event handlers', () => {

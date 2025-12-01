@@ -47,7 +47,7 @@ describe('UserModel', () => {
     });
 
     it('should create timestamps automatically', async () => {
-      const user = await UserModel.create(validUserData) as any;
+      const user = (await UserModel.create(validUserData)) as any;
 
       expect(user.createdAt).toBeDefined();
       expect(user.updatedAt).toBeDefined();
@@ -229,12 +229,20 @@ describe('UserModel', () => {
     };
 
     it('should accept watching status', async () => {
-      const user = await createUserWithAnimeStatus('watching', 'user-watching', 'watching@test.com');
+      const user = await createUserWithAnimeStatus(
+        'watching',
+        'user-watching',
+        'watching@test.com',
+      );
       expect(user.animeList.list[0].status).toBe('watching');
     });
 
     it('should accept finished status', async () => {
-      const user = await createUserWithAnimeStatus('finished', 'user-finished', 'finished@test.com');
+      const user = await createUserWithAnimeStatus(
+        'finished',
+        'user-finished',
+        'finished@test.com',
+      );
       expect(user.animeList.list[0].status).toBe('finished');
     });
 
@@ -250,7 +258,7 @@ describe('UserModel', () => {
 
     it('should fail with invalid status', async () => {
       await expect(
-        createUserWithAnimeStatus('invalid', 'user-invalid', 'invalid@test.com')
+        createUserWithAnimeStatus('invalid', 'user-invalid', 'invalid@test.com'),
       ).rejects.toThrow();
     });
   });
@@ -321,30 +329,21 @@ describe('UserModel', () => {
     });
 
     it('should update user fields', async () => {
-      await UserModel.updateOne(
-        { _id: validUserData._id },
-        { biography: 'Updated biography' }
-      );
+      await UserModel.updateOne({ _id: validUserData._id }, { biography: 'Updated biography' });
 
       const user = await UserModel.findById(validUserData._id);
       expect(user!.biography).toBe('Updated biography');
     });
 
     it('should update username', async () => {
-      await UserModel.updateOne(
-        { _id: validUserData._id },
-        { username: 'newusername' }
-      );
+      await UserModel.updateOne({ _id: validUserData._id }, { username: 'newusername' });
 
       const user = await UserModel.findById(validUserData._id);
       expect(user!.username).toBe('newusername');
     });
 
     it('should update user role', async () => {
-      await UserModel.updateOne(
-        { _id: validUserData._id },
-        { role: 'admin' }
-      );
+      await UserModel.updateOne({ _id: validUserData._id }, { role: 'admin' });
 
       const user = await UserModel.findById(validUserData._id);
       expect(user!.role).toBe('admin');
@@ -364,10 +363,7 @@ describe('UserModel', () => {
         updatedAt: new Date(),
       };
 
-      await UserModel.updateOne(
-        { _id: validUserData._id },
-        { animeList: newAnimeList }
-      );
+      await UserModel.updateOne({ _id: validUserData._id }, { animeList: newAnimeList });
 
       const user = await UserModel.findById(validUserData._id);
       expect(user!.animeList.list).toHaveLength(1);
@@ -375,17 +371,14 @@ describe('UserModel', () => {
     });
 
     it('should update updatedAt on modification', async () => {
-      const original = await UserModel.findById(validUserData._id) as any;
+      const original = (await UserModel.findById(validUserData._id)) as any;
       const originalUpdatedAt = original!.updatedAt;
 
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await new Promise((resolve) => setTimeout(resolve, 100));
 
-      await UserModel.updateOne(
-        { _id: validUserData._id },
-        { biography: 'New biography' }
-      );
+      await UserModel.updateOne({ _id: validUserData._id }, { biography: 'New biography' });
 
-      const updated = await UserModel.findById(validUserData._id) as any;
+      const updated = (await UserModel.findById(validUserData._id)) as any;
       expect(updated!.updatedAt.getTime()).toBeGreaterThanOrEqual(originalUpdatedAt.getTime());
     });
   });
@@ -436,7 +429,11 @@ describe('UserModel', () => {
               ],
               seasonsStatus: [
                 {
-                  season: { seasonNumber: 1, releaseDate: new Date('2020-01-01'), totalEpisodes: 12 },
+                  season: {
+                    seasonNumber: 1,
+                    releaseDate: new Date('2020-01-01'),
+                    totalEpisodes: 12,
+                  },
                   status: 'watching' as const,
                   lastEpisodeWatched: 6,
                   isLiked: true,

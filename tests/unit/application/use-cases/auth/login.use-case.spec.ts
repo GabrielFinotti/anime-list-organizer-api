@@ -1,6 +1,6 @@
 import { LoginUseCase } from '../../../../../src/application/use-cases/auth/login.use-case';
 import { IUserRepository } from '../../../../../src/domain/repositories/user.repository';
-import JwtService, { TokenPayload } from '../../../../../src/infrastructure/services/jwt.service';
+import { IJwtService, TokenPayload } from '../../../../../src/application/services/jwt.service.interface';
 import { UnauthorizedError } from '../../../../../src/application/errors/unauthorized.error';
 import User from '../../../../../src/domain/entities/User.entity';
 import Password from '../../../../../src/domain/value-objects/password.value-object';
@@ -8,7 +8,7 @@ import Password from '../../../../../src/domain/value-objects/password.value-obj
 describe('LoginUseCase', () => {
   let useCase: LoginUseCase;
   let mockUserRepository: jest.Mocked<IUserRepository>;
-  let mockJwtService: jest.Mocked<JwtService>;
+  let mockJwtService: jest.Mocked<IJwtService>;
 
   const createMockUser = (overrides: Partial<{ email: string; password: string }> = {}) => {
     const user = User.create({
@@ -37,7 +37,7 @@ describe('LoginUseCase', () => {
       generateToken: jest.fn(),
       verifyToken: jest.fn(),
       getTokenRemainingTTL: jest.fn(),
-    } as unknown as jest.Mocked<JwtService>;
+    } as unknown as jest.Mocked<IJwtService>;
 
     useCase = new LoginUseCase(mockUserRepository, mockJwtService);
   });

@@ -36,7 +36,7 @@ export class AnimeController {
     private readonly removeGenreFromAnimeUseCase: RemoveGenreFromAnimeUseCase,
   ) {}
 
-  async create(req: Request, res: Response, next: NextFunction): Promise<void> {
+  create = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const input: AnimeInputDTO = {
         imageUrl: req.body.imageUrl,
@@ -57,9 +57,9 @@ export class AnimeController {
     } catch (error) {
       next(error);
     }
-  }
+  };
 
-  async getById(req: Request, res: Response, next: NextFunction): Promise<void> {
+  getById = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const { id } = req.params;
 
@@ -69,9 +69,9 @@ export class AnimeController {
     } catch (error) {
       next(error);
     }
-  }
+  };
 
-  async getAll(_req: Request, res: Response, next: NextFunction): Promise<void> {
+  getAll = async (_req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const animes = await this.getAllAnimesUseCase.execute();
 
@@ -79,9 +79,9 @@ export class AnimeController {
     } catch (error) {
       next(error);
     }
-  }
+  };
 
-  async update(req: Request, res: Response, next: NextFunction): Promise<void> {
+  update = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const { id } = req.params;
 
@@ -102,9 +102,9 @@ export class AnimeController {
     } catch (error) {
       next(error);
     }
-  }
+  };
 
-  async delete(req: Request, res: Response, next: NextFunction): Promise<void> {
+  delete = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const { id } = req.params;
 
@@ -114,9 +114,9 @@ export class AnimeController {
     } catch (error) {
       next(error);
     }
-  }
+  };
 
-  async addMovie(req: Request, res: Response, next: NextFunction): Promise<void> {
+  addMovie = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const { id } = req.params;
 
@@ -132,9 +132,9 @@ export class AnimeController {
     } catch (error) {
       next(error);
     }
-  }
+  };
 
-  async addSeason(req: Request, res: Response, next: NextFunction): Promise<void> {
+  addSeason = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const { id } = req.params;
 
@@ -151,9 +151,9 @@ export class AnimeController {
     } catch (error) {
       next(error);
     }
-  }
+  };
 
-  async addGenre(req: Request, res: Response, next: NextFunction): Promise<void> {
+  addGenre = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const { id } = req.params;
 
@@ -168,9 +168,9 @@ export class AnimeController {
     } catch (error) {
       next(error);
     }
-  }
+  };
 
-  async removeMovie(req: Request, res: Response, next: NextFunction): Promise<void> {
+  removeMovie = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const { id } = req.params;
 
@@ -186,9 +186,9 @@ export class AnimeController {
     } catch (error) {
       next(error);
     }
-  }
+  };
 
-  async removeSeason(req: Request, res: Response, next: NextFunction): Promise<void> {
+  removeSeason = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const { id } = req.params;
 
@@ -205,9 +205,9 @@ export class AnimeController {
     } catch (error) {
       next(error);
     }
-  }
+  };
 
-  async removeGenre(req: Request, res: Response, next: NextFunction): Promise<void> {
+  removeGenre = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const { id, genreId } = req.params;
 
@@ -222,7 +222,7 @@ export class AnimeController {
     } catch (error) {
       next(error);
     }
-  }
+  };
 }
 
 export default AnimeController;

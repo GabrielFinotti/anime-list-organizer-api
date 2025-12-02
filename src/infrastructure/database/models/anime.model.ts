@@ -18,7 +18,7 @@ type IAnimeDocument = Document & {
 
 const animeSchema = new Schema<IAnimeDocument>(
   {
-    _id: { type: String, required: true, unique: true },
+    _id: { type: String, required: true },
     imageUrl: { type: String, required: true },
     name: { type: String, required: true, unique: true },
     synopsis: { type: String, required: true },

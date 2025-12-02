@@ -13,7 +13,7 @@ export class CategoryController {
     private readonly deleteCategoryUseCase: DeleteCategoryUseCase,
   ) {}
 
-  async create(req: Request, res: Response, next: NextFunction): Promise<void> {
+  create = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const input: CategoryInputDTO = {
         name: req.body.name,
@@ -26,9 +26,9 @@ export class CategoryController {
     } catch (error) {
       next(error);
     }
-  }
+  };
 
-  async getById(req: Request, res: Response, next: NextFunction): Promise<void> {
+  getById = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const { id } = req.params;
 
@@ -38,9 +38,9 @@ export class CategoryController {
     } catch (error) {
       next(error);
     }
-  }
+  };
 
-  async getAll(_req: Request, res: Response, next: NextFunction): Promise<void> {
+  getAll = async (_req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const categories = await this.getAllCategoriesUseCase.execute();
 
@@ -48,9 +48,9 @@ export class CategoryController {
     } catch (error) {
       next(error);
     }
-  }
+  };
 
-  async delete(req: Request, res: Response, next: NextFunction): Promise<void> {
+  delete = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const { id } = req.params;
 
@@ -60,7 +60,7 @@ export class CategoryController {
     } catch (error) {
       next(error);
     }
-  }
+  };
 }
 
 export default CategoryController;

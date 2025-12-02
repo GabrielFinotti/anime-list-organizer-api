@@ -33,7 +33,7 @@ export class UserController {
     private readonly updateSeasonStatusUseCase: UpdateSeasonStatusUseCase,
   ) {}
 
-  async create(req: Request, res: Response, next: NextFunction): Promise<void> {
+  create = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const input: UserInputDTO = {
         imageUrl: req.body.imageUrl,
@@ -50,9 +50,9 @@ export class UserController {
     } catch (error) {
       next(error);
     }
-  }
+  };
 
-  async getById(req: Request, res: Response, next: NextFunction): Promise<void> {
+  getById = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const { id } = req.params;
 
@@ -62,9 +62,9 @@ export class UserController {
     } catch (error) {
       next(error);
     }
-  }
+  };
 
-  async getAll(_req: Request, res: Response, next: NextFunction): Promise<void> {
+  getAll = async (_req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const users = await this.getAllUsersUseCase.execute();
 
@@ -72,9 +72,9 @@ export class UserController {
     } catch (error) {
       next(error);
     }
-  }
+  };
 
-  async update(req: Request, res: Response, next: NextFunction): Promise<void> {
+  update = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const { id } = req.params;
 
@@ -93,9 +93,9 @@ export class UserController {
     } catch (error) {
       next(error);
     }
-  }
+  };
 
-  async delete(req: Request, res: Response, next: NextFunction): Promise<void> {
+  delete = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const { id } = req.params;
 
@@ -105,9 +105,9 @@ export class UserController {
     } catch (error) {
       next(error);
     }
-  }
+  };
 
-  async addAnimeToList(req: Request, res: Response, next: NextFunction): Promise<void> {
+  addAnimeToList = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const { id } = req.params;
 
@@ -122,9 +122,9 @@ export class UserController {
     } catch (error) {
       next(error);
     }
-  }
+  };
 
-  async removeAnimeFromList(req: Request, res: Response, next: NextFunction): Promise<void> {
+  removeAnimeFromList = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const { id, animeId } = req.params;
 
@@ -139,9 +139,9 @@ export class UserController {
     } catch (error) {
       next(error);
     }
-  }
+  };
 
-  async toggleAnimeLike(req: Request, res: Response, next: NextFunction): Promise<void> {
+  toggleAnimeLike = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const { id, animeId } = req.params;
 
@@ -156,9 +156,9 @@ export class UserController {
     } catch (error) {
       next(error);
     }
-  }
+  };
 
-  async updateMovieStatus(req: Request, res: Response, next: NextFunction): Promise<void> {
+  updateMovieStatus = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const { id, animeId } = req.params;
 
@@ -179,9 +179,9 @@ export class UserController {
     } catch (error) {
       next(error);
     }
-  }
+  };
 
-  async updateSeasonStatus(req: Request, res: Response, next: NextFunction): Promise<void> {
+  updateSeasonStatus = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const { id, animeId } = req.params;
 
@@ -204,7 +204,7 @@ export class UserController {
     } catch (error) {
       next(error);
     }
-  }
+  };
 }
 
 export default UserController;

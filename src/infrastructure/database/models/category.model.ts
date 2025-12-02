@@ -8,7 +8,7 @@ type ICategoryDocument = Document & {
 
 const categorySchema = new Schema<ICategoryDocument>(
   {
-    _id: { type: String, required: true, unique: true },
+    _id: { type: String, required: true },
     name: { type: String, required: true },
     description: { type: String, required: true },
   },

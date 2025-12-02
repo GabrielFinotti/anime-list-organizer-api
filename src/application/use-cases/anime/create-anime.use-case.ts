@@ -36,8 +36,15 @@ export class CreateAnimeUseCase {
       throw new NotFoundError('Genre', input.genreIds[missingGenreIndex]);
     }
 
-    const movies = input.movies.map((m) => Movie.create(m));
-    const seasons = input.seasons.map((s) => Season.create(s));
+    const movies = input.movies.map((m) => Movie.create({
+      name: m.name,
+      releaseDate: new Date(m.releaseDate),
+    }));
+    const seasons = input.seasons.map((s) => Season.create({
+      seasonNumber: s.seasonNumber,
+      releaseDate: new Date(s.releaseDate),
+      totalEpisodes: s.totalEpisodes,
+    }));
 
     const anime = Anime.create({
       imageUrl: input.imageUrl,

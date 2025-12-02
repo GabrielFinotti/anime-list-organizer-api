@@ -9,7 +9,7 @@ type IGenreDocument = Document & {
 
 const genreSchema = new Schema<IGenreDocument>(
   {
-    _id: { type: String, required: true, unique: true },
+    _id: { type: String, required: true },
     name: { type: String, required: true },
     description: { type: String, required: true },
     isAdultContent: { type: Boolean, required: true },

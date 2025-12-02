@@ -1,4 +1,4 @@
-import jwt, { JsonWebTokenError, TokenExpiredError, SignOptions } from 'jsonwebtoken';
+import jwt from 'jsonwebtoken';
 import StartEnv from '../env/startEnv.config.js';
 import { IJwtService, TokenPayload } from '../../application/services/jwt.service.interface.js';
 
@@ -27,7 +27,7 @@ class JwtService implements IJwtService {
   }
 
   generateToken(payload: TokenPayload): string {
-    const options: SignOptions = {
+    const options: jwt.SignOptions = {
       expiresIn: this.tokenExpiration as jwt.SignOptions['expiresIn'],
     };
 
@@ -44,11 +44,11 @@ class JwtService implements IJwtService {
         role: decoded.role,
       };
     } catch (error) {
-      if (error instanceof TokenExpiredError) {
+      if (error instanceof jwt.TokenExpiredError) {
         throw new Error('Token expired');
       }
 
-      if (error instanceof JsonWebTokenError) {
+      if (error instanceof jwt.JsonWebTokenError) {
         throw new Error('Invalid token');
       }
 

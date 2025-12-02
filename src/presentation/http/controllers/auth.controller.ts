@@ -9,7 +9,7 @@ export class AuthController {
     private readonly logoutUseCase: LogoutUseCase,
   ) {}
 
-  async login(req: Request, res: Response, next: NextFunction): Promise<void> {
+  login = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const input: LoginInputDTO = {
         email: req.body.email,
@@ -22,9 +22,9 @@ export class AuthController {
     } catch (error) {
       next(error);
     }
-  }
+  };
 
-  async logout(req: Request, res: Response, next: NextFunction): Promise<void> {
+  logout = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const authHeader = req.headers.authorization;
       const token = authHeader?.split(' ')[1];
@@ -37,7 +37,7 @@ export class AuthController {
     } catch (error) {
       next(error);
     }
-  }
+  };
 }
 
 export default AuthController;

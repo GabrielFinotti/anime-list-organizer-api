@@ -1,6 +1,9 @@
 import { LoginUseCase } from '../../../../../src/application/use-cases/auth/login.use-case';
 import { IUserRepository } from '../../../../../src/domain/repositories/user.repository';
-import { IJwtService, TokenPayload } from '../../../../../src/application/services/jwt.service.interface';
+import {
+  IJwtService,
+  TokenPayload,
+} from '../../../../../src/application/services/jwt.service.interface';
 import { UnauthorizedError } from '../../../../../src/application/errors/unauthorized.error';
 import User from '../../../../../src/domain/entities/User.entity';
 import Password from '../../../../../src/domain/value-objects/password.value-object';

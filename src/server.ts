@@ -2,11 +2,17 @@ import express from 'express';
 import MongoConfig from './infrastructure/database/config/mongo.config.js';
 import RedisClient from './infrastructure/cache/redis.client.js';
 import StartEnv from './infrastructure/env/startEnv.config.js';
+import routes from './presentation/http/routes/index.js';
+import errorHandler from './presentation/http/middlewares/errorHandler.middleware.js';
 
 const env = StartEnv.getInstance();
 const app = express();
 
 app.use(express.json());
+
+app.use('/api', routes);
+
+app.use(errorHandler);
 
 const startServer = async () => {
   try {

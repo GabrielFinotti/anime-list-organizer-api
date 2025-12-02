@@ -2,15 +2,7 @@ import { Request, Response, NextFunction, RequestHandler } from 'express';
 import { IJwtService } from '../../../application/services/jwt.service.interface.js';
 import { ITokenBlacklistService } from '../../../application/services/token-blacklist.service.interface.js';
 import { UnauthorizedError } from '../../../application/errors/unauthorized.error.js';
-
-declare global {
-  namespace Express {
-    interface Request {
-      userId?: string;
-      userRole?: 'user' | 'admin';
-    }
-  }
-}
+import '../../types/express.type.js';
 
 export const makeAuthMiddleware = (
   jwtService: IJwtService,

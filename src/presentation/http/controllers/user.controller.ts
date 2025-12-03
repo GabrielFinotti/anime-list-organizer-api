@@ -9,6 +9,7 @@ import { RemoveAnimeFromListUseCase } from '../../../application/use-cases/user/
 import { ToggleAnimeLikeUseCase } from '../../../application/use-cases/user/toggle-anime-like.use-case.js';
 import { UpdateMovieStatusUseCase } from '../../../application/use-cases/user/update-movie-status.use-case.js';
 import { UpdateSeasonStatusUseCase } from '../../../application/use-cases/user/update-season-status.use-case.js';
+import { UpdateAnimeStatusUseCase } from '../../../application/use-cases/user/update-anime-status.use-case.js';
 import {
   UserInputDTO,
   UpdateUserInputDTO,
@@ -17,6 +18,7 @@ import {
   ToggleAnimeLikeInputDTO,
   UpdateMovieStatusInputDTO,
   UpdateSeasonStatusInputDTO,
+  UpdateAnimeStatusInputDTO,
 } from '../../../application/dtos/user.dto.js';
 
 export class UserController {
@@ -31,6 +33,7 @@ export class UserController {
     private readonly toggleAnimeLikeUseCase: ToggleAnimeLikeUseCase,
     private readonly updateMovieStatusUseCase: UpdateMovieStatusUseCase,
     private readonly updateSeasonStatusUseCase: UpdateSeasonStatusUseCase,
+    private readonly updateAnimeStatusUseCase: UpdateAnimeStatusUseCase,
   ) {}
 
   create = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
@@ -199,6 +202,24 @@ export class UserController {
       };
 
       const user = await this.updateSeasonStatusUseCase.execute(input);
+
+      res.status(200).json(user);
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  updateAnimeStatus = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const { id, animeId } = req.params;
+
+      const input: UpdateAnimeStatusInputDTO = {
+        userId: id,
+        animeId,
+        status: req.body.status,
+      };
+
+      const user = await this.updateAnimeStatusUseCase.execute(input);
 
       res.status(200).json(user);
     } catch (error) {

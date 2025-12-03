@@ -36,6 +36,7 @@ import {
   makeToggleAnimeLikeUseCase,
   makeUpdateMovieStatusUseCase,
   makeUpdateSeasonStatusUseCase,
+  makeUpdateAnimeStatusUseCase,
 } from './usecases.factory.js';
 
 /* Category */
@@ -89,4 +90,5 @@ export const makeUserController = (): UserController =>
     makeToggleAnimeLikeUseCase(),
     makeUpdateMovieStatusUseCase(),
     makeUpdateSeasonStatusUseCase(),
+    makeUpdateAnimeStatusUseCase(),
   );

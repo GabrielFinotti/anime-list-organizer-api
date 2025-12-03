@@ -10,6 +10,7 @@ import { RemoveAnimeFromListUseCase } from '../../../../../src/application/use-c
 import { ToggleAnimeLikeUseCase } from '../../../../../src/application/use-cases/user/toggle-anime-like.use-case';
 import { UpdateMovieStatusUseCase } from '../../../../../src/application/use-cases/user/update-movie-status.use-case';
 import { UpdateSeasonStatusUseCase } from '../../../../../src/application/use-cases/user/update-season-status.use-case';
+import { UpdateAnimeStatusUseCase } from '../../../../../src/application/use-cases/user/update-anime-status.use-case';
 import { UserOutputDTO } from '../../../../../src/application/dtos/user.dto';
 
 describe('UserController', () => {
@@ -24,6 +25,7 @@ describe('UserController', () => {
   let mockToggleAnimeLikeUseCase: jest.Mocked<ToggleAnimeLikeUseCase>;
   let mockUpdateMovieStatusUseCase: jest.Mocked<UpdateMovieStatusUseCase>;
   let mockUpdateSeasonStatusUseCase: jest.Mocked<UpdateSeasonStatusUseCase>;
+  let mockUpdateAnimeStatusUseCase: jest.Mocked<UpdateAnimeStatusUseCase>;
   let mockRequest: Partial<Request>;
   let mockResponse: Partial<Response>;
   let mockNext: jest.MockedFunction<NextFunction>;
@@ -55,6 +57,7 @@ describe('UserController', () => {
     mockToggleAnimeLikeUseCase = { execute: jest.fn() } as any;
     mockUpdateMovieStatusUseCase = { execute: jest.fn() } as any;
     mockUpdateSeasonStatusUseCase = { execute: jest.fn() } as any;
+    mockUpdateAnimeStatusUseCase = { execute: jest.fn() } as any;
 
     userController = new UserController(
       mockCreateUserUseCase,
@@ -67,6 +70,7 @@ describe('UserController', () => {
       mockToggleAnimeLikeUseCase,
       mockUpdateMovieStatusUseCase,
       mockUpdateSeasonStatusUseCase,
+      mockUpdateAnimeStatusUseCase,
     );
 
     mockRequest = {

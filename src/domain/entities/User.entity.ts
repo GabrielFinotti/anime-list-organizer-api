@@ -236,6 +236,46 @@ class User {
     this._updatedAt = new Date();
   }
 
+  updateAnimeStatus(anime: Anime, newStatus: AnimeStatus['status']) {
+    const animeStatus = this._animeList.list.find((status) => status.anime.equals(anime));
+
+    if (!animeStatus) {
+      throw new BusinessRuleError({
+        message: 'animeList: anime not found in list',
+        field: 'animeList',
+        rule: 'not_found',
+      });
+    }
+
+    if (newStatus === 'finished') {
+      const notFinishedMovies = animeStatus.moviesStatus.some((ms) => ms.status !== 'finished');
+      const notFinishedSeasons = animeStatus.seasonsStatus.some((ss) => ss.status !== 'finished');
+
+      if (notFinishedMovies || notFinishedSeasons) {
+        throw new BusinessRuleError({
+          message:
+            'animeList: anime cannot be marked as finished while it has movies or seasons that are not finished',
+          field: 'animeList',
+          rule: 'incomplete_sub_statuses',
+        });
+      }
+    }
+
+    const updatedAnimeStatus = AnimeStatus.create({
+      anime: animeStatus.anime,
+      status: newStatus,
+      moviesStatus: animeStatus.moviesStatus,
+      seasonsStatus: animeStatus.seasonsStatus,
+      isLiked: animeStatus.isLiked,
+    });
+
+    const animeIndex = this._animeList.list.findIndex((s) => s.anime.equals(anime));
+
+    this._animeList.list[animeIndex] = updatedAnimeStatus;
+    this._animeList.updatedAt = new Date();
+    this._updatedAt = new Date();
+  }
+
   updateAnimeLikeStatus(anime: Anime) {
     const animeStatus = this._animeList.list.find((status) => status.anime.equals(anime));
 

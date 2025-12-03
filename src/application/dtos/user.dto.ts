@@ -103,3 +103,9 @@ export type UpdateSeasonStatusInputDTO = {
   lastEpisodeWatched: number;
   isLiked: boolean;
 };
+
+export type UpdateAnimeStatusInputDTO = {
+  userId: string;
+  animeId: string;
+  status: 'watching' | 'finished' | 'dropped' | 'in_list';
+};

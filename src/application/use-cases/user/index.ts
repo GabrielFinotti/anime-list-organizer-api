@@ -8,3 +8,4 @@ export { RemoveAnimeFromListUseCase } from './remove-anime-from-list.use-case.js
 export { ToggleAnimeLikeUseCase } from './toggle-anime-like.use-case.js';
 export { UpdateMovieStatusUseCase } from './update-movie-status.use-case.js';
 export { UpdateSeasonStatusUseCase } from './update-season-status.use-case.js';
+export { UpdateAnimeStatusUseCase } from './update-anime-status.use-case.js';

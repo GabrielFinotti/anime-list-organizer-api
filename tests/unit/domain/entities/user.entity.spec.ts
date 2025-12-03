@@ -191,6 +191,167 @@ describe('User Entity', () => {
     );
   });
 
+  it('should not allow setting anime status to finished if any movie or season is not finished', () => {
+    const user = User.create(defaultUserData);
+
+    const category = Category.create('Action', 'Action description');
+    const genre = Genre.create('Adventure', 'Awesome genre', false);
+    const movie = Movie.create({ name: 'Movie 1', releaseDate: new Date(2020, 0, 1) });
+    const season = Season.create({
+      seasonNumber: 1,
+      releaseDate: new Date(2020, 0, 1),
+      totalEpisodes: 12,
+    });
+
+    const anime = Anime.create({
+      imageUrl: 'http://example.com/a.png',
+      name: 'My Anime',
+      synopsis: 'Synopsis long enough',
+      category,
+      genres: [genre],
+      animeType: 'mixed',
+      productionType: 'original',
+      movies: [movie],
+      seasons: [season],
+      isAdultContent: false,
+    });
+
+    user.addAnimeToAnimeList(anime);
+
+    // Try to set anime to finished while sub-statuses are still 'in_list'
+    expect(() => user.updateAnimeStatus(anime, 'finished')).toThrow(
+      'animeList: anime cannot be marked as finished while it has movies or seasons that are not finished',
+    );
+  });
+
+  it('should allow setting anime status to finished if all movies and seasons are finished', () => {
+    const user = User.create(defaultUserData);
+
+    const category = Category.create('Action', 'Action description');
+    const genre = Genre.create('Adventure', 'Awesome genre', false);
+    const movie = Movie.create({ name: 'Movie 1', releaseDate: new Date(2020, 0, 1) });
+    const season = Season.create({
+      seasonNumber: 1,
+      releaseDate: new Date(2020, 0, 1),
+      totalEpisodes: 12,
+    });
+
+    const anime = Anime.create({
+      imageUrl: 'http://example.com/a.png',
+      name: 'My Anime',
+      synopsis: 'Synopsis long enough',
+      category,
+      genres: [genre],
+      animeType: 'mixed',
+      productionType: 'original',
+      movies: [movie],
+      seasons: [season],
+      isAdultContent: false,
+    });
+
+    user.addAnimeToAnimeList(anime);
+
+    // Set movie and season statuses to finished
+    const newMovieStatus = MovieStatus.create({ movie, status: 'finished', isLiked: false });
+    user.updateMovieStatus(anime, newMovieStatus);
+
+    const newSeasonStatus = SeasonStatus.create({
+      season,
+      status: 'finished',
+      lastEpisodeWatched: 12,
+      isLiked: false,
+    });
+    user.updateSeasonStatus(anime, newSeasonStatus);
+
+    // Now setting anime status to finished should succeed
+    user.updateAnimeStatus(anime, 'finished');
+    const animeStatus = user.animeList.list[0];
+    expect(animeStatus.status).toBe('finished');
+  });
+
+  it('should enforce validation for movie-only animes (no seasons)', () => {
+    const user = User.create(defaultUserData);
+
+    const category = Category.create('Action', 'Action description');
+    const genre = Genre.create('Adventure', 'Awesome genre', false);
+    const movie = Movie.create({ name: 'Movie 1', releaseDate: new Date(2020, 0, 1) });
+
+    const animeMovieOnly = Anime.create({
+      imageUrl: 'http://example.com/m.png',
+      name: 'Movie Only Anime',
+      synopsis: 'Synopsis long enough',
+      category,
+      genres: [genre],
+      animeType: 'movie',
+      productionType: 'original',
+      movies: [movie],
+      seasons: [],
+      isAdultContent: false,
+    });
+
+    user.addAnimeToAnimeList(animeMovieOnly);
+
+    // movie is still in_list -> cannot set anime to finished
+    expect(() => user.updateAnimeStatus(animeMovieOnly, 'finished')).toThrow(
+      'animeList: anime cannot be marked as finished while it has movies or seasons that are not finished',
+    );
+
+    // Mark movie as finished
+    const finishedMovieStatus = MovieStatus.create({ movie, status: 'finished', isLiked: false });
+    user.updateMovieStatus(animeMovieOnly, finishedMovieStatus);
+
+    // Now should succeed
+    user.updateAnimeStatus(animeMovieOnly, 'finished');
+    const ms = user.animeList.list.find((s) => s.anime.equals(animeMovieOnly));
+    expect(ms?.status).toBe('finished');
+  });
+
+  it('should enforce validation for series-only animes (no movies)', () => {
+    const user = User.create(defaultUserData);
+
+    const category = Category.create('Action', 'Action description');
+    const genre = Genre.create('Adventure', 'Awesome genre', false);
+    const season = Season.create({
+      seasonNumber: 1,
+      releaseDate: new Date(2020, 0, 1),
+      totalEpisodes: 12,
+    });
+
+    const animeSeriesOnly = Anime.create({
+      imageUrl: 'http://example.com/s.png',
+      name: 'Series Only Anime',
+      synopsis: 'Synopsis long enough',
+      category,
+      genres: [genre],
+      animeType: 'serie',
+      productionType: 'original',
+      movies: [],
+      seasons: [season],
+      isAdultContent: false,
+    });
+
+    user.addAnimeToAnimeList(animeSeriesOnly);
+
+    // season is still in_list -> cannot set anime to finished
+    expect(() => user.updateAnimeStatus(animeSeriesOnly, 'finished')).toThrow(
+      'animeList: anime cannot be marked as finished while it has movies or seasons that are not finished',
+    );
+
+    // Mark season as finished
+    const finishedSeasonStatus = SeasonStatus.create({
+      season,
+      status: 'finished',
+      lastEpisodeWatched: 12,
+      isLiked: false,
+    });
+    user.updateSeasonStatus(animeSeriesOnly, finishedSeasonStatus);
+
+    // Now should succeed
+    user.updateAnimeStatus(animeSeriesOnly, 'finished');
+    const ss = user.animeList.list.find((s) => s.anime.equals(animeSeriesOnly));
+    expect(ss?.status).toBe('finished');
+  });
+
   it('should update profile image and common info', () => {
     const user = User.create(defaultUserData);
     const newImage = 'http://example.com/another.png';

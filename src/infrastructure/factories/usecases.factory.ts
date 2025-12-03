@@ -39,6 +39,7 @@ import {
   ToggleAnimeLikeUseCase,
   UpdateMovieStatusUseCase,
   UpdateSeasonStatusUseCase,
+  UpdateAnimeStatusUseCase,
 } from '../../application/use-cases/user/index.js';
 
 import {
@@ -147,3 +148,6 @@ export const makeUpdateMovieStatusUseCase = (): UpdateMovieStatusUseCase =>
 
 export const makeUpdateSeasonStatusUseCase = (): UpdateSeasonStatusUseCase =>
   new UpdateSeasonStatusUseCase(makeUserRepository(), makeAnimeRepository());
+
+export const makeUpdateAnimeStatusUseCase = (): UpdateAnimeStatusUseCase =>
+  new UpdateAnimeStatusUseCase(makeUserRepository(), makeAnimeRepository());

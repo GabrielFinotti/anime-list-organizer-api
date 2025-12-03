@@ -25,6 +25,11 @@ userRoutes.delete('/:id/anime-list/:animeId', authMiddleware, userController.rem
 
 userRoutes.patch('/:id/anime-list/:animeId/like', authMiddleware, userController.toggleAnimeLike);
 userRoutes.patch(
+  '/:id/anime-list/:animeId/status',
+  authMiddleware,
+  userController.updateAnimeStatus,
+);
+userRoutes.patch(
   '/:id/anime-list/:animeId/movie-status',
   authMiddleware,
   userController.updateMovieStatus,

@@ -7,7 +7,6 @@ import {
   createTestGenre,
   createTestAnime,
 } from '../setup';
-import UserModel from '../../../src/infrastructure/database/models/user.model';
 
 describe('User Routes - Integration Tests', () => {
   describe('POST /api/users', () => {

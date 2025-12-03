@@ -4,7 +4,8 @@ dotenv.config({ debug: process.env.NODE_ENV === 'development' });
 
 type StartEnvProps = {
   NODE_ENV: 'development' | 'production' | 'test';
-  PORT: string;
+  PORT: number;
+  VERSION: number;
   MONGO_URI: string;
   MONGO_NAME: string;
   REDIS_URL: string;
@@ -36,7 +37,8 @@ class StartEnv {
   private static create() {
     const envProps = {
       NODE_ENV: process.env.NODE_ENV,
-      PORT: process.env.PORT,
+      PORT: Number(process.env.PORT),
+      VERSION: Number(process.env.VERSION),
       MONGO_URI: process.env.MONGO_URI,
       MONGO_NAME: process.env.MONGO_NAME,
       REDIS_URL: process.env.REDIS_URL,

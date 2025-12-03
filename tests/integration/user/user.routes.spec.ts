@@ -665,4 +665,182 @@ describe('User Routes - Integration Tests', () => {
       expect(response.body).toHaveProperty('message');
     });
   });
+
+  describe('PATCH /api/users/:id/anime-list/:animeId/status', () => {
+    it('should update anime status to watching', async () => {
+      const user = await createTestUser();
+      const category = await createTestCategory();
+      const genre = await createTestGenre();
+      const anime = await createTestAnime(category.id, [genre.id]);
+
+      // Add anime first
+      await request(app)
+        .post(`/api/users/${user.id}/anime-list`)
+        .set('Authorization', `Bearer ${user.token}`)
+        .send({ animeId: anime.id })
+        .expect(200);
+
+      // Update anime status
+      const response = await request(app)
+        .patch(`/api/users/${user.id}/anime-list/${anime.id}/status`)
+        .set('Authorization', `Bearer ${user.token}`)
+        .send({ status: 'watching' })
+        .expect(200);
+
+      expect(response.body.animeList.list[0].status).toBe('watching');
+    });
+
+    it('should update anime status to finished when all sub-statuses are finished (movie only)', async () => {
+      const user = await createTestUser();
+      const category = await createTestCategory();
+      const genre = await createTestGenre();
+      const anime = await createTestAnime(category.id, [genre.id], {
+        animeType: 'movie',
+        movies: [{ title: 'Movie 1', releaseDate: new Date() }],
+      });
+
+      // Add anime first
+      await request(app)
+        .post(`/api/users/${user.id}/anime-list`)
+        .set('Authorization', `Bearer ${user.token}`)
+        .send({ animeId: anime.id })
+        .expect(200);
+
+      // Update movie status to finished
+      await request(app)
+        .patch(`/api/users/${user.id}/anime-list/${anime.id}/movie-status`)
+        .set('Authorization', `Bearer ${user.token}`)
+        .send({ movie: { name: 'Movie 1', releaseDate: new Date() }, status: 'finished', isLiked: false })
+        .expect(200);
+
+      // Update anime status to finished
+      const response = await request(app)
+        .patch(`/api/users/${user.id}/anime-list/${anime.id}/status`)
+        .set('Authorization', `Bearer ${user.token}`)
+        .send({ status: 'finished' })
+        .expect(200);
+
+      expect(response.body.animeList.list[0].status).toBe('finished');
+    });
+
+    it('should update anime status to finished when all sub-statuses are finished (serie only)', async () => {
+      const user = await createTestUser();
+      const category = await createTestCategory();
+      const genre = await createTestGenre();
+      const anime = await createTestAnime(category.id, [genre.id], {
+        animeType: 'serie',
+        seasons: [{ seasonNumber: 1, releaseDate: new Date(), totalEpisodes: 12 }],
+      });
+
+      // Add anime first
+      await request(app)
+        .post(`/api/users/${user.id}/anime-list`)
+        .set('Authorization', `Bearer ${user.token}`)
+        .send({ animeId: anime.id })
+        .expect(200);
+
+      // Update season status to finished
+      await request(app)
+        .patch(`/api/users/${user.id}/anime-list/${anime.id}/season-status`)
+        .set('Authorization', `Bearer ${user.token}`)
+        .send({
+          season: { seasonNumber: 1, releaseDate: new Date(), totalEpisodes: 12 },
+          status: 'finished',
+          lastEpisodeWatched: 12,
+          isLiked: false,
+        })
+        .expect(200);
+
+      // Update anime status to finished
+      const response = await request(app)
+        .patch(`/api/users/${user.id}/anime-list/${anime.id}/status`)
+        .set('Authorization', `Bearer ${user.token}`)
+        .send({ status: 'finished' })
+        .expect(200);
+
+      expect(response.body.animeList.list[0].status).toBe('finished');
+    });
+
+    it('should return 400 when trying to mark finished but sub-statuses are not finished', async () => {
+      const user = await createTestUser();
+      const category = await createTestCategory();
+      const genre = await createTestGenre();
+      const anime = await createTestAnime(category.id, [genre.id], {
+        animeType: 'mixed',
+        movies: [{ title: 'Movie 1', releaseDate: new Date() }],
+        seasons: [{ seasonNumber: 1, releaseDate: new Date(), totalEpisodes: 12 }],
+      });
+
+      // Add anime first
+      await request(app)
+        .post(`/api/users/${user.id}/anime-list`)
+        .set('Authorization', `Bearer ${user.token}`)
+        .send({ animeId: anime.id })
+        .expect(200);
+
+      // Attempt to mark anime as finished without finishing sub-statuses
+      const response = await request(app)
+        .patch(`/api/users/${user.id}/anime-list/${anime.id}/status`)
+        .set('Authorization', `Bearer ${user.token}`)
+        .send({ status: 'finished' })
+        .expect(400);
+
+      expect(response.body).toHaveProperty('message');
+    });
+
+    it('should return 401 without authentication', async () => {
+      const user = await createTestUser();
+      const category = await createTestCategory();
+      const genre = await createTestGenre();
+      const anime = await createTestAnime(category.id, [genre.id]);
+
+      // Add anime first
+      await request(app)
+        .post(`/api/users/${user.id}/anime-list`)
+        .set('Authorization', `Bearer ${user.token}`)
+        .send({ animeId: anime.id })
+        .expect(200);
+
+      const response = await request(app)
+        .patch(`/api/users/${user.id}/anime-list/${anime.id}/status`)
+        .send({ status: 'watching' })
+        .expect(401);
+
+      expect(response.body).toHaveProperty('message');
+    });
+
+    it('should return 404 when anime does not exist', async () => {
+      const user = await createTestUser();
+
+      const response = await request(app)
+        .patch(`/api/users/${user.id}/anime-list/01ARZ3NDEKTSV4RRFFQ69G5FAV/status`)
+        .set('Authorization', `Bearer ${user.token}`)
+        .send({ status: 'watching' })
+        .expect(404);
+
+      expect(response.body).toHaveProperty('message');
+    });
+
+    it('should return 404 when user does not exist', async () => {
+      const user = await createTestUser();
+      const category = await createTestCategory();
+      const genre = await createTestGenre();
+      const anime = await createTestAnime(category.id, [genre.id]);
+
+      // Add anime first
+      await request(app)
+        .post(`/api/users/${user.id}/anime-list`)
+        .set('Authorization', `Bearer ${user.token}`)
+        .send({ animeId: anime.id })
+        .expect(200);
+
+      const response = await request(app)
+        .patch('/api/users/01ARZ3NDEKTSV4RRFFQ69G5FAV/anime-list/01ARZ3NDEKTSV4RRFFQ69G5FAV/status')
+        .set('Authorization', `Bearer ${user.token}`)
+        .send({ status: 'watching' })
+        .expect(404);
+
+      expect(response.body).toHaveProperty('message');
+    });
+  });
 });

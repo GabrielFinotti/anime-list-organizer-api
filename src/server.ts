@@ -11,8 +11,8 @@ const startServer = async () => {
 
     await RedisClient.getInstance().connect();
 
-    app.listen(Number(env.value.PORT), () => {
-      console.log(`Server running on port ${env.value.PORT}`);
+    app.listen(env.value.PORT, () => {
+      console.log(`Server running on port ${env.value.PORT}, version ${env.value.VERSION}`);
     });
   } catch (error) {
     if (error instanceof Error) {

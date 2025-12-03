@@ -1,3 +1,5 @@
+import { InvalidValueError, InvalidFormatError } from '../errors/index.js';
+
 class Url {
   private readonly _value: string;
 
@@ -11,7 +13,10 @@ class Url {
 
   static create(value: string) {
     if (typeof value !== 'string') {
-      throw new Error('URL must be a non-empty string');
+      throw new InvalidValueError({
+        message: 'url: must be a non-empty string',
+        field: 'url',
+      });
     }
 
     const normalizedUrl = value.trim();
@@ -25,7 +30,11 @@ class Url {
     try {
       new URL(value);
     } catch {
-      throw new Error('Invalid URL format');
+      throw new InvalidFormatError({
+        message: 'url: invalid format',
+        field: 'url',
+        expectedFormat: 'https://example.com',
+      });
     }
   }
 

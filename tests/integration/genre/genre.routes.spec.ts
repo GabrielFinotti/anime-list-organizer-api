@@ -192,7 +192,7 @@ describe('Genre Routes - Integration Tests', () => {
       expect(response.body).toHaveProperty('message');
     });
 
-    it('should return 500 with missing name', async () => {
+    it('should return 400 with missing name', async () => {
       const admin = await createTestAdmin();
 
       const response = await request(app)
@@ -202,12 +202,12 @@ describe('Genre Routes - Integration Tests', () => {
           description: 'Descrição sem nome',
           isAdultContent: false,
         })
-        .expect(500);
+        .expect(400);
 
       expect(response.body).toHaveProperty('message');
     });
 
-    it('should return 500 with missing description', async () => {
+    it('should return 400 with missing description', async () => {
       const admin = await createTestAdmin();
 
       const response = await request(app)
@@ -217,7 +217,7 @@ describe('Genre Routes - Integration Tests', () => {
           name: 'Nome sem descrição',
           isAdultContent: false,
         })
-        .expect(500);
+        .expect(400);
 
       expect(response.body).toHaveProperty('message');
     });
@@ -237,7 +237,7 @@ describe('Genre Routes - Integration Tests', () => {
       expect(response.body.isAdultContent).toBe(false);
     });
 
-    it('should return 500 with short name', async () => {
+    it('should return 400 with short name', async () => {
       const admin = await createTestAdmin();
 
       const response = await request(app)
@@ -248,7 +248,7 @@ describe('Genre Routes - Integration Tests', () => {
           description: 'Descrição válida',
           isAdultContent: false,
         })
-        .expect(500);
+        .expect(400);
 
       expect(response.body).toHaveProperty('message');
     });

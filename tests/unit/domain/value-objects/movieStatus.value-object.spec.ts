@@ -18,7 +18,7 @@ describe('MovieStatus Value Object', () => {
 
       expect(() =>
         MovieStatus.create({ movie: movie, status: 'dropped' as any, isLiked: false }),
-      ).toThrow('Invalid status: dropped, must be one of watching, finished, in_list');
+      ).toThrow('status: must be one of watching, finished, in_list');
     });
 
     it('should throw when isLiked is not boolean', () => {
@@ -26,7 +26,7 @@ describe('MovieStatus Value Object', () => {
 
       expect(() =>
         MovieStatus.create({ movie: movie, status: 'watching', isLiked: 'yes' as any }),
-      ).toThrow('isLiked must be a boolean value');
+      ).toThrow('isLiked: must be a boolean');
     });
 
     it('equals should compare properly', () => {

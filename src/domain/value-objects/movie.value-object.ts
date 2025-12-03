@@ -1,4 +1,5 @@
 import Name from './name.value-object.js';
+import { InvalidFormatError } from '../errors/index.js';
 
 type MovieProps = {
   title: Name;
@@ -33,7 +34,11 @@ class Movie {
 
   private static validateReleaseDate(releaseDate: Date) {
     if (!(releaseDate instanceof Date) || isNaN(releaseDate.getTime())) {
-      throw new Error('Invalid release date');
+      throw new InvalidFormatError({
+        message: 'releaseDate: invalid date',
+        field: 'releaseDate',
+        expectedFormat: 'Date object',
+      });
     }
   }
 

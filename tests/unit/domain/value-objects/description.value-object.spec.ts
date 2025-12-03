@@ -9,19 +9,19 @@ describe('Description Value Object', () => {
   });
 
   it('should throw error when value is not a string', () => {
-    expect(() => Description.create(123 as any)).toThrow('Description must be a string');
+    expect(() => Description.create(123 as any)).toThrow('description: must be a string');
   });
 
   it('should throw when description is less than 10 characters', () => {
     expect(() => Description.create('Too short')).toThrow(
-      'Description must be between 10 and 800 characters',
+      'description: must be between 10 and 800 characters',
     );
   });
 
   it('should throw when description is longer than 800 characters', () => {
     const long = 'a'.repeat(801);
     expect(() => Description.create(long)).toThrow(
-      'Description must be between 10 and 800 characters',
+      'description: must be between 10 and 800 characters',
     );
   });
 

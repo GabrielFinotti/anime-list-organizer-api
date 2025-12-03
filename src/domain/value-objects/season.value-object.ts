@@ -1,3 +1,5 @@
+import { InvalidValueError, InvalidFormatError } from '../errors/index.js';
+
 type SeasonProps = {
   seasonNumber: number;
   releaseDate: Date;
@@ -41,13 +43,21 @@ class Season {
 
   private static validateNumberField(field: number, fieldName: string) {
     if (typeof field !== 'number' || field <= 0 || !Number.isInteger(field)) {
-      throw new Error(`Invalid value for ${fieldName}, must be a positive integer`);
+      throw new InvalidValueError({
+        message: `${fieldName}: must be a positive integer`,
+        field: fieldName,
+        min: 1,
+      });
     }
   }
 
   private static validateReleaseDate(releaseDate: Date) {
     if (!(releaseDate instanceof Date) || isNaN(releaseDate.getTime())) {
-      throw new Error('Invalid release date');
+      throw new InvalidFormatError({
+        message: 'releaseDate: invalid date',
+        field: 'releaseDate',
+        expectedFormat: 'Date object',
+      });
     }
   }
 

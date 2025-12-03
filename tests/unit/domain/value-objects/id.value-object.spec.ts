@@ -10,16 +10,16 @@ describe('Id Value Object', () => {
     });
 
     it('should throw error when id is empty string', () => {
-      expect(() => Id.create('')).toThrow('ID must be a valid ULID');
+      expect(() => Id.create('')).toThrow('id: must be a valid ULID');
     });
 
     it('should throw error when id is only whitespace', () => {
-      expect(() => Id.create('   ')).toThrow('ID must be a valid ULID');
+      expect(() => Id.create('   ')).toThrow('id: must be a valid ULID');
     });
 
     it('should throw error when id is not a string', () => {
       // Not a string will fail ulid validation
-      expect(() => Id.create(123 as any)).toThrow('ID must be a valid ULID');
+      expect(() => Id.create(123 as any)).toThrow('id: must be a valid ULID');
     });
   });
 

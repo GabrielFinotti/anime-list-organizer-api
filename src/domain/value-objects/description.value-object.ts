@@ -1,3 +1,5 @@
+import { InvalidValueError } from '../errors/index.js';
+
 class Description {
   private readonly _value: string;
 
@@ -11,7 +13,10 @@ class Description {
 
   static create(description: string): Description {
     if (typeof description !== 'string') {
-      throw new Error('Description must be a string');
+      throw new InvalidValueError({
+        message: 'description: must be a string',
+        field: 'description',
+      });
     }
 
     const normalizedDescription = description.trim();
@@ -23,7 +28,12 @@ class Description {
 
   private static validateDescription(description: string) {
     if (description.length < 10 || description.length > 800) {
-      throw new Error('Description must be between 10 and 800 characters');
+      throw new InvalidValueError({
+        message: 'description: must be between 10 and 800 characters',
+        field: 'description',
+        min: 10,
+        max: 800,
+      });
     }
   }
 

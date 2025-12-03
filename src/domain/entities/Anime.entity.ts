@@ -6,6 +6,7 @@ import Season from '../value-objects/season.value-object.js';
 import Url from '../value-objects/url.value-object.js';
 import Category from './Category.entity.js';
 import Genre from './Genre.entity.js';
+import { InvalidValueError, BusinessRuleError } from '../errors/index.js';
 
 type AnimeType = 'serie' | 'movie' | 'mixed';
 type ProductionType = 'original' | 'adaptation';
@@ -128,14 +129,26 @@ class Anime {
     seasons: Season[];
     isAdultContent: boolean;
   }) {
-    if (typeof data.animeType !== 'string') throw new Error('Anime type must be a string');
+    if (typeof data.animeType !== 'string') {
+      throw new InvalidValueError({
+        message: 'animeType: must be a string',
+        field: 'animeType',
+      });
+    }
 
     if (data.genres.length === 0) {
-      throw new Error('At least one genre must be provided');
+      throw new InvalidValueError({
+        message: 'genres: at least one genre must be provided',
+        field: 'genres',
+        min: 1,
+      });
     }
 
     if (typeof data.productionType !== 'string') {
-      throw new Error('Production type must be a string');
+      throw new InvalidValueError({
+        message: 'productionType: must be a string',
+        field: 'productionType',
+      });
     }
 
     const normalizedAnimeType = data.animeType.toLowerCase().trim();
@@ -182,30 +195,41 @@ class Anime {
   }
 
   private static validateBooleanFields(field: boolean, fieldName: string) {
-    if (typeof field !== 'boolean') throw new Error(`${fieldName} must be a boolean`);
+    if (typeof field !== 'boolean') {
+      throw new InvalidValueError({
+        message: `${fieldName}: must be a boolean`,
+        field: fieldName,
+      });
+    }
   }
 
   private static validateEnumFields(animeType: string, productionType: string) {
     if (!Anime.ANIME_TYPES.includes(animeType)) {
-      throw new Error(`Anime type must be one of the following: ${Anime.ANIME_TYPES.join(', ')}`);
+      throw new InvalidValueError({
+        message: `animeType: must be one of ${Anime.ANIME_TYPES.join(', ')}`,
+        field: 'animeType',
+        allowedValues: Anime.ANIME_TYPES,
+      });
     }
 
     if (!Anime.PRODUCTION_TYPES.includes(productionType)) {
-      throw new Error(
-        `Production type must be one of the following: ${Anime.PRODUCTION_TYPES.join(', ')}`,
-      );
+      throw new InvalidValueError({
+        message: `productionType: must be one of ${Anime.PRODUCTION_TYPES.join(', ')}`,
+        field: 'productionType',
+        allowedValues: Anime.PRODUCTION_TYPES,
+      });
     }
   }
 
   private static ensureUniqueGenres(genres: Genre[]) {
-    this.ensureUnique(genres, (g) => g.id.value, 'Duplicate genres detected');
+    this.ensureUnique(genres, (g) => g.id.value, 'genres');
   }
 
   private static ensureUniqueMovies(movies: Movie[]) {
     this.ensureUnique(
       movies,
       (m) => `${m.title.value}|${m.releaseDate.getTime()}`,
-      'Duplicate movies detected',
+      'movies',
     );
   }
 
@@ -213,21 +237,27 @@ class Anime {
     this.ensureUnique(
       seasons,
       (s) => `${s.seasonNumber}|${s.releaseDate.getTime()}`,
-      'Duplicate seasons detected',
+      'seasons',
     );
   }
 
   private static ensureUnique<T>(
     items: T[],
     keySelector: (item: T) => string,
-    errorMessage: string,
+    fieldName: string,
   ) {
     const keys = new Set<string>();
 
     for (const item of items) {
       const key = keySelector(item);
 
-      if (keys.has(key)) throw new Error(errorMessage);
+      if (keys.has(key)) {
+        throw new BusinessRuleError({
+          message: `${fieldName}: duplicate items detected`,
+          field: fieldName,
+          rule: 'unique_items',
+        });
+      }
 
       keys.add(key);
     }
@@ -235,21 +265,37 @@ class Anime {
 
   private static validateCreateMovies(animeType: string, movies: Movie[]) {
     if (animeType === 'serie' && movies.length > 0) {
-      throw new Error('Series cannot have movies');
+      throw new BusinessRuleError({
+        message: 'movies: series cannot have movies',
+        field: 'movies',
+        rule: 'series_no_movies',
+      });
     }
 
     if (animeType !== 'serie' && movies.length === 0) {
-      throw new Error('Movies and mixed types must have at least one movie');
+      throw new BusinessRuleError({
+        message: 'movies: movies and mixed types must have at least one movie',
+        field: 'movies',
+        rule: 'requires_movie',
+      });
     }
   }
 
   private static validateCreateSeasons(animeType: string, seasons: Season[]) {
     if (animeType === 'movie' && seasons.length > 0) {
-      throw new Error('Movies cannot have seasons');
+      throw new BusinessRuleError({
+        message: 'seasons: movies cannot have seasons',
+        field: 'seasons',
+        rule: 'movie_no_seasons',
+      });
     }
 
     if (animeType !== 'movie' && seasons.length === 0) {
-      throw new Error('Series and mixed types must have at least one season');
+      throw new BusinessRuleError({
+        message: 'seasons: series and mixed types must have at least one season',
+        field: 'seasons',
+        rule: 'requires_season',
+      });
     }
   }
 
@@ -284,7 +330,11 @@ class Anime {
     const movieIndex = this._movies.findIndex((m) => m.equals(Movie.create(data)));
 
     if (movieIndex === -1) {
-      throw new Error('Movie not found');
+      throw new BusinessRuleError({
+        message: 'movie: not found',
+        field: 'movie',
+        rule: 'not_found',
+      });
     }
 
     const copyMovies = [...this._movies];
@@ -292,7 +342,11 @@ class Anime {
     copyMovies.splice(movieIndex, 1);
 
     if (copyMovies.length === 0 && this._animeType !== 'serie') {
-      throw new Error('Anime must have at least one movie');
+      throw new BusinessRuleError({
+        message: 'movies: anime must have at least one movie',
+        field: 'movies',
+        rule: 'min_movies',
+      });
     }
 
     this._movies = copyMovies;
@@ -303,7 +357,11 @@ class Anime {
     const seasonIndex = this._seasons.findIndex((s) => s.equals(Season.create(data)));
 
     if (seasonIndex === -1) {
-      throw new Error('Season not found');
+      throw new BusinessRuleError({
+        message: 'season: not found',
+        field: 'season',
+        rule: 'not_found',
+      });
     }
 
     const copySeasons = [...this._seasons];
@@ -311,7 +369,11 @@ class Anime {
     copySeasons.splice(seasonIndex, 1);
 
     if (copySeasons.length === 0 && this._animeType !== 'movie') {
-      throw new Error('Anime must have at least one season');
+      throw new BusinessRuleError({
+        message: 'seasons: anime must have at least one season',
+        field: 'seasons',
+        rule: 'min_seasons',
+      });
     }
 
     this._seasons = copySeasons;
@@ -322,7 +384,11 @@ class Anime {
     const genreIndex = this._genres.findIndex((g) => g.id.equals(genreId));
 
     if (genreIndex === -1) {
-      throw new Error('Genre not found');
+      throw new BusinessRuleError({
+        message: 'genre: not found',
+        field: 'genre',
+        rule: 'not_found',
+      });
     }
 
     const copyGenres = [...this._genres];
@@ -330,7 +396,11 @@ class Anime {
     copyGenres.splice(genreIndex, 1);
 
     if (copyGenres.length === 0) {
-      throw new Error('Anime must have at least one genre');
+      throw new BusinessRuleError({
+        message: 'genres: anime must have at least one genre',
+        field: 'genres',
+        rule: 'min_genres',
+      });
     }
 
     this._genres = copyGenres;
@@ -346,15 +416,24 @@ class Anime {
     isAdultContent?: boolean;
   }) {
     if (data.synopsis !== undefined && typeof data.synopsis !== 'string') {
-      throw new Error('Synopsis must be a string');
+      throw new InvalidValueError({
+        message: 'synopsis: must be a string',
+        field: 'synopsis',
+      });
     }
 
     if (data.animeType !== undefined && typeof data.animeType !== 'string') {
-      throw new Error('Anime type must be a string');
+      throw new InvalidValueError({
+        message: 'animeType: must be a string',
+        field: 'animeType',
+      });
     }
 
     if (data.productionType !== undefined && typeof data.productionType !== 'string') {
-      throw new Error('Production type must be a string');
+      throw new InvalidValueError({
+        message: 'productionType: must be a string',
+        field: 'productionType',
+      });
     }
 
     data.name !== undefined && (this._name = Name.create(data.name));

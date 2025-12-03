@@ -32,7 +32,7 @@ describe('SeasonStatus Value Object', () => {
 
       expect(() =>
         SeasonStatus.create({ season, status: 'watching', lastEpisodeWatched: -1, isLiked: false }),
-      ).toThrow('lastEpisodeWatched must be a non-negative number');
+      ).toThrow('lastEpisodeWatched: must be a non-negative number');
     });
 
     it('should throw when status is invalid', () => {
@@ -49,7 +49,7 @@ describe('SeasonStatus Value Object', () => {
           lastEpisodeWatched: 0,
           isLiked: false,
         }),
-      ).toThrow('Invalid status: dropped, must be one of watching, finished, in_list');
+      ).toThrow('status: must be one of watching, finished, in_list');
     });
 
     it('equals should compare properly', () => {

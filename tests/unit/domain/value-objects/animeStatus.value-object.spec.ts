@@ -83,7 +83,7 @@ describe('AnimeStatus Value Object', () => {
           seasonsStatus: [],
           isLiked: false,
         }),
-      ).toThrow('Invalid status: unknown, must be one of watching, finished, dropped, in_list');
+      ).toThrow('status: must be one of watching, finished, dropped, in_list');
     });
 
     it('should throw when isLiked is invalid', () => {
@@ -113,7 +113,7 @@ describe('AnimeStatus Value Object', () => {
           seasonsStatus: [],
           isLiked: 'nope' as any,
         }),
-      ).toThrow('isLiked must be a boolean value');
+      ).toThrow('isLiked: must be a boolean');
     });
 
     it('equals should compare properly', () => {

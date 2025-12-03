@@ -10,13 +10,13 @@ describe('Email Value Object', () => {
     });
 
     it('should throw error when value is not a string', () => {
-      expect(() => Email.create(123 as any)).toThrow('Email must be a string');
+      expect(() => Email.create(123 as any)).toThrow('email: must be a string');
     });
 
     it('should throw when value is not in a valid email format', () => {
-      expect(() => Email.create('nota-email')).toThrow('Invalid email format');
-      expect(() => Email.create('invalid@')).toThrow('Invalid email format');
-      expect(() => Email.create('invalid@domain.')).toThrow('Invalid email format');
+      expect(() => Email.create('nota-email')).toThrow('email: invalid format');
+      expect(() => Email.create('invalid@')).toThrow('email: invalid format');
+      expect(() => Email.create('invalid@domain.')).toThrow('email: invalid format');
     });
 
     it('should trim whitespace and normalize to lowercase', () => {

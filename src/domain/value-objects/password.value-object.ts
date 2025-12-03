@@ -1,4 +1,5 @@
 import bcrypt from 'bcrypt';
+import { InvalidValueError, AggregateValidationError, ValidationErrorDetail } from '../errors/index.js';
 
 class Password {
   private readonly _value: string;
@@ -14,7 +15,12 @@ class Password {
   }
 
   static create(password: string) {
-    if (typeof password !== 'string') throw new Error('Password must be a string');
+    if (typeof password !== 'string') {
+      throw new InvalidValueError({
+        message: 'password: must be a string',
+        field: 'password',
+      });
+    }
 
     const normalizedPassword = password.trim();
 
@@ -26,26 +32,37 @@ class Password {
   }
 
   static createFromHash(hashedPassword: string) {
-    if (typeof hashedPassword !== 'string') throw new Error('Hashed password must be a string');
+    if (typeof hashedPassword !== 'string') {
+      throw new InvalidValueError({
+        message: 'hashedPassword: must be a string',
+        field: 'hashedPassword',
+      });
+    }
 
     return new Password(hashedPassword);
   }
 
   private static validatePassword(password: string) {
-    const errorMessages: string[] = [];
+    const errors: ValidationErrorDetail[] = [];
 
     if (password.length < 6 || password.length > 20) {
-      errorMessages.push('Password must be between 6 and 20 characters long');
+      errors.push({
+        field: 'password',
+        message: 'must be between 6 and 20 characters long',
+        code: 'INVALID_VALUE_PASSWORD_LENGTH',
+      });
     }
 
     if (!this.PASSWORD_REGEX.test(password)) {
-      errorMessages.push(
-        'Password must contain at least one letter, one number, and one special character',
-      );
+      errors.push({
+        field: 'password',
+        message: 'must contain at least one letter, one number, and one special character',
+        code: 'INVALID_FORMAT_PASSWORD_COMPLEXITY',
+      });
     }
 
-    if (errorMessages.length > 0) {
-      throw new Error(errorMessages.join('; '));
+    if (errors.length > 0) {
+      throw new AggregateValidationError(errors);
     }
   }
 

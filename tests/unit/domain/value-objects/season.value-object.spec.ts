@@ -17,19 +17,19 @@ describe('Season Value Object', () => {
     it('should throw when number fields are invalid', () => {
       expect(() =>
         Season.create({ seasonNumber: 0, releaseDate: new Date(2021, 4, 10), totalEpisodes: 12 }),
-      ).toThrow('Invalid value for seasonNumber, must be a positive integer');
+      ).toThrow('seasonNumber: must be a positive integer');
       expect(() =>
         Season.create({ seasonNumber: 1.5, releaseDate: new Date(2021, 4, 10), totalEpisodes: 12 }),
-      ).toThrow('Invalid value for seasonNumber, must be a positive integer');
+      ).toThrow('seasonNumber: must be a positive integer');
       expect(() =>
         Season.create({ seasonNumber: 1, releaseDate: new Date(2021, 4, 10), totalEpisodes: 0 }),
-      ).toThrow('Invalid value for totalEpisodes, must be a positive integer');
+      ).toThrow('totalEpisodes: must be a positive integer');
     });
 
     it('should throw when releaseDate is invalid', () => {
       expect(() =>
         Season.create({ seasonNumber: 1, releaseDate: new Date('invalid'), totalEpisodes: 12 }),
-      ).toThrow('Invalid release date');
+      ).toThrow('releaseDate: invalid date');
     });
 
     it('equals should compare properly', () => {

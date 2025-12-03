@@ -288,7 +288,7 @@ describe('Anime Routes - Integration Tests', () => {
       expect(response.body).toHaveProperty('message');
     });
 
-    it('should return 500 with missing name', async () => {
+    it('should return 400 with missing name', async () => {
       const admin = await createTestAdmin();
       const category = await createTestCategory();
       const genre = await createTestGenre();
@@ -311,12 +311,12 @@ describe('Anime Routes - Integration Tests', () => {
             },
           ],
         })
-        .expect(500);
+        .expect(400);
 
       expect(response.body).toHaveProperty('message');
     });
 
-    it('should return 500 with short synopsis', async () => {
+    it('should return 400 with short synopsis', async () => {
       const admin = await createTestAdmin();
       const category = await createTestCategory();
       const genre = await createTestGenre();
@@ -340,7 +340,7 @@ describe('Anime Routes - Integration Tests', () => {
             },
           ],
         })
-        .expect(500);
+        .expect(400);
 
       expect(response.body).toHaveProperty('message');
     });

@@ -42,24 +42,24 @@ describe('Category Entity', () => {
     });
 
     it('should throw error when description is not a string', () => {
-      expect(() => Category.create('Thriller', 123 as any)).toThrow('Description must be a string');
+      expect(() => Category.create('Thriller', 123 as any)).toThrow('description: must be a string');
     });
 
     it('should throw error when description is empty', () => {
       expect(() => Category.create('Horror', '')).toThrow(
-        'Description must be between 10 and 800 characters',
+        'description: must be between 10 and 800 characters',
       );
     });
 
     it('should throw error when description is whitespace only', () => {
       expect(() => Category.create('Fantasy', '   ')).toThrow(
-        'Description must be between 10 and 800 characters',
+        'description: must be between 10 and 800 characters',
       );
     });
 
     it('should throw error when description is less than 10 characters', () => {
       expect(() => Category.create('Sci-Fi', 'Too short')).toThrow(
-        'Description must be between 10 and 800 characters',
+        'description: must be between 10 and 800 characters',
       );
     });
   });

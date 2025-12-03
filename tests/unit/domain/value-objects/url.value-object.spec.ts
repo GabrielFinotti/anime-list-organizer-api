@@ -9,11 +9,11 @@ describe('Url Value Object', () => {
   });
 
   it('should throw error when value is not a string', () => {
-    expect(() => Url.create(123 as any)).toThrow('URL must be a non-empty string');
+    expect(() => Url.create(123 as any)).toThrow('url: must be a non-empty string');
   });
 
   it('should throw when value is not a valid URL', () => {
-    expect(() => Url.create('nota-url')).toThrow('Invalid URL format');
+    expect(() => Url.create('nota-url')).toThrow('url: invalid format');
   });
 
   it('should compare equality by value', () => {

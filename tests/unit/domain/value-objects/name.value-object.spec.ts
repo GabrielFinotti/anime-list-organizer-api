@@ -19,20 +19,20 @@ describe('Name Value Object', () => {
 
     it('should throw error when name is empty', () => {
       expect(() => Name.create('')).toThrow(
-        'Name must be at least 3 characters long and at most 100 characters long',
+        'name: must be between 3 and 100 characters long',
       );
     });
 
     it('should throw error when name is less than 3 characters', () => {
       expect(() => Name.create('ab')).toThrow(
-        'Name must be at least 3 characters long and at most 100 characters long',
+        'name: must be between 3 and 100 characters long',
       );
     });
 
     it('should throw error when name is more than 100 characters', () => {
       const longName = 'a'.repeat(101);
       expect(() => Name.create(longName)).toThrow(
-        'Name must be at least 3 characters long and at most 100 characters long',
+        'name: must be between 3 and 100 characters long',
       );
     });
 

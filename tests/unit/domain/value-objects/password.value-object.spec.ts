@@ -26,13 +26,13 @@ describe('Password Value Object', () => {
 
     it('should throw when password is too short (less than 6)', () => {
       expect(() => Password.create('A1!')).toThrow(
-        'Password must be between 6 and 20 characters long',
+        'password: must be between 6 and 20 characters long',
       );
     });
 
     it('should throw when password lacks number/letter/special char', () => {
       expect(() => Password.create('abcdefg1')).toThrow(
-        'Password must contain at least one letter, one number, and one special character',
+        'password: must contain at least one letter, one number, and one special character',
       );
     });
   });
@@ -80,7 +80,7 @@ describe('Password Value Object', () => {
     });
 
     it('should throw when hash is not a string', () => {
-      expect(() => Password.createFromHash(123 as any)).toThrow('Hashed password must be a string');
+      expect(() => Password.createFromHash(123 as any)).toThrow('hashedPassword: must be a string');
     });
   });
 });

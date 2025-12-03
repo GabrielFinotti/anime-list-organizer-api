@@ -1,6 +1,7 @@
 import Description from '../value-objects/description.value-object.js';
 import Id from '../value-objects/id.value-object.js';
 import Name from '../value-objects/name.value-object.js';
+import { InvalidValueError } from '../errors/index.js';
 
 type GenreProps = {
   id: Id;
@@ -91,7 +92,10 @@ class Genre {
 
   private static validateIsAdultContent(value: boolean) {
     if (typeof value !== 'boolean') {
-      throw new Error('Adult content flag must be a boolean.');
+      throw new InvalidValueError({
+        message: 'isAdultContent: must be a boolean',
+        field: 'isAdultContent',
+      });
     }
   }
 

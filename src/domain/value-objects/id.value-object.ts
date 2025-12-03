@@ -1,4 +1,5 @@
 import { ulid, isValid } from 'ulid';
+import { InvalidFormatError } from '../errors/index.js';
 
 class Id {
   private readonly _id: string;
@@ -18,7 +19,13 @@ class Id {
   }
 
   private static validate(id: string) {
-    if (!isValid(id)) throw new Error('ID must be a valid ULID');
+    if (!isValid(id)) {
+      throw new InvalidFormatError({
+        message: 'id: must be a valid ULID',
+        field: 'id',
+        expectedFormat: 'ULID (26 characters)',
+      });
+    }
   }
 
   static generateRandomId() {

@@ -17,7 +17,7 @@ describe('Movie Value Object', () => {
 
     it('should throw when releaseDate is invalid', () => {
       expect(() => Movie.create({ name: 'M', releaseDate: new Date('invalid') })).toThrow(
-        'Invalid release date',
+        'releaseDate: invalid date',
       );
     });
 

@@ -8,6 +8,7 @@ import Password from '../value-objects/password.value-object.js';
 import SeasonStatus from '../value-objects/seasonStatus.value-object.js';
 import Url from '../value-objects/url.value-object.js';
 import Anime from './Anime.entity.js';
+import { InvalidValueError, BusinessRuleError } from '../errors/index.js';
 
 type Role = 'user' | 'admin';
 
@@ -147,7 +148,11 @@ class User {
 
   private static validateRole(role: Role) {
     if (!this.VALID_ROLES.includes(role)) {
-      throw new Error(`Invalid role: ${role}`);
+      throw new InvalidValueError({
+        message: `role: must be one of ${this.VALID_ROLES.join(', ')}`,
+        field: 'role',
+        allowedValues: this.VALID_ROLES,
+      });
     }
   }
 
@@ -189,7 +194,13 @@ class User {
       animeStatus.anime.equals(anime),
     );
 
-    if (alreadyExists) throw new Error('Anime is already in the anime list');
+    if (alreadyExists) {
+      throw new BusinessRuleError({
+        message: 'animeList: anime is already in the list',
+        field: 'animeList',
+        rule: 'already_exists',
+      });
+    }
 
     const moviesStatus = this.createMoviesStatusForAnime(anime.movies);
     const seasonsStatus = this.createSeasonsStatusForAnime(anime.seasons);
@@ -210,7 +221,13 @@ class User {
   removeAnimeFromAnimeList(anime: Anime) {
     const exists = this._animeList.list.some((animeStatus) => animeStatus.anime.equals(anime));
 
-    if (!exists) throw new Error('Anime is not in the anime list');
+    if (!exists) {
+      throw new BusinessRuleError({
+        message: 'animeList: anime is not in the list',
+        field: 'animeList',
+        rule: 'not_found',
+      });
+    }
 
     this._animeList.list = this._animeList.list.filter(
       (animeStatus) => !animeStatus.anime.equals(anime),
@@ -222,7 +239,13 @@ class User {
   updateAnimeLikeStatus(anime: Anime) {
     const animeStatus = this._animeList.list.find((status) => status.anime.equals(anime));
 
-    if (!animeStatus) throw new Error('Anime not found in anime list');
+    if (!animeStatus) {
+      throw new BusinessRuleError({
+        message: 'animeList: anime not found in list',
+        field: 'animeList',
+        rule: 'not_found',
+      });
+    }
 
     const updatedAnimeStatus = AnimeStatus.create({
       anime: animeStatus.anime,
@@ -242,17 +265,35 @@ class User {
   updateMovieStatus(anime: Anime, movieStatus: MovieStatus) {
     const animeStatus = this._animeList.list.find((status) => status.anime.equals(anime));
 
-    if (!animeStatus) throw new Error('Anime not found in anime list');
+    if (!animeStatus) {
+      throw new BusinessRuleError({
+        message: 'animeList: anime not found in list',
+        field: 'animeList',
+        rule: 'not_found',
+      });
+    }
 
     const movieBelongsToAnime = anime.movies.some((m) => m.equals(movieStatus.movie));
 
-    if (!movieBelongsToAnime) throw new Error('Movie does not belong to the anime');
+    if (!movieBelongsToAnime) {
+      throw new BusinessRuleError({
+        message: 'movie: does not belong to the anime',
+        field: 'movie',
+        rule: 'invalid_association',
+      });
+    }
 
     const movieStatusIndex = animeStatus.moviesStatus.findIndex((ms) =>
       ms.movie.equals(movieStatus.movie),
     );
 
-    if (movieStatusIndex === -1) throw new Error('Movie not found in anime status');
+    if (movieStatusIndex === -1) {
+      throw new BusinessRuleError({
+        message: 'movieStatus: movie not found in anime status',
+        field: 'movieStatus',
+        rule: 'not_found',
+      });
+    }
 
     const updatedMoviesStatus = animeStatus.moviesStatus.map((ms) =>
       ms.movie.equals(movieStatus.movie) ? movieStatus : ms,
@@ -276,17 +317,35 @@ class User {
   updateSeasonStatus(anime: Anime, seasonStatus: SeasonStatus) {
     const animeStatus = this._animeList.list.find((status) => status.anime.equals(anime));
 
-    if (!animeStatus) throw new Error('Anime not found in anime list');
+    if (!animeStatus) {
+      throw new BusinessRuleError({
+        message: 'animeList: anime not found in list',
+        field: 'animeList',
+        rule: 'not_found',
+      });
+    }
 
     const seasonBelongsToAnime = anime.seasons.some((s) => s.equals(seasonStatus.season));
 
-    if (!seasonBelongsToAnime) throw new Error('Season does not belong to the anime');
+    if (!seasonBelongsToAnime) {
+      throw new BusinessRuleError({
+        message: 'season: does not belong to the anime',
+        field: 'season',
+        rule: 'invalid_association',
+      });
+    }
 
     const seasonStatusIndex = animeStatus.seasonsStatus.findIndex((ss) =>
       ss.season.equals(seasonStatus.season),
     );
 
-    if (seasonStatusIndex === -1) throw new Error('Season not found in anime status');
+    if (seasonStatusIndex === -1) {
+      throw new BusinessRuleError({
+        message: 'seasonStatus: season not found in anime status',
+        field: 'seasonStatus',
+        rule: 'not_found',
+      });
+    }
 
     const updatedSeasonsStatus = animeStatus.seasonsStatus.map((ss) =>
       ss.season.equals(seasonStatus.season) ? seasonStatus : ss,

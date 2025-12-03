@@ -1,3 +1,5 @@
+import { InvalidValueError } from '../errors/index.js';
+
 class Name {
   private readonly _name: string;
 
@@ -10,6 +12,13 @@ class Name {
   }
 
   static create(name: string) {
+    if (typeof name !== 'string') {
+      throw new InvalidValueError({
+        message: 'name: must be a string',
+        field: 'name',
+      });
+    }
+
     const normalizedName = name.toLowerCase().trim();
 
     this.validate(normalizedName);
@@ -18,10 +27,13 @@ class Name {
   }
 
   private static validate(name: string) {
-    if (typeof name !== 'string') throw new Error('Name must be a string');
-
     if (name.length < 3 || name.length > 100) {
-      throw new Error('Name must be at least 3 characters long and at most 100 characters long');
+      throw new InvalidValueError({
+        message: 'name: must be between 3 and 100 characters long',
+        field: 'name',
+        min: 3,
+        max: 100,
+      });
     }
   }
 

@@ -149,7 +149,7 @@ describe('Category Routes - Integration Tests', () => {
       expect(response.body).toHaveProperty('message');
     });
 
-    it('should return 500 with missing name', async () => {
+    it('should return 400 with missing name', async () => {
       const admin = await createTestAdmin();
 
       const response = await request(app)
@@ -158,12 +158,12 @@ describe('Category Routes - Integration Tests', () => {
         .send({
           description: 'Descrição sem nome',
         })
-        .expect(500);
+        .expect(400);
 
       expect(response.body).toHaveProperty('message');
     });
 
-    it('should return 500 with missing description', async () => {
+    it('should return 400 with missing description', async () => {
       const admin = await createTestAdmin();
 
       const response = await request(app)
@@ -172,12 +172,12 @@ describe('Category Routes - Integration Tests', () => {
         .send({
           name: 'Nome sem descrição',
         })
-        .expect(500);
+        .expect(400);
 
       expect(response.body).toHaveProperty('message');
     });
 
-    it('should return 500 with short name', async () => {
+    it('should return 400 with short name', async () => {
       const admin = await createTestAdmin();
 
       const response = await request(app)
@@ -187,7 +187,7 @@ describe('Category Routes - Integration Tests', () => {
           name: 'AB',
           description: 'Descrição válida',
         })
-        .expect(500);
+        .expect(400);
 
       expect(response.body).toHaveProperty('message');
     });

@@ -111,7 +111,7 @@ describe('Anime Entity', () => {
           seasons: [],
           isAdultContent: false,
         }),
-      ).toThrow('At least one genre must be provided');
+      ).toThrow('genres: at least one genre must be provided');
     });
 
     it('should throw when animeType is invalid', () => {
@@ -131,7 +131,7 @@ describe('Anime Entity', () => {
           seasons: [],
           isAdultContent: false,
         }),
-      ).toThrow('Anime type must be one of the following: serie, movie, mixed');
+      ).toThrow('animeType: must be one of serie, movie, mixed');
     });
 
     it('should throw when productionType is invalid', () => {
@@ -151,7 +151,7 @@ describe('Anime Entity', () => {
           seasons: [],
           isAdultContent: false,
         }),
-      ).toThrow('Production type must be one of the following: original, adaptation');
+      ).toThrow('productionType: must be one of original, adaptation');
     });
 
     it('should throw when synopsis is less than 10 chars', () => {
@@ -177,7 +177,7 @@ describe('Anime Entity', () => {
           ],
           isAdultContent: false,
         }),
-      ).toThrow('Description must be between 10 and 800 characters');
+      ).toThrow('description: must be between 10 and 800 characters');
     });
 
     it('should throw on duplicate genres', () => {
@@ -205,7 +205,7 @@ describe('Anime Entity', () => {
           ],
           isAdultContent: false,
         }),
-      ).toThrow('Duplicate genres detected');
+      ).toThrow('genres: duplicate items detected');
     });
 
     it('should throw for duplicate movies on create', () => {
@@ -229,7 +229,7 @@ describe('Anime Entity', () => {
           seasons: [],
           isAdultContent: false,
         }),
-      ).toThrow('Duplicate movies detected');
+      ).toThrow('movies: duplicate items detected');
     });
 
     it('should throw for duplicate seasons on create', () => {
@@ -253,7 +253,7 @@ describe('Anime Entity', () => {
           seasons: [season1, season2],
           isAdultContent: false,
         }),
-      ).toThrow('Duplicate seasons detected');
+      ).toThrow('seasons: duplicate items detected');
     });
   });
 
@@ -279,16 +279,16 @@ describe('Anime Entity', () => {
 
       expect(anime.genres.length).toBe(2);
 
-      expect(() => anime.addGenre(newGenre)).toThrow('Duplicate genres detected');
+      expect(() => anime.addGenre(newGenre)).toThrow('genres: duplicate items detected');
 
       anime.removeGenre(newGenre.id);
       expect(anime.genres.length).toBe(1);
 
-      expect(() => anime.removeGenre(newGenre.id)).toThrow('Genre not found');
+      expect(() => anime.removeGenre(newGenre.id)).toThrow('genre: not found');
 
       // cannot remove the last genre
       const remaining = anime.genres[0];
-      expect(() => anime.removeGenre(remaining.id)).toThrow('Anime must have at least one genre');
+      expect(() => anime.removeGenre(remaining.id)).toThrow('genres: anime must have at least one genre');
     });
 
     it('should add and remove movies for non-serie anime', () => {
@@ -312,7 +312,7 @@ describe('Anime Entity', () => {
 
       // cannot add duplicate
       expect(() => anime.addMovie({ name: 'First', releaseDate: new Date(2020, 9, 1) })).toThrow(
-        'Duplicate movies detected',
+        'movies: duplicate items detected',
       );
 
       // adding a new movie works
@@ -326,7 +326,7 @@ describe('Anime Entity', () => {
       // trying to remove last movie in a movie anime should throw
       expect(() =>
         anime.removeMovie({ name: 'Second', releaseDate: new Date(2021, 4, 5) }),
-      ).toThrow('Anime must have at least one movie');
+      ).toThrow('movies: anime must have at least one movie');
 
       // series cannot add movies
       const serie = Anime.create({
@@ -345,7 +345,7 @@ describe('Anime Entity', () => {
       });
 
       expect(() => serie.addMovie({ name: 'AddMovie', releaseDate: new Date() })).toThrow(
-        'Series cannot have movies',
+        'movies: series cannot have movies',
       );
     });
 
@@ -375,7 +375,7 @@ describe('Anime Entity', () => {
       // duplicate season cannot be added
       expect(() =>
         anime.addSeason({ seasonNumber: 1, releaseDate: new Date(2020, 3, 1), totalEpisodes: 10 }),
-      ).toThrow('Duplicate seasons detected');
+      ).toThrow('seasons: duplicate items detected');
 
       // add a new season
       anime.addSeason({ seasonNumber: 2, releaseDate: new Date(2021, 3, 1), totalEpisodes: 10 });
@@ -392,7 +392,7 @@ describe('Anime Entity', () => {
           releaseDate: new Date(2021, 3, 1),
           totalEpisodes: 10,
         }),
-      ).toThrow('Anime must have at least one season');
+      ).toThrow('seasons: anime must have at least one season');
 
       // movies cannot have seasons
       const movieAnime = Anime.create({
@@ -410,7 +410,7 @@ describe('Anime Entity', () => {
 
       expect(() =>
         movieAnime.addSeason({ seasonNumber: 1, releaseDate: new Date(), totalEpisodes: 10 }),
-      ).toThrow('Movies cannot have seasons');
+      ).toThrow('seasons: movies cannot have seasons');
     });
   });
 
@@ -439,16 +439,16 @@ describe('Anime Entity', () => {
       expect(anime.updatedAt.getTime()).toBeGreaterThanOrEqual(before.getTime());
 
       expect(() => anime.updateCommonInfo({ synopsis: 123 as any })).toThrow(
-        'Synopsis must be a string',
+        'synopsis: must be a string',
       );
       expect(() => anime.updateCommonInfo({ animeType: 123 as any })).toThrow(
-        'Anime type must be a string',
+        'animeType: must be a string',
       );
 
       anime.updateImageUrl('  https://example.com/new.png  ');
       expect(anime.imageUrl.value).toBe('https://example.com/new.png');
 
-      expect(() => anime.updateImageUrl(123 as any)).toThrow('URL must be a non-empty string');
+      expect(() => anime.updateImageUrl(123 as any)).toThrow('url: must be a non-empty string');
     });
 
     it('equals should compare properly', () => {

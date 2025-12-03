@@ -1,4 +1,5 @@
 import Movie from './movie.value-object.js';
+import { InvalidValueError } from '../errors/index.js';
 
 type Status = 'watching' | 'finished' | 'in_list';
 
@@ -42,13 +43,20 @@ class MovieStatus {
 
   private static validateStatus(status: string) {
     if (!this.validStatuses.includes(status)) {
-      throw new Error(`Invalid status: ${status}, must be one of ${this.validStatuses.join(', ')}`);
+      throw new InvalidValueError({
+        message: `status: must be one of ${this.validStatuses.join(', ')}`,
+        field: 'status',
+        allowedValues: this.validStatuses,
+      });
     }
   }
 
   private static validateIsLiked(isLiked: boolean) {
     if (typeof isLiked !== 'boolean') {
-      throw new Error('isLiked must be a boolean value');
+      throw new InvalidValueError({
+        message: 'isLiked: must be a boolean',
+        field: 'isLiked',
+      });
     }
   }
 

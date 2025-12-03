@@ -69,7 +69,7 @@ describe('User Routes - Integration Tests', () => {
       expect(response.body).toHaveProperty('message');
     });
 
-    it('should return 500 with invalid email format', async () => {
+    it('should return 400 with invalid email format', async () => {
       const response = await request(app)
         .post('/api/users')
         .send({
@@ -79,12 +79,12 @@ describe('User Routes - Integration Tests', () => {
           imageUrl: 'https://example.com/avatar.jpg',
           biography: 'Biography',
         })
-        .expect(500);
+        .expect(400);
 
       expect(response.body).toHaveProperty('message');
     });
 
-    it('should return 500 with weak password', async () => {
+    it('should return 400 with weak password', async () => {
       const response = await request(app)
         .post('/api/users')
         .send({
@@ -94,12 +94,12 @@ describe('User Routes - Integration Tests', () => {
           imageUrl: 'https://example.com/avatar.jpg',
           biography: 'Biography',
         })
-        .expect(500);
+        .expect(400);
 
       expect(response.body).toHaveProperty('message');
     });
 
-    it('should return 500 with missing username', async () => {
+    it('should return 400 with missing username', async () => {
       const response = await request(app)
         .post('/api/users')
         .send({
@@ -108,12 +108,12 @@ describe('User Routes - Integration Tests', () => {
           imageUrl: 'https://example.com/avatar.jpg',
           biography: 'Biography',
         })
-        .expect(500);
+        .expect(400);
 
       expect(response.body).toHaveProperty('message');
     });
 
-    it('should return 500 with short username', async () => {
+    it('should return 400 with short username', async () => {
       const response = await request(app)
         .post('/api/users')
         .send({
@@ -123,12 +123,12 @@ describe('User Routes - Integration Tests', () => {
           imageUrl: 'https://example.com/avatar.jpg',
           biography: 'Biography',
         })
-        .expect(500);
+        .expect(400);
 
       expect(response.body).toHaveProperty('message');
     });
 
-    it('should return 500 with invalid imageUrl', async () => {
+    it('should return 400 with invalid imageUrl', async () => {
       const response = await request(app)
         .post('/api/users')
         .send({
@@ -138,7 +138,7 @@ describe('User Routes - Integration Tests', () => {
           imageUrl: 'invalid-url',
           biography: 'Biography',
         })
-        .expect(500);
+        .expect(400);
 
       expect(response.body).toHaveProperty('message');
     });
@@ -461,7 +461,7 @@ describe('User Routes - Integration Tests', () => {
       expect(response.body.animeList.list).toHaveLength(0);
     });
 
-    it('should return 500 when anime is not in user list', async () => {
+    it('should return 400 when anime is not in user list', async () => {
       const user = await createTestUser();
       const category = await createTestCategory();
       const genre = await createTestGenre();
@@ -473,7 +473,7 @@ describe('User Routes - Integration Tests', () => {
       const response = await request(app)
         .delete(`/api/users/${user.id}/anime-list/${anime.id}`)
         .set('Authorization', `Bearer ${user.token}`)
-        .expect(500);
+        .expect(400);
 
       expect(response.body).toHaveProperty('message');
     });
@@ -520,7 +520,7 @@ describe('User Routes - Integration Tests', () => {
       expect(response2.body.animeList.list[0].isLiked).toBe(false);
     });
 
-    it('should return 500 when anime is not in user list', async () => {
+    it('should return 400 when anime is not in user list', async () => {
       const user = await createTestUser();
       const category = await createTestCategory();
       const genre = await createTestGenre();
@@ -532,7 +532,7 @@ describe('User Routes - Integration Tests', () => {
       const response = await request(app)
         .patch(`/api/users/${user.id}/anime-list/${anime.id}/like`)
         .set('Authorization', `Bearer ${user.token}`)
-        .expect(500);
+        .expect(400);
 
       expect(response.body).toHaveProperty('message');
     });

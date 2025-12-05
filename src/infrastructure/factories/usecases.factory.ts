@@ -1,4 +1,5 @@
 import {
+  LookupAnimeUseCase,
   CreateAnimeUseCase,
   GetAnimeByIdUseCase,
   GetAllAnimesUseCase,
@@ -11,23 +12,19 @@ import {
   RemoveSeasonFromAnimeUseCase,
   RemoveGenreFromAnimeUseCase,
 } from '../../application/use-cases/anime/index.js';
-
 import { LoginUseCase, LogoutUseCase } from '../../application/use-cases/auth/index.js';
-
 import {
   CreateCategoryUseCase,
   GetCategoryByIdUseCase,
   GetAllCategoriesUseCase,
   DeleteCategoryUseCase,
 } from '../../application/use-cases/category/index.js';
-
 import {
   CreateGenreUseCase,
   GetGenreByIdUseCase,
   GetAllGenresUseCase,
   DeleteGenreUseCase,
 } from '../../application/use-cases/genre/index.js';
-
 import {
   CreateUserUseCase,
   GetUserByIdUseCase,
@@ -41,17 +38,22 @@ import {
   UpdateSeasonStatusUseCase,
   UpdateAnimeStatusUseCase,
 } from '../../application/use-cases/user/index.js';
-
 import {
   makeAnimeRepository,
   makeCategoryRepository,
   makeGenreRepository,
   makeUserRepository,
 } from './repositories.factory.js';
-
-import { makeJwtService, makeTokenBlacklistService } from './services.factory.js';
+import {
+  makeJwtService,
+  makeLookupAnimeService,
+  makeTokenBlacklistService,
+} from './services.factory.js';
 
 /* Anime */
+export const makeLookupAnimeUseCase = (): LookupAnimeUseCase =>
+  new LookupAnimeUseCase(makeLookupAnimeService());
+
 export const makeCreateAnimeUseCase = (): CreateAnimeUseCase =>
   new CreateAnimeUseCase(makeAnimeRepository(), makeCategoryRepository(), makeGenreRepository());
 

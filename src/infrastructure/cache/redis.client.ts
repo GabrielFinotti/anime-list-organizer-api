@@ -3,6 +3,7 @@ import StartEnv from '../env/startEnv.config.js';
 
 class RedisClient {
   private readonly client: Redis;
+
   private static instance: RedisClient;
 
   private constructor() {

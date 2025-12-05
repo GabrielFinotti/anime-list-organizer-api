@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
+import { LookupAnimeUseCase } from '../../../application/use-cases/anime/lookup-anime.use-case.js';
 import { CreateAnimeUseCase } from '../../../application/use-cases/anime/create-anime.use-case.js';
 import { GetAnimeByIdUseCase } from '../../../application/use-cases/anime/get-anime-by-id.use-case.js';
 import { GetAllAnimesUseCase } from '../../../application/use-cases/anime/get-all-animes.use-case.js';
@@ -23,6 +24,7 @@ import {
 
 export class AnimeController {
   constructor(
+    private readonly lookupAnimeUseCase: LookupAnimeUseCase,
     private readonly createAnimeUseCase: CreateAnimeUseCase,
     private readonly getAnimeByIdUseCase: GetAnimeByIdUseCase,
     private readonly getAllAnimesUseCase: GetAllAnimesUseCase,
@@ -35,6 +37,16 @@ export class AnimeController {
     private readonly removeSeasonFromAnimeUseCase: RemoveSeasonFromAnimeUseCase,
     private readonly removeGenreFromAnimeUseCase: RemoveGenreFromAnimeUseCase,
   ) {}
+
+  lookupAnime = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const animeData = await this.lookupAnimeUseCase.execute(req.query.title as string);
+
+      res.status(200).json(animeData);
+    } catch (error) {
+      next(error);
+    }
+  };
 
   create = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {

@@ -39,9 +39,7 @@ describe('Anime Routes - Integration Tests', () => {
     });
 
     it('should return 401 without authentication', async () => {
-      const response = await request(app)
-        .get('/api/animes')
-        .expect(401);
+      const response = await request(app).get('/api/animes').expect(401);
 
       expect(response.body).toHaveProperty('message');
     });
@@ -88,9 +86,7 @@ describe('Anime Routes - Integration Tests', () => {
     });
 
     it('should return 401 without authentication', async () => {
-      const response = await request(app)
-        .get('/api/animes/01ARZ3NDEKTSV4RRFFQ69G5FAV')
-        .expect(401);
+      const response = await request(app).get('/api/animes/01ARZ3NDEKTSV4RRFFQ69G5FAV').expect(401);
 
       expect(response.body).toHaveProperty('message');
     });
@@ -209,7 +205,8 @@ describe('Anime Routes - Integration Tests', () => {
         .send({
           name: 'Novo Anime',
           imageUrl: 'https://example.com/anime.jpg',
-          synopsis: 'Uma sinopse muito longa e detalhada do anime que está sendo criado para testes',
+          synopsis:
+            'Uma sinopse muito longa e detalhada do anime que está sendo criado para testes',
           categoryId: category.id,
           genreIds: [genre.id],
           animeType: 'serie',
@@ -298,7 +295,8 @@ describe('Anime Routes - Integration Tests', () => {
         .set('Authorization', `Bearer ${admin.token}`)
         .send({
           imageUrl: 'https://example.com/anime.jpg',
-          synopsis: 'Uma sinopse muito longa e detalhada do anime que está sendo criado para testes',
+          synopsis:
+            'Uma sinopse muito longa e detalhada do anime que está sendo criado para testes',
           categoryId: category.id,
           genreIds: [genre.id],
           animeType: 'serie',
@@ -500,7 +498,10 @@ describe('Anime Routes - Integration Tests', () => {
       const admin = await createTestAdmin();
       const category = await createTestCategory();
       const genre = await createTestGenre();
-      const anime = await createTestAnime(category.id, [genre.id], { animeType: 'movie', movies: [{ title: 'First Movie', releaseDate: new Date() }] });
+      const anime = await createTestAnime(category.id, [genre.id], {
+        animeType: 'movie',
+        movies: [{ title: 'First Movie', releaseDate: new Date() }],
+      });
 
       const response = await request(app)
         .post(`/api/animes/${anime.id}/movies`)
@@ -628,7 +629,10 @@ describe('Anime Routes - Integration Tests', () => {
       const admin = await createTestAdmin();
       const category = await createTestCategory();
       const genre = await createTestGenre();
-      const anime = await createTestAnime(category.id, [genre.id], { animeType: 'serie', seasons: [{ seasonNumber: 1, releaseDate: new Date(), totalEpisodes: 12 }] });
+      const anime = await createTestAnime(category.id, [genre.id], {
+        animeType: 'serie',
+        seasons: [{ seasonNumber: 1, releaseDate: new Date(), totalEpisodes: 12 }],
+      });
 
       const response = await request(app)
         .post(`/api/animes/${anime.id}/seasons`)

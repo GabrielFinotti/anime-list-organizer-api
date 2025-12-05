@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 import StartEnv from '../env/startEnv.config.js';
-import { IJwtService, TokenPayload } from '../../application/services/jwt.service.interface.js';
+import { IJwtService, TokenPayload } from '../../application/services/jwt.service.js';
 
 type DecodedToken = TokenPayload & {
   iat: number;
@@ -10,6 +10,7 @@ type DecodedToken = TokenPayload & {
 class JwtService implements IJwtService {
   private readonly secretKey: string;
   private readonly tokenExpiration: string;
+
   private static instance: JwtService;
 
   private constructor() {

@@ -29,7 +29,7 @@ const errorHandler = (error: Error, _req: Request, res: Response, _next: NextFun
     if (validationError.errors) response.errors = validationError.errors;
 
     res.status(validationError.statusCode).json(response);
-    
+
     return;
   }
 

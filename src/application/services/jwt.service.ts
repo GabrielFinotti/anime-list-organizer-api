@@ -4,8 +4,8 @@ export type TokenPayload = {
   role: 'user' | 'admin';
 };
 
-export interface IJwtService {
+export type IJwtService = {
   generateToken(payload: TokenPayload): string;
   verifyToken(token: string): TokenPayload;
   getTokenRemainingTTL(token: string): number;
-}
+};

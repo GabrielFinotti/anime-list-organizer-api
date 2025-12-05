@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { AnimeController } from '../../../../../src/presentation/http/controllers/anime.controller';
+import { LookupAnimeUseCase } from '../../../../../src/application/use-cases/anime/lookup-anime.use-case';
 import { CreateAnimeUseCase } from '../../../../../src/application/use-cases/anime/create-anime.use-case';
 import { GetAnimeByIdUseCase } from '../../../../../src/application/use-cases/anime/get-anime-by-id.use-case';
 import { GetAllAnimesUseCase } from '../../../../../src/application/use-cases/anime/get-all-animes.use-case';
@@ -12,9 +13,11 @@ import { RemoveMovieFromAnimeUseCase } from '../../../../../src/application/use-
 import { RemoveSeasonFromAnimeUseCase } from '../../../../../src/application/use-cases/anime/remove-season-from-anime.use-case';
 import { RemoveGenreFromAnimeUseCase } from '../../../../../src/application/use-cases/anime/remove-genre-from-anime.use-case';
 import { AnimeOutputDTO } from '../../../../../src/application/dtos/anime.dto';
+import { PromptResponse } from '../../../../../src/application/services/lookupAnime.service';
 
 describe('AnimeController', () => {
   let animeController: AnimeController;
+  let mockLookupAnimeUseCase: jest.Mocked<LookupAnimeUseCase>;
   let mockCreateAnimeUseCase: jest.Mocked<CreateAnimeUseCase>;
   let mockGetAnimeByIdUseCase: jest.Mocked<GetAnimeByIdUseCase>;
   let mockGetAllAnimesUseCase: jest.Mocked<GetAllAnimesUseCase>;
@@ -47,6 +50,7 @@ describe('AnimeController', () => {
   };
 
   beforeEach(() => {
+    mockLookupAnimeUseCase = { execute: jest.fn() } as any;
     mockCreateAnimeUseCase = { execute: jest.fn() } as any;
     mockGetAnimeByIdUseCase = { execute: jest.fn() } as any;
     mockGetAllAnimesUseCase = { execute: jest.fn() } as any;
@@ -60,6 +64,7 @@ describe('AnimeController', () => {
     mockRemoveGenreFromAnimeUseCase = { execute: jest.fn() } as any;
 
     animeController = new AnimeController(
+      mockLookupAnimeUseCase,
       mockCreateAnimeUseCase,
       mockGetAnimeByIdUseCase,
       mockGetAllAnimesUseCase,
@@ -76,6 +81,7 @@ describe('AnimeController', () => {
     mockRequest = {
       body: {},
       params: {},
+      query: {},
     };
 
     mockResponse = {
@@ -474,6 +480,150 @@ describe('AnimeController', () => {
       await animeController.removeGenre(mockRequest as Request, mockResponse as Response, mockNext);
 
       expect(mockNext).toHaveBeenCalledWith(error);
+    });
+  });
+
+  describe('lookupAnime', () => {
+    const mockLookupResponse: PromptResponse = {
+      anime: {
+        name: 'Naruto',
+        synopsis: 'Uma história sobre um ninja chamado Naruto Uzumaki',
+        category: 'Shounen',
+        genres: ['Action', 'Adventure'],
+        animeType: 'serie',
+        productionType: 'adaptation',
+        movies: [{ title: 'Naruto the Movie', releaseDate: new Date('2004-08-21') }],
+        seasons: [{ seasonNumber: 1, releaseDate: new Date('2002-10-03'), totalEpisodes: 220 }],
+        isAdultContent: false,
+      },
+      observedDetails: [],
+    };
+
+    it('should lookup anime and return 200', async () => {
+      mockRequest.query = { title: 'Naruto' };
+
+      mockLookupAnimeUseCase.execute.mockResolvedValue(mockLookupResponse);
+
+      await animeController.lookupAnime(mockRequest as Request, mockResponse as Response, mockNext);
+
+      expect(mockLookupAnimeUseCase.execute).toHaveBeenCalledWith('Naruto');
+      expect(mockResponse.status).toHaveBeenCalledWith(200);
+      expect(mockResponse.json).toHaveBeenCalledWith(mockLookupResponse);
+    });
+
+    it('should call next with error when lookupAnime fails', async () => {
+      mockRequest.query = { title: 'Naruto' };
+
+      const error = new Error('Lookup failed');
+      mockLookupAnimeUseCase.execute.mockRejectedValue(error);
+
+      await animeController.lookupAnime(mockRequest as Request, mockResponse as Response, mockNext);
+
+      expect(mockNext).toHaveBeenCalledWith(error);
+    });
+
+    it('should handle movie type anime lookup', async () => {
+      mockRequest.query = { title: 'Your Name' };
+
+      const movieResponse: PromptResponse = {
+        anime: {
+          name: 'Your Name',
+          synopsis: 'Uma história de amor entre dois adolescentes',
+          category: 'Romance',
+          genres: ['Romance', 'Drama'],
+          animeType: 'movie',
+          productionType: 'original',
+          movies: [{ title: 'Your Name', releaseDate: new Date('2016-08-26') }],
+          seasons: [],
+          isAdultContent: false,
+        },
+        observedDetails: [],
+      };
+
+      mockLookupAnimeUseCase.execute.mockResolvedValue(movieResponse);
+
+      await animeController.lookupAnime(mockRequest as Request, mockResponse as Response, mockNext);
+
+      expect(mockResponse.status).toHaveBeenCalledWith(200);
+      expect(mockResponse.json).toHaveBeenCalledWith(movieResponse);
+    });
+
+    it('should handle mixed type anime lookup', async () => {
+      mockRequest.query = { title: 'Dragon Ball Z' };
+
+      const mixedResponse: PromptResponse = {
+        anime: {
+          name: 'Dragon Ball Z',
+          synopsis: 'Goku e seus amigos protegem a Terra',
+          category: 'Shounen',
+          genres: ['Action'],
+          animeType: 'mixed',
+          productionType: 'adaptation',
+          movies: [{ title: 'DBZ Movie', releaseDate: new Date('1989-07-15') }],
+          seasons: [{ seasonNumber: 1, releaseDate: new Date('1989-04-26'), totalEpisodes: 39 }],
+          isAdultContent: false,
+        },
+        observedDetails: [],
+      };
+
+      mockLookupAnimeUseCase.execute.mockResolvedValue(mixedResponse);
+
+      await animeController.lookupAnime(mockRequest as Request, mockResponse as Response, mockNext);
+
+      expect(mockResponse.status).toHaveBeenCalledWith(200);
+      expect(mockResponse.json).toHaveBeenCalledWith(mixedResponse);
+    });
+
+    it('should handle lookup with observed details', async () => {
+      mockRequest.query = { title: 'Unknown Anime' };
+
+      const incompleteResponse: PromptResponse = {
+        anime: {
+          name: 'Unknown Anime',
+          synopsis: '',
+          category: '',
+          genres: [],
+          animeType: 'serie',
+          productionType: 'original',
+          movies: [],
+          seasons: [],
+          isAdultContent: false,
+        },
+        observedDetails: ['synopsis', 'category', 'genres'],
+      };
+
+      mockLookupAnimeUseCase.execute.mockResolvedValue(incompleteResponse);
+
+      await animeController.lookupAnime(mockRequest as Request, mockResponse as Response, mockNext);
+
+      expect(mockResponse.status).toHaveBeenCalledWith(200);
+      expect(mockResponse.json).toHaveBeenCalledWith(incompleteResponse);
+    });
+
+    it('should handle adult content anime lookup', async () => {
+      mockRequest.query = { title: 'Adult Anime' };
+
+      const adultResponse: PromptResponse = {
+        anime: {
+          name: 'Adult Anime',
+          synopsis: 'Um anime para adultos',
+          category: 'Seinen',
+          genres: ['Ecchi'],
+          animeType: 'serie',
+          productionType: 'original',
+          movies: [],
+          seasons: [{ seasonNumber: 1, releaseDate: new Date('2020-01-01'), totalEpisodes: 12 }],
+          isAdultContent: true,
+        },
+        observedDetails: [],
+      };
+
+      mockLookupAnimeUseCase.execute.mockResolvedValue(adultResponse);
+
+      await animeController.lookupAnime(mockRequest as Request, mockResponse as Response, mockNext);
+
+      expect(mockResponse.status).toHaveBeenCalledWith(200);
+      expect(mockResponse.json).toHaveBeenCalledWith(adultResponse);
     });
   });
 });

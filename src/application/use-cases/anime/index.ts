@@ -1,3 +1,4 @@
+export { LookupAnimeUseCase } from './lookup-anime.use-case.js';
 export { CreateAnimeUseCase } from './create-anime.use-case.js';
 export { GetAnimeByIdUseCase } from './get-anime-by-id.use-case.js';
 export { GetAllAnimesUseCase } from './get-all-animes.use-case.js';

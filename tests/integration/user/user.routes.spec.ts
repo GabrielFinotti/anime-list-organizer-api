@@ -43,10 +43,7 @@ describe('User Routes - Integration Tests', () => {
         role: 'admin',
       };
 
-      const response = await request(app)
-        .post('/api/users')
-        .send(userData)
-        .expect(201);
+      const response = await request(app).post('/api/users').send(userData).expect(201);
 
       expect(response.body.role).toBe('admin');
     });
@@ -170,9 +167,7 @@ describe('User Routes - Integration Tests', () => {
     });
 
     it('should return 401 without authentication', async () => {
-      const response = await request(app)
-        .get('/api/users')
-        .expect(401);
+      const response = await request(app).get('/api/users').expect(401);
 
       expect(response.body).toHaveProperty('message');
     });
@@ -217,9 +212,7 @@ describe('User Routes - Integration Tests', () => {
     });
 
     it('should return 401 without authentication', async () => {
-      const response = await request(app)
-        .get('/api/users/01ARZ3NDEKTSV4RRFFQ69G5FAV')
-        .expect(401);
+      const response = await request(app).get('/api/users/01ARZ3NDEKTSV4RRFFQ69G5FAV').expect(401);
 
       expect(response.body).toHaveProperty('message');
     });
@@ -588,7 +581,9 @@ describe('User Routes - Integration Tests', () => {
 
     it('should return 401 without authentication', async () => {
       const response = await request(app)
-        .patch('/api/users/01ARZ3NDEKTSV4RRFFQ69G5FAV/anime-list/01ARZ3NDEKTSV4RRFFQ69G5FAV/movie-status')
+        .patch(
+          '/api/users/01ARZ3NDEKTSV4RRFFQ69G5FAV/anime-list/01ARZ3NDEKTSV4RRFFQ69G5FAV/movie-status',
+        )
         .send({
           movie: {
             name: 'Movie 1',
@@ -649,7 +644,9 @@ describe('User Routes - Integration Tests', () => {
 
     it('should return 401 without authentication', async () => {
       const response = await request(app)
-        .patch('/api/users/01ARZ3NDEKTSV4RRFFQ69G5FAV/anime-list/01ARZ3NDEKTSV4RRFFQ69G5FAV/season-status')
+        .patch(
+          '/api/users/01ARZ3NDEKTSV4RRFFQ69G5FAV/anime-list/01ARZ3NDEKTSV4RRFFQ69G5FAV/season-status',
+        )
         .send({
           season: {
             seasonNumber: 1,
@@ -710,7 +707,11 @@ describe('User Routes - Integration Tests', () => {
       await request(app)
         .patch(`/api/users/${user.id}/anime-list/${anime.id}/movie-status`)
         .set('Authorization', `Bearer ${user.token}`)
-        .send({ movie: { name: 'Movie 1', releaseDate: new Date() }, status: 'finished', isLiked: false })
+        .send({
+          movie: { name: 'Movie 1', releaseDate: new Date() },
+          status: 'finished',
+          isLiked: false,
+        })
         .expect(200);
 
       // Update anime status to finished

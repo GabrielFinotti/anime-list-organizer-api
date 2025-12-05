@@ -288,7 +288,9 @@ describe('Anime Entity', () => {
 
       // cannot remove the last genre
       const remaining = anime.genres[0];
-      expect(() => anime.removeGenre(remaining.id)).toThrow('genres: anime must have at least one genre');
+      expect(() => anime.removeGenre(remaining.id)).toThrow(
+        'genres: anime must have at least one genre',
+      );
     });
 
     it('should add and remove movies for non-serie anime', () => {

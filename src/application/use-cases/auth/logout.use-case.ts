@@ -1,5 +1,5 @@
-import { IJwtService } from '../../services/jwt.service.interface.js';
-import { ITokenBlacklistService } from '../../services/token-blacklist.service.interface.js';
+import { IJwtService } from '../../services/jwt.service.js';
+import { ITokenBlacklistService } from '../../services/token-blacklist.service.js';
 import { LogoutInputDTO } from '../../dtos/auth.dto.js';
 
 export class LogoutUseCase {

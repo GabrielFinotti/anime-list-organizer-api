@@ -5,6 +5,9 @@ import { authMiddleware, roleMiddleware } from '../middlewares/index.js';
 const animeRoutes = Router();
 const animeController = makeAnimeController();
 
+// Rotas protegidas (admin only) - deve vir antes de /:id para não conflitar
+animeRoutes.get('/lookup', authMiddleware, roleMiddleware, animeController.lookupAnime);
+
 // Rotas protegidas (user autenticado)
 animeRoutes.get('/', authMiddleware, animeController.getAll);
 animeRoutes.get('/:id', authMiddleware, animeController.getById);

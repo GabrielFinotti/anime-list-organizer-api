@@ -1,5 +1,5 @@
 import RedisClient from '../cache/redis.client.js';
-import { ITokenBlacklistService } from '../../application/services/token-blacklist.service.interface.js';
+import { ITokenBlacklistService } from '../../application/services/token-blacklist.service.js';
 
 class TokenBlacklistService implements ITokenBlacklistService {
   private readonly redisClient: RedisClient;

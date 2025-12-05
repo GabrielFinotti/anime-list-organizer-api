@@ -42,7 +42,9 @@ describe('Category Entity', () => {
     });
 
     it('should throw error when description is not a string', () => {
-      expect(() => Category.create('Thriller', 123 as any)).toThrow('description: must be a string');
+      expect(() => Category.create('Thriller', 123 as any)).toThrow(
+        'description: must be a string',
+      );
     });
 
     it('should throw error when description is empty', () => {

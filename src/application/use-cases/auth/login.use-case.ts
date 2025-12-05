@@ -1,5 +1,5 @@
 import { IUserRepository } from '../../../domain/repositories/user.repository.js';
-import { IJwtService } from '../../services/jwt.service.interface.js';
+import { IJwtService } from '../../services/jwt.service.js';
 import { LoginInputDTO, LoginOutputDTO } from '../../dtos/auth.dto.js';
 import { UnauthorizedError } from '../../errors/unauthorized.error.js';
 

@@ -18,15 +18,11 @@ describe('Name Value Object', () => {
     });
 
     it('should throw error when name is empty', () => {
-      expect(() => Name.create('')).toThrow(
-        'name: must be between 3 and 100 characters long',
-      );
+      expect(() => Name.create('')).toThrow('name: must be between 3 and 100 characters long');
     });
 
     it('should throw error when name is less than 3 characters', () => {
-      expect(() => Name.create('ab')).toThrow(
-        'name: must be between 3 and 100 characters long',
-      );
+      expect(() => Name.create('ab')).toThrow('name: must be between 3 and 100 characters long');
     });
 
     it('should throw error when name is more than 100 characters', () => {

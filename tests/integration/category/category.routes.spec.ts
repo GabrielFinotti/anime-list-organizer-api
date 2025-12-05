@@ -31,9 +31,7 @@ describe('Category Routes - Integration Tests', () => {
     });
 
     it('should return 401 without authentication', async () => {
-      const response = await request(app)
-        .get('/api/categories')
-        .expect(401);
+      const response = await request(app).get('/api/categories').expect(401);
 
       expect(response.body).toHaveProperty('message');
     });
@@ -89,9 +87,7 @@ describe('Category Routes - Integration Tests', () => {
     it('should return 401 without authentication', async () => {
       const category = await createTestCategory();
 
-      const response = await request(app)
-        .get(`/api/categories/${category.id}`)
-        .expect(401);
+      const response = await request(app).get(`/api/categories/${category.id}`).expect(401);
 
       expect(response.body).toHaveProperty('message');
     });
@@ -259,9 +255,7 @@ describe('Category Routes - Integration Tests', () => {
     it('should return 401 without authentication', async () => {
       const category = await createTestCategory();
 
-      const response = await request(app)
-        .delete(`/api/categories/${category.id}`)
-        .expect(401);
+      const response = await request(app).delete(`/api/categories/${category.id}`).expect(401);
 
       expect(response.body).toHaveProperty('message');
     });

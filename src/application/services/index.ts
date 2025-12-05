@@ -1,2 +1,2 @@
-export * from './jwt.service.interface.js';
-export * from './token-blacklist.service.interface.js';
+export * from './jwt.service.js';
+export * from './token-blacklist.service.js';

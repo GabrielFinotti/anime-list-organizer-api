@@ -1,5 +1,9 @@
 import bcrypt from 'bcrypt';
-import { InvalidValueError, AggregateValidationError, ValidationErrorDetail } from '../errors/index.js';
+import {
+  InvalidValueError,
+  AggregateValidationError,
+  ValidationErrorDetail,
+} from '../errors/index.js';
 
 class Password {
   private readonly _value: string;

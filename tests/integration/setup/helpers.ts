@@ -55,21 +55,11 @@ export interface TestAnime {
   isAdultContent: boolean;
 }
 
-export const generateToken = (
-  userId: string,
-  email: string,
-  role: 'user' | 'admin',
-): string => {
-  return jwt.sign(
-    { userId, email, role },
-    SECRET_KEY,
-    { expiresIn: TOKEN_EXPIRATION },
-  );
+export const generateToken = (userId: string, email: string, role: 'user' | 'admin'): string => {
+  return jwt.sign({ userId, email, role }, SECRET_KEY, { expiresIn: TOKEN_EXPIRATION });
 };
 
-export const createTestUser = async (
-  overrides: Partial<TestUser> = {},
-): Promise<TestUser> => {
+export const createTestUser = async (overrides: Partial<TestUser> = {}): Promise<TestUser> => {
   const id = overrides.id || ulid();
   const password = overrides.password || 'Password123!';
   const hashedPassword = await bcrypt.hash(password, 10);
@@ -127,9 +117,7 @@ export const createTestCategory = async (
   };
 };
 
-export const createTestGenre = async (
-  overrides: Partial<TestGenre> = {},
-): Promise<TestGenre> => {
+export const createTestGenre = async (overrides: Partial<TestGenre> = {}): Promise<TestGenre> => {
   const id = overrides.id || ulid();
 
   const genreData = {
@@ -187,8 +175,6 @@ export const createTestAnime = async (
   };
 };
 
-export const createTestAdmin = async (
-  overrides: Partial<TestUser> = {},
-): Promise<TestUser> => {
+export const createTestAdmin = async (overrides: Partial<TestUser> = {}): Promise<TestUser> => {
   return createTestUser({ ...overrides, role: 'admin' });
 };

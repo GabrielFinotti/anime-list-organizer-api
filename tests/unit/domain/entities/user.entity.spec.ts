@@ -59,13 +59,17 @@ describe('User Entity', () => {
     expect(animeStatus.seasonsStatus.length).toBe(1);
 
     // Adding again should throw
-    expect(() => user.addAnimeToAnimeList(anime)).toThrow('animeList: anime is already in the list');
+    expect(() => user.addAnimeToAnimeList(anime)).toThrow(
+      'animeList: anime is already in the list',
+    );
 
     // Remove
     user.removeAnimeFromAnimeList(anime);
     expect(user.animeList.list.length).toBe(0);
     // Removing non existing should throw
-    expect(() => user.removeAnimeFromAnimeList(anime)).toThrow('animeList: anime is not in the list');
+    expect(() => user.removeAnimeFromAnimeList(anime)).toThrow(
+      'animeList: anime is not in the list',
+    );
   });
 
   it('should add and remove anime from favorites using updateAnimeLikeStatus', () => {
@@ -113,7 +117,9 @@ describe('User Entity', () => {
       isAdultContent: false,
     });
 
-    expect(() => user.updateAnimeLikeStatus(anotherAnime)).toThrow('animeList: anime not found in list');
+    expect(() => user.updateAnimeLikeStatus(anotherAnime)).toThrow(
+      'animeList: anime not found in list',
+    );
   });
 
   it('should update movie and season statuses (and validate belong to anime)', () => {

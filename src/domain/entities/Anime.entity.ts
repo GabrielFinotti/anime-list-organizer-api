@@ -226,26 +226,14 @@ class Anime {
   }
 
   private static ensureUniqueMovies(movies: Movie[]) {
-    this.ensureUnique(
-      movies,
-      (m) => `${m.title.value}|${m.releaseDate.getTime()}`,
-      'movies',
-    );
+    this.ensureUnique(movies, (m) => `${m.title.value}|${m.releaseDate.getTime()}`, 'movies');
   }
 
   private static ensureUniqueSeasons(seasons: Season[]) {
-    this.ensureUnique(
-      seasons,
-      (s) => `${s.seasonNumber}|${s.releaseDate.getTime()}`,
-      'seasons',
-    );
+    this.ensureUnique(seasons, (s) => `${s.seasonNumber}|${s.releaseDate.getTime()}`, 'seasons');
   }
 
-  private static ensureUnique<T>(
-    items: T[],
-    keySelector: (item: T) => string,
-    fieldName: string,
-  ) {
+  private static ensureUnique<T>(items: T[], keySelector: (item: T) => string, fieldName: string) {
     const keys = new Set<string>();
 
     for (const item of items) {

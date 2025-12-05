@@ -15,6 +15,7 @@ import {
   makeDeleteGenreUseCase,
   makeLoginUseCase,
   makeLogoutUseCase,
+  makeLookupAnimeUseCase,
   makeCreateAnimeUseCase,
   makeGetAnimeByIdUseCase,
   makeGetAllAnimesUseCase,
@@ -64,6 +65,7 @@ export const makeAuthController = (): AuthController =>
 /* Anime */
 export const makeAnimeController = (): AnimeController =>
   new AnimeController(
+    makeLookupAnimeUseCase(),
     makeCreateAnimeUseCase(),
     makeGetAnimeByIdUseCase(),
     makeGetAllAnimesUseCase(),

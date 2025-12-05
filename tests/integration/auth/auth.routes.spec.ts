@@ -125,9 +125,7 @@ describe('Auth Routes - Integration Tests', () => {
     });
 
     it('should return 401 without authorization header', async () => {
-      const response = await request(app)
-        .post('/api/auth/logout')
-        .expect(401);
+      const response = await request(app).post('/api/auth/logout').expect(401);
 
       expect(response.body).toHaveProperty('message');
     });

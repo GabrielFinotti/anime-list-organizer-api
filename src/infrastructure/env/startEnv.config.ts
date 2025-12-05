@@ -10,6 +10,7 @@ type StartEnvProps = {
   MONGO_NAME: string;
   REDIS_URL: string;
   SECRET_KEY: string;
+  OPENAI_API_KEY: string;
   TOKEN_EXPIRATION: string;
 };
 
@@ -43,6 +44,7 @@ class StartEnv {
       MONGO_NAME: process.env.MONGO_NAME,
       REDIS_URL: process.env.REDIS_URL,
       SECRET_KEY: process.env.SECRET_KEY,
+      OPENAI_API_KEY: process.env.OPENAI_API_KEY,
       TOKEN_EXPIRATION: process.env.TOKEN_EXPIRATION,
     };
 

@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction, RequestHandler } from 'express';
-import { IJwtService } from '../../../application/services/jwt.service.interface.js';
-import { ITokenBlacklistService } from '../../../application/services/token-blacklist.service.interface.js';
+import { IJwtService } from '../../../application/services/jwt.service.js';
+import { ITokenBlacklistService } from '../../../application/services/token-blacklist.service.js';
 import { UnauthorizedError } from '../../../application/errors/unauthorized.error.js';
 import '../../types/express.type.js';
 

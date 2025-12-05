@@ -5,7 +5,8 @@ import {
   BusinessRuleError,
   AggregateValidationError,
 } from '../../domain/errors/index.js';
-import { ValidationError, ValidationErrorDetail } from './validation.error.js';
+import { ValidationError } from './validation.error.js';
+import type { ValidationErrorDetail } from './validation.error.js';
 
 export class DomainErrorMapper {
   static toValidationError(error: DomainError): ValidationError {

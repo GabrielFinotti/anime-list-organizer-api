@@ -8,20 +8,14 @@ export class CreateUserUseCase {
   constructor(private readonly userRepository: IUserRepository) {}
 
   async execute(input: UserInputDTO): Promise<UserOutputDTO> {
-    const existingUser = await this.userRepository.findByEmail(input.email);
+    const user = User.create(input);
+
+    const existingUser = await this.userRepository.findByEmail(user.email.value);
 
     if (existingUser) {
-      throw new ConflictError('User', 'email', input.email);
+      throw new ConflictError('User', 'email', user.email.value);
     }
 
-    const user = User.create({
-      imageUrl: input.imageUrl,
-      username: input.username,
-      email: input.email,
-      password: input.password,
-      biography: input.biography,
-      role: input.role,
-    });
 
     const savedUser = await this.userRepository.create(user);
 

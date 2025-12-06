@@ -2,6 +2,7 @@ import { IUserRepository } from '../../../domain/repositories/user.repository.js
 import { UserOutputDTO, UpdateUserInputDTO } from '../../dtos/user.dto.js';
 import UserMapper from '../../mappers/user.mapper.js';
 import { NotFoundError, ConflictError } from '../../errors/index.js';
+import Email from '../../../domain/value-objects/email.value-object.js';
 
 export class UpdateUserUseCase {
   constructor(private readonly userRepository: IUserRepository) {}
@@ -13,20 +14,17 @@ export class UpdateUserUseCase {
       throw new NotFoundError('User', input.id);
     }
 
-    if (input.email && input.email !== user.email.value) {
-      const existingUser = await this.userRepository.findByEmail(input.email);
+    if (input.email) {
+      const email = Email.create(input.email);
 
-      if (existingUser) {
-        throw new ConflictError('User', 'email', input.email);
+      const existingUser = await this.userRepository.findByEmail(email.value);
+
+      if (existingUser && !existingUser.id.equals(user.id)) {
+        throw new ConflictError('User', 'email', email.value);
       }
     }
 
-    user.updateCommonInfo({
-      username: input.username,
-      email: input.email,
-      password: input.password,
-      biography: input.biography,
-    });
+    user.updateCommonInfo(input);
 
     if (input.imageUrl) {
       user.updateProfileImage(input.imageUrl);

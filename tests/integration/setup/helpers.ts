@@ -5,6 +5,7 @@ import UserModel from '../../../src/infrastructure/database/models/user.model';
 import AnimeModel from '../../../src/infrastructure/database/models/anime.model';
 import CategoryModel from '../../../src/infrastructure/database/models/category.model';
 import GenreModel from '../../../src/infrastructure/database/models/genre.model';
+import Name from '../../../src/domain/value-objects/name.value-object';
 
 const SECRET_KEY = 'test-secret-key';
 const TOKEN_EXPIRATION = '1h';
@@ -102,9 +103,11 @@ export const createTestCategory = async (
 ): Promise<TestCategory> => {
   const id = overrides.id || ulid();
 
+  const categoryName = overrides.name ? Name.create(overrides.name).value : Name.create(`Category ${id}`).value;
+
   const categoryData = {
     _id: id,
-    name: overrides.name || `Category ${id}`,
+    name: categoryName,
     description: overrides.description || 'Test category description',
   };
 
@@ -120,9 +123,11 @@ export const createTestCategory = async (
 export const createTestGenre = async (overrides: Partial<TestGenre> = {}): Promise<TestGenre> => {
   const id = overrides.id || ulid();
 
+  const genreName = overrides.name ? Name.create(overrides.name).value : Name.create(`Genre ${id}`).value;
+
   const genreData = {
     _id: id,
-    name: overrides.name || `Genre ${id}`,
+    name: genreName,
     description: overrides.description || 'Test genre description',
     isAdultContent: overrides.isAdultContent ?? false,
   };
@@ -144,9 +149,11 @@ export const createTestAnime = async (
 ): Promise<TestAnime> => {
   const id = overrides.id || ulid();
 
+  const animeName = overrides.name ? Name.create(overrides.name).value : Name.create(`Anime ${id}`).value;
+
   const animeData = {
     _id: id,
-    name: overrides.name || `Anime ${id}`,
+    name: animeName,
     imageUrl: overrides.imageUrl || 'https://example.com/anime.jpg',
     synopsis: overrides.synopsis || 'Test anime synopsis that is long enough to be valid',
     category: categoryId,

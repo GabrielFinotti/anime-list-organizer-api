@@ -115,6 +115,8 @@ describe('CreateAnimeUseCase', () => {
     });
 
     mockAnimeRepository.findByTitle.mockResolvedValue(existingAnime);
+    mockCategoryRepository.findById.mockResolvedValue(category);
+    mockGenreRepository.findById.mockResolvedValue(genre);
 
     await expect(useCase.execute(input)).rejects.toThrow(ConflictError);
   });

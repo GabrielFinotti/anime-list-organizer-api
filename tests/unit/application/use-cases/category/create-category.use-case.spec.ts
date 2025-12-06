@@ -33,7 +33,7 @@ describe('CreateCategoryUseCase', () => {
     expect(result).toHaveProperty('id');
     expect(result.name).toBe(input.name.toLowerCase());
     expect(result.description).toBe(input.description);
-    expect(mockCategoryRepository.findByName).toHaveBeenCalledWith(input.name);
+    expect(mockCategoryRepository.findByName).toHaveBeenCalledWith(input.name.toLowerCase());
     expect(mockCategoryRepository.create).toHaveBeenCalled();
   });
 
@@ -47,9 +47,7 @@ describe('CreateCategoryUseCase', () => {
     mockCategoryRepository.findByName.mockResolvedValue(existingCategory);
 
     await expect(useCase.execute(input)).rejects.toThrow(ConflictError);
-    await expect(useCase.execute(input)).rejects.toThrow(
-      "Category with name 'Action' already exists",
-    );
+    await expect(useCase.execute(input)).rejects.toThrow("Category with name 'action' already exists");
     expect(mockCategoryRepository.create).not.toHaveBeenCalled();
   });
 });

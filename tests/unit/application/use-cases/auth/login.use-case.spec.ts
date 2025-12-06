@@ -3,7 +3,7 @@ import { IUserRepository } from '../../../../../src/domain/repositories/user.rep
 import {
   IJwtService,
   TokenPayload,
-} from '../../../../../src/application/services/jwt.service.interface';
+} from '../../../../../src/application/services/jwt.service';
 import { UnauthorizedError } from '../../../../../src/application/errors/unauthorized.error';
 import User from '../../../../../src/domain/entities/User.entity';
 import Password from '../../../../../src/domain/value-objects/password.value-object';

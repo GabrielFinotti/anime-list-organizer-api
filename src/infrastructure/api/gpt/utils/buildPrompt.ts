@@ -11,7 +11,7 @@ const buildPrompt = (
   const genreNames = availableGenres.map((g) => g.name);
   const adultGenres = availableGenres.filter((g) => g.isAdultContent).map((g) => g.name);
 
-  return `Você é um assistente que devolve apenas JSON válido, sem markdown nem texto extra. Responda em português. Use a ferramenta de pesquisa na web para dados mais recentes; se não encontrar informação confiável, preencha campos vazios conforme regras e liste em observedDetails.
+  return `Você é um assistente que devolve apenas JSON válido, sem markdown nem texto extra. Responda em português. Use a ferramenta de pesquisa na web para dados mais recentes; se não encontrar informação confiável, preencha campos vazios conforme regras.
 
 Dados fornecidos:
 - Título: "${title}"
@@ -40,20 +40,22 @@ Retorne exatamente:
 Regras (siga em ordem):
 1) name: corrija o nome oficial se necessário.
 2) synopsis: 50-500 caracteres em pt-BR.
-3) category: escolha apenas entre as categorias permitidas; se nenhuma servir, use "" e adicione "category" em observedDetails.
-4) genres: use somente gêneros permitidos, adicione o máximo possível; se nenhum, use [] e adicione "genres" em observedDetails.
+3) category: escolha apenas entre as categorias permitidas; se nenhuma servir, use "".
+4) genres: use somente gêneros permitidos, adicione o máximo possível; se nenhum, use [].
 5) animeType:
    - "serie": movies=[] e seasons length>=1
    - "movie": seasons=[] e movies length>=1
    - "mixed": movies length>=1 e seasons length>=1
 6) productionType: escolha um dos permitidos.
-7) movies/seasons: se não houver dados confiáveis, use [] e marque "movies" e/ou "seasons" em observedDetails.
+7) movies/seasons: se não houver dados confiáveis, use [].
 8) isAdultContent: true se qualquer gênero selecionado estiver na lista adulta; senão false.
-9) Campos ausentes: strings -> "", arrays -> [], boolean -> false, números -> 0; sempre liste o campo faltante em observedDetails.
-10) Datas: sempre "YYYY-MM-DD"; se desconhecida, use "" e marque observedDetails.
+9) Campos ausentes: strings -> "", arrays -> [], boolean -> false, números -> 0.
+10) Datas: sempre "YYYY-MM-DD"; se desconhecida, use "".
 11) Não invente links nem fontes; use apenas dados encontrados ou deixe vazio conforme regras.
-12) Para dados parcialmente encontrados, preencha o que souber e liste em observedDetails para sinalizar que ainda faltam informações.
-13) Checklist final antes de responder: validar (a) animeType x movies/seasons, (b) uso apenas de categorias/gêneros fornecidos, (c) isAdultContent coerente com gêneros.
+12) Para dados parcialmente encontrados, preencha o que souber.
+14) Para os campos parcialmente preenchidos ou vazios, liste somente o nome do campo em observedDetails.
+15) Não adicione dados extras como fonte de pesquisa ou avisos, somente os dados solicitados no JSON.
+16) Checklist final antes de responder: validar (a) animeType x movies/seasons, (b) uso apenas de categorias/gêneros fornecidos, (c) isAdultContent coerente com gêneros.
 
 Retorne somente o JSON.`;
 };

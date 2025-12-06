@@ -35,7 +35,7 @@ describe('CreateGenreUseCase', () => {
     expect(result.name).toBe(input.name.toLowerCase());
     expect(result.description).toBe(input.description);
     expect(result.isAdultContent).toBe(false);
-    expect(mockGenreRepository.findByName).toHaveBeenCalledWith(input.name);
+    expect(mockGenreRepository.findByName).toHaveBeenCalledWith(input.name.toLowerCase());
     expect(mockGenreRepository.create).toHaveBeenCalled();
   });
 
@@ -65,7 +65,7 @@ describe('CreateGenreUseCase', () => {
     mockGenreRepository.findByName.mockResolvedValue(existingGenre);
 
     await expect(useCase.execute(input)).rejects.toThrow(ConflictError);
-    await expect(useCase.execute(input)).rejects.toThrow("Genre with name 'Action' already exists");
+    await expect(useCase.execute(input)).rejects.toThrow("Genre with name 'action' already exists");
     expect(mockGenreRepository.create).not.toHaveBeenCalled();
   });
 });

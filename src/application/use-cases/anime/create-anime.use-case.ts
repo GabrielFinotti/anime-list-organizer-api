@@ -16,12 +16,6 @@ export class CreateAnimeUseCase {
   ) {}
 
   async execute(input: AnimeInputDTO): Promise<AnimeOutputDTO> {
-    const existingAnime = await this.animeRepository.findByTitle(input.name);
-
-    if (existingAnime) {
-      throw new ConflictError('Anime', 'name', input.name);
-    }
-
     const category = await this.categoryRepository.findById(input.categoryId);
 
     if (!category) {
@@ -62,6 +56,12 @@ export class CreateAnimeUseCase {
       seasons,
       isAdultContent: input.isAdultContent,
     });
+
+    const existingAnime = await this.animeRepository.findByTitle(anime.name.value);
+
+    if (existingAnime) {
+      throw new ConflictError('Anime', 'name', anime.name.value);
+    }
 
     const savedAnime = await this.animeRepository.create(anime);
 

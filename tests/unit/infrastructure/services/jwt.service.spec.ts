@@ -13,7 +13,7 @@ const mockStartEnv = {
 jest.mock('../../../../src/infrastructure/env/startEnv.config', () => mockStartEnv);
 
 import JwtService from '../../../../src/infrastructure/services/jwt.service';
-import { TokenPayload } from '../../../../src/application/services/jwt.service.interface';
+import { TokenPayload } from '../../../../src/application/services/jwt.service';
 
 describe('JwtService', () => {
   let jwtService: JwtService;

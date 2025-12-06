@@ -113,4 +113,23 @@ describe('UpdateUserUseCase', () => {
     await expect(useCase.execute(updateInput)).rejects.toThrow(ConflictError);
     expect(userRepository.update).not.toHaveBeenCalled();
   });
+
+  it('deve permitir atualizar com o mesmo email sem conflito', async () => {
+    const user = createMockUser();
+    const updateInput = {
+      id: user.id.value,
+      email: user.email.value,
+    };
+
+    userRepository.findById.mockResolvedValue(user);
+    // Retorna o próprio usuário existente para o mesmo email
+    userRepository.findByEmail.mockResolvedValue(user);
+    userRepository.update.mockImplementation(async (u) => u);
+
+    const result = await useCase.execute(updateInput);
+
+    expect(userRepository.findByEmail).toHaveBeenCalledWith(updateInput.email);
+    expect(userRepository.update).toHaveBeenCalled();
+    expect(result.email).toBe(user.email.value);
+  });
 });

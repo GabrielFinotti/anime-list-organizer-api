@@ -3,8 +3,8 @@ import { UnauthorizedError } from '../../../../../src/application/errors/unautho
 import {
   IJwtService,
   TokenPayload,
-} from '../../../../../src/application/services/jwt.service.interface';
-import { ITokenBlacklistService } from '../../../../../src/application/services/token-blacklist.service.interface';
+} from '../../../../../src/application/services/jwt.service';
+import { ITokenBlacklistService } from '../../../../../src/application/services/token-blacklist.service';
 import { makeAuthMiddleware } from '../../../../../src/presentation/http/middlewares/auth.middleware';
 
 describe('authMiddleware', () => {

@@ -8,13 +8,13 @@ export class CreateGenreUseCase {
   constructor(private readonly genreRepository: IGenreRepository) {}
 
   async execute(input: GenreInputDTO): Promise<GenreOutputDTO> {
-    const existingGenre = await this.genreRepository.findByName(input.name);
+    const genre = Genre.create(input.name, input.description, input.isAdultContent);
+
+    const existingGenre = await this.genreRepository.findByName(genre.name.value);
 
     if (existingGenre) {
-      throw new ConflictError('Genre', 'name', input.name);
+      throw new ConflictError('Genre', 'name', genre.name.value);
     }
-
-    const genre = Genre.create(input.name, input.description, input.isAdultContent);
 
     await this.genreRepository.create(genre);
 

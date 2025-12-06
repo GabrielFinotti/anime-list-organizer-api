@@ -8,13 +8,13 @@ export class CreateCategoryUseCase {
   constructor(private readonly categoryRepository: ICategoryRepository) {}
 
   async execute(input: CategoryInputDTO): Promise<CategoryOutputDTO> {
-    const existingCategory = await this.categoryRepository.findByName(input.name);
+    const category = Category.create(input.name, input.description);
+
+    const existingCategory = await this.categoryRepository.findByName(category.name.value);
 
     if (existingCategory) {
-      throw new ConflictError('Category', 'name', input.name);
+      throw new ConflictError('Category', 'name', category.name.value);
     }
-
-    const category = Category.create(input.name, input.description);
 
     await this.categoryRepository.create(category);
 

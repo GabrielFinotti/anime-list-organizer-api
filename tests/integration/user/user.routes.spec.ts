@@ -58,10 +58,10 @@ describe('User Routes - Integration Tests', () => {
           email: 'existing@example.com',
           password: 'ValidPassword123!',
           imageUrl: 'https://example.com/avatar.jpg',
-          biography: 'Biography',
-        })
-        .expect(409);
+          biography: 'Test biography content',
+        });
 
+      expect(response.status).toBe(409);
       expect(response.body).toHaveProperty('message');
     });
 
@@ -73,7 +73,7 @@ describe('User Routes - Integration Tests', () => {
           email: 'invalid-email',
           password: 'ValidPassword123!',
           imageUrl: 'https://example.com/avatar.jpg',
-          biography: 'Biography',
+          biography: 'Test biography content',
         })
         .expect(400);
 
@@ -88,7 +88,7 @@ describe('User Routes - Integration Tests', () => {
           email: 'newuser@example.com',
           password: '123',
           imageUrl: 'https://example.com/avatar.jpg',
-          biography: 'Biography',
+          biography: 'Test biography content',
         })
         .expect(400);
 
@@ -102,7 +102,7 @@ describe('User Routes - Integration Tests', () => {
           email: 'newuser@example.com',
           password: 'ValidPassword123!',
           imageUrl: 'https://example.com/avatar.jpg',
-          biography: 'Biography',
+          biography: 'Test biography content',
         })
         .expect(400);
 
@@ -117,7 +117,7 @@ describe('User Routes - Integration Tests', () => {
           email: 'newuser@example.com',
           password: 'ValidPassword123!',
           imageUrl: 'https://example.com/avatar.jpg',
-          biography: 'Biography',
+          biography: 'Test biography content',
         })
         .expect(400);
 
@@ -132,7 +132,7 @@ describe('User Routes - Integration Tests', () => {
           email: 'newuser@example.com',
           password: 'ValidPassword123!',
           imageUrl: 'invalid-url',
-          biography: 'Biography',
+          biography: 'Test biography content',
         })
         .expect(400);
 

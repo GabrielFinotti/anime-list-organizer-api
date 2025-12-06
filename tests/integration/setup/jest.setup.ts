@@ -9,6 +9,8 @@ process.env.MONGO_NAME = 'test_db';
 process.env.REDIS_URL = 'redis://localhost:6379';
 process.env.SECRET_KEY = 'test-secret-key';
 process.env.TOKEN_EXPIRATION = '1h';
+process.env.OPENAI_API_KEY = 'test-openai-key';
+process.env.VERSION = '0.0.0';
 
 // Mock do ioredis ANTES de qualquer import da aplicação
 jest.mock('ioredis', () => {

@@ -20,7 +20,7 @@ describe('GetCategoryByIdUseCase', () => {
   });
 
   it('should return a category when found', async () => {
-    const category = Category.create('Action', 'Action description');
+    const category = Category.create('Action', 'Action', 'General', 'Action description');
     mockCategoryRepository.findById.mockResolvedValue(category);
 
     const result = await useCase.execute(category.id.value);

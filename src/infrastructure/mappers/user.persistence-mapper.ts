@@ -54,37 +54,6 @@ export type UserDocument = {
   updatedAt: Date;
 };
 
-export type UserPersistenceData = {
-  _id: string;
-  imageUrl: string;
-  username: string;
-  email: string;
-  password: string;
-  biography: string;
-  animeList: {
-    list: {
-      anime: string;
-      status: 'watching' | 'finished' | 'in_list' | 'dropped';
-      moviesStatus: {
-        movie: MovieDocument;
-        status: 'watching' | 'finished' | 'in_list';
-        isLiked: boolean;
-      }[];
-      seasonsStatus: {
-        season: SeasonDocument;
-        status: 'watching' | 'finished' | 'in_list';
-        lastEpisodeWatched: number;
-        isLiked: boolean;
-      }[];
-      isLiked: boolean;
-    }[];
-    updatedAt: Date;
-  };
-  role: 'user' | 'admin';
-  createdAt: Date;
-  updatedAt: Date;
-};
-
 class UserPersistenceMapper {
   static toDomain(doc: UserDocument, animesMap: Map<string, Anime>): User {
     const animeListDomain = doc.animeList.list.map((animeStatusDoc) => {
@@ -148,7 +117,7 @@ class UserPersistenceMapper {
     });
   }
 
-  static toPersistence(user: User): UserPersistenceData {
+  static toPersistence(user: User): UserDocument {
     return {
       _id: user.id.value,
       imageUrl: user.imageUrl.value,

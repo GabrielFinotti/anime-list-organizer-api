@@ -12,7 +12,7 @@ describe('AddGenreToAnimeUseCase', () => {
   let animeRepository: jest.Mocked<IAnimeRepository>;
   let genreRepository: jest.Mocked<IGenreRepository>;
 
-  const mockCategory = Category.create('Shounen', 'Action anime for boys');
+  const mockCategory = Category.create('Shounen', 'Shounen', 'Teens', 'Action anime for boys');
 
   const mockGenre = Genre.create('Action', 'Action-packed anime', false);
 
@@ -27,6 +27,7 @@ describe('AddGenreToAnimeUseCase', () => {
       genres: [mockGenre],
       animeType: 'serie',
       productionType: 'original',
+      typeOfMaterialOrigin: 'none',
       movies: [],
       seasons: [Season.create({ seasonNumber: 1, releaseDate: new Date(), totalEpisodes: 220 })],
       isAdultContent: false,

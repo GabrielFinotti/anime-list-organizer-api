@@ -18,6 +18,7 @@ class AnimeMapper {
       })),
       animeType: anime.animeType,
       productionType: anime.productionType,
+      typeOfMaterialOrigin: anime.typeOfMaterialOrigin,
       movies: anime.movies.map((movie) => ({
         title: movie.title.value,
         releaseDate: movie.releaseDate,

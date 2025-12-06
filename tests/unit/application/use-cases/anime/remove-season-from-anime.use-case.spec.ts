@@ -10,7 +10,7 @@ describe('RemoveSeasonFromAnimeUseCase', () => {
   let useCase: RemoveSeasonFromAnimeUseCase;
   let animeRepository: jest.Mocked<IAnimeRepository>;
 
-  const mockCategory = Category.create('Shounen', 'Action anime for boys');
+  const mockCategory = Category.create('Shounen', 'Shounen', 'Teens', 'Action anime for boys');
   const mockGenre = Genre.create('Action', 'Action genre', false);
 
   const createMockAnimeWithSeason = () => {
@@ -32,6 +32,7 @@ describe('RemoveSeasonFromAnimeUseCase', () => {
       genres: [mockGenre],
       animeType: 'serie',
       productionType: 'original',
+      typeOfMaterialOrigin: 'none',
       movies: [],
       seasons: [season1, season2],
       isAdultContent: false,

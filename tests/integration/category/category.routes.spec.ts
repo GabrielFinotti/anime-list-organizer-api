@@ -99,6 +99,8 @@ describe('Category Routes - Integration Tests', () => {
 
       const categoryData = {
         name: 'Nova Categoria',
+        translatedName: 'Nova Categoria Traduzida',
+        targetAudience: 'Shounen',
         description: 'Descrição da nova categoria',
       };
 
@@ -111,6 +113,8 @@ describe('Category Routes - Integration Tests', () => {
       expect(response.body).toHaveProperty('id');
       // Name is normalized to lowercase by Name value object
       expect(response.body.name).toBe(categoryData.name.toLowerCase());
+      expect(response.body.translatedName).toBe(categoryData.translatedName.toLowerCase());
+      expect(response.body.targetAudience).toBe(categoryData.targetAudience.toLowerCase());
       expect(response.body.description).toBe(categoryData.description);
     });
 
@@ -122,6 +126,8 @@ describe('Category Routes - Integration Tests', () => {
         .set('Authorization', `Bearer ${user.token}`)
         .send({
           name: 'Nova Categoria',
+          translatedName: 'Nova Categoria Traduzida',
+          targetAudience: 'Shounen',
           description: 'Descrição',
         })
         .expect(401);
@@ -138,6 +144,8 @@ describe('Category Routes - Integration Tests', () => {
         .set('Authorization', `Bearer ${admin.token}`)
         .send({
           name: 'Ação',
+          translatedName: 'Ação Traduzida',
+          targetAudience: 'Shounen',
           description: 'Outra descrição',
         })
         .expect(409);
@@ -152,6 +160,8 @@ describe('Category Routes - Integration Tests', () => {
         .post('/api/categories')
         .set('Authorization', `Bearer ${admin.token}`)
         .send({
+          translatedName: 'Categoria Traduzida',
+          targetAudience: 'Shounen',
           description: 'Descrição sem nome',
         })
         .expect(400);
@@ -167,6 +177,8 @@ describe('Category Routes - Integration Tests', () => {
         .set('Authorization', `Bearer ${admin.token}`)
         .send({
           name: 'Nome sem descrição',
+          translatedName: 'Categoria Traduzida',
+          targetAudience: 'Shounen',
         })
         .expect(400);
 
@@ -181,6 +193,8 @@ describe('Category Routes - Integration Tests', () => {
         .set('Authorization', `Bearer ${admin.token}`)
         .send({
           name: 'AB',
+          translatedName: 'Categoria Traduzida',
+          targetAudience: 'Shounen',
           description: 'Descrição válida',
         })
         .expect(400);
@@ -193,6 +207,8 @@ describe('Category Routes - Integration Tests', () => {
         .post('/api/categories')
         .send({
           name: 'Nova Categoria',
+          translatedName: 'Categoria Traduzida',
+          targetAudience: 'Shounen',
           description: 'Descrição',
         })
         .expect(401);

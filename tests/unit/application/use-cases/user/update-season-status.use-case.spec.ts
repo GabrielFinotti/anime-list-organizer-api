@@ -13,7 +13,7 @@ describe('UpdateSeasonStatusUseCase', () => {
   let userRepository: jest.Mocked<IUserRepository>;
   let animeRepository: jest.Mocked<IAnimeRepository>;
 
-  const mockCategory = Category.create('Shounen', 'Action anime for boys');
+  const mockCategory = Category.create('Shounen', 'Shounen', 'Young Male', 'Action anime for boys');
   const mockGenre = Genre.create('Action', 'Action genre', false);
 
   const createMockAnimeWithSeason = () => {
@@ -30,6 +30,7 @@ describe('UpdateSeasonStatusUseCase', () => {
       genres: [mockGenre],
       animeType: 'serie',
       productionType: 'original',
+      typeOfMaterialOrigin: 'manga',
       movies: [],
       seasons: [season],
       isAdultContent: false,

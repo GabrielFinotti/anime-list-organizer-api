@@ -8,7 +8,7 @@ import Id from '../../../../src/domain/value-objects/id.value-object';
 describe('Anime Entity', () => {
   describe('create', () => {
     it('should create a serie anime with valid data', () => {
-      const category = Category.create('Action', 'Animes with action-packed scenes');
+      const category = Category.create('Action', 'Ação', 'General', 'Animes with action-packed scenes');
       const genre = Genre.create('Adventure', 'Long expeditions and quests', false);
 
       const season = Season.create({
@@ -25,6 +25,7 @@ describe('Anime Entity', () => {
         genres: [genre],
         animeType: 'serie',
         productionType: 'original',
+        typeOfMaterialOrigin: 'none',
         movies: [],
         seasons: [season],
         isAdultContent: false,
@@ -38,10 +39,11 @@ describe('Anime Entity', () => {
       expect(anime.totalSeasons).toBe(1);
       expect(anime.animeType).toBe('serie');
       expect(anime.productionType).toBe('original');
+      expect(anime.typeOfMaterialOrigin).toBe('none');
     });
 
     it('should create a movie anime with valid data', () => {
-      const category = Category.create('Movie', 'Movie category');
+      const category = Category.create('Movie', 'Filme', 'General', 'Movie category');
       const genre = Genre.create('Drama', 'Emotional stories', true);
 
       const movie = Movie.create({ name: 'Film A', releaseDate: new Date(2021, 6, 20) });
@@ -54,6 +56,7 @@ describe('Anime Entity', () => {
         genres: [genre],
         animeType: 'movie',
         productionType: 'adaptation',
+        typeOfMaterialOrigin: 'manga',
         movies: [movie],
         seasons: [],
         isAdultContent: true,
@@ -64,10 +67,11 @@ describe('Anime Entity', () => {
       expect(anime.seasons.length).toBe(0);
       expect(anime.imageUrl.value).toBe('http://example.com/movie.png');
       expect(anime.name.value).toBe('cool movie');
+      expect(anime.typeOfMaterialOrigin).toBe('manga');
     });
 
     it('should create a mixed anime with valid data', () => {
-      const category = Category.create('Mixed', 'Mixed category');
+      const category = Category.create('Mixed', 'Misto', 'General', 'Mixed category');
       const genre = Genre.create('Fantasy', 'Magical and fantastical', false);
 
       const movie = Movie.create({ name: 'Movie X', releaseDate: new Date(2019, 1, 5) });
@@ -85,6 +89,7 @@ describe('Anime Entity', () => {
         genres: [genre],
         animeType: 'mixed',
         productionType: 'original',
+        typeOfMaterialOrigin: 'none',
         movies: [movie],
         seasons: [season],
         isAdultContent: false,
@@ -93,10 +98,11 @@ describe('Anime Entity', () => {
       expect(anime.animeType).toBe('mixed');
       expect(anime.movies.length).toBe(1);
       expect(anime.seasons.length).toBe(1);
+      expect(anime.typeOfMaterialOrigin).toBe('none');
     });
 
     it('should throw when genres array is empty', () => {
-      const category = Category.create('Mixed', 'Mixed category');
+      const category = Category.create('Mixed', 'Misto', 'General', 'Mixed category');
 
       expect(() =>
         Anime.create({
@@ -107,6 +113,7 @@ describe('Anime Entity', () => {
           genres: [],
           animeType: 'mixed',
           productionType: 'original',
+          typeOfMaterialOrigin: 'none',
           movies: [],
           seasons: [],
           isAdultContent: false,
@@ -115,7 +122,7 @@ describe('Anime Entity', () => {
     });
 
     it('should throw when animeType is invalid', () => {
-      const category = Category.create('Mixed', 'Mixed category');
+      const category = Category.create('Mixed', 'Misto', 'General', 'Mixed category');
       const genre = Genre.create('Fantasy', 'Magical and fantastical', false);
 
       expect(() =>
@@ -127,6 +134,7 @@ describe('Anime Entity', () => {
           genres: [genre],
           animeType: 'unknown',
           productionType: 'original',
+          typeOfMaterialOrigin: 'none',
           movies: [],
           seasons: [],
           isAdultContent: false,
@@ -135,7 +143,7 @@ describe('Anime Entity', () => {
     });
 
     it('should throw when productionType is invalid', () => {
-      const category = Category.create('Mixed', 'Mixed category');
+      const category = Category.create('Mixed', 'Misto', 'General', 'Mixed category');
       const genre = Genre.create('Fantasy', 'Magical and fantastical', false);
 
       expect(() =>
@@ -147,6 +155,7 @@ describe('Anime Entity', () => {
           genres: [genre],
           animeType: 'mixed',
           productionType: 'invalid',
+          typeOfMaterialOrigin: 'none',
           movies: [],
           seasons: [],
           isAdultContent: false,
@@ -155,7 +164,7 @@ describe('Anime Entity', () => {
     });
 
     it('should throw when synopsis is less than 10 chars', () => {
-      const category = Category.create('Mixed', 'Mixed category');
+      const category = Category.create('Mixed', 'Misto', 'General', 'Mixed category');
       const genre = Genre.create('Fantasy', 'Magical and fantastical', false);
 
       expect(() =>
@@ -167,6 +176,7 @@ describe('Anime Entity', () => {
           genres: [genre],
           animeType: 'serie',
           productionType: 'original',
+          typeOfMaterialOrigin: 'none',
           movies: [],
           seasons: [
             Season.create({
@@ -181,7 +191,7 @@ describe('Anime Entity', () => {
     });
 
     it('should throw on duplicate genres', () => {
-      const category = Category.create('Mixed', 'Mixed category');
+      const category = Category.create('Mixed', 'Misto', 'General', 'Mixed category');
       const genre1 = Genre.create('Fantasy', 'Magical and fantastical', false);
 
       const genre2 = genre1; // same instance - duplicate
@@ -195,6 +205,7 @@ describe('Anime Entity', () => {
           genres: [genre1, genre2],
           animeType: 'mixed',
           productionType: 'original',
+          typeOfMaterialOrigin: 'none',
           movies: [],
           seasons: [
             Season.create({
@@ -209,7 +220,7 @@ describe('Anime Entity', () => {
     });
 
     it('should throw for duplicate movies on create', () => {
-      const category = Category.create('Mixed', 'Mixed category');
+      const category = Category.create('Mixed', 'Misto', 'General', 'Mixed category');
       const genre = Genre.create('Fantasy', 'Magical and fantastical', false);
 
       const movieDate = new Date(2022, 5, 20);
@@ -225,6 +236,7 @@ describe('Anime Entity', () => {
           genres: [genre],
           animeType: 'movie',
           productionType: 'original',
+          typeOfMaterialOrigin: 'none',
           movies: [movie1, movie2],
           seasons: [],
           isAdultContent: false,
@@ -233,7 +245,7 @@ describe('Anime Entity', () => {
     });
 
     it('should throw for duplicate seasons on create', () => {
-      const category = Category.create('Mixed', 'Mixed category');
+      const category = Category.create('Mixed', 'Misto', 'General', 'Mixed category');
       const genre = Genre.create('Fantasy', 'Magical and fantastical', false);
 
       const sDate = new Date(2021, 6, 1);
@@ -249,11 +261,62 @@ describe('Anime Entity', () => {
           genres: [genre],
           animeType: 'serie',
           productionType: 'original',
+          typeOfMaterialOrigin: 'none',
           movies: [],
           seasons: [season1, season2],
           isAdultContent: false,
         }),
       ).toThrow('seasons: duplicate items detected');
+    });
+
+    it('should throw when typeOfMaterialOrigin is invalid', () => {
+      const category = Category.create('Mixed', 'Misto', 'General', 'Mixed category');
+      const genre = Genre.create('Fantasy', 'Magical and fantastical', false);
+
+      expect(() =>
+        Anime.create({
+          imageUrl: 'http://example.com/mixed.png',
+          name: 'Mixed Title',
+          synopsis: 'A proper synopsis for a mixed anime',
+          category,
+          genres: [genre],
+          animeType: 'serie',
+          productionType: 'original',
+          typeOfMaterialOrigin: 'invalid',
+          movies: [],
+          seasons: [
+            Season.create({
+              seasonNumber: 1,
+              releaseDate: new Date(2020, 1, 1),
+              totalEpisodes: 10,
+            }),
+          ],
+          isAdultContent: false,
+        }),
+      ).toThrow('typeOfMaterialOrigin: must be one of manga, light_novel, visual_novel, game, other, none');
+    });
+
+    it('should throw when adaptation has typeOfMaterialOrigin as none', () => {
+      const category = Category.create('Mixed', 'Misto', 'General', 'Mixed category');
+      const genre = Genre.create('Fantasy', 'Magical and fantastical', false);
+
+      expect(() =>
+        Anime.create({
+          imageUrl: 'http://example.com/mixed.png',
+          name: 'Mixed Title',
+          synopsis: 'A proper synopsis for a mixed anime',
+          category,
+          genres: [genre],
+          animeType: 'movie',
+          productionType: 'adaptation',
+          typeOfMaterialOrigin: 'none',
+          movies: [
+            Movie.create({ name: 'Movie A', releaseDate: new Date(2021, 6, 20) }),
+          ],
+          seasons: [],
+          isAdultContent: false,
+        }),
+      ).toThrow("typeOfMaterialOrigin: adaptations cannot have 'none' as type of material origin");
     });
   });
 
@@ -263,10 +326,11 @@ describe('Anime Entity', () => {
         imageUrl: 'http://example.com/mixed.png',
         name: 'Genre Test',
         synopsis: 'A long enough synopsis',
-        category: Category.create('Misc', 'Misc description'),
+        category: Category.create('Misc', 'Misc', 'General', 'Misc description'),
         genres: [Genre.create('Alp', 'AAAAAAAAAA', false)],
         animeType: 'serie',
         productionType: 'original',
+        typeOfMaterialOrigin: 'none',
         movies: [],
         seasons: [
           Season.create({ seasonNumber: 1, releaseDate: new Date(2018, 1, 1), totalEpisodes: 8 }),
@@ -294,7 +358,7 @@ describe('Anime Entity', () => {
     });
 
     it('should add and remove movies for non-serie anime', () => {
-      const category = Category.create('Movies', 'Movie category description');
+      const category = Category.create('Movies', 'Filmes', 'General', 'Movie category description');
       const genre = Genre.create('Docu', 'Documentary style descriptions', false);
 
       const movie = Movie.create({ name: 'First', releaseDate: new Date(2020, 9, 1) });
@@ -307,6 +371,7 @@ describe('Anime Entity', () => {
         genres: [genre],
         animeType: 'movie',
         productionType: 'adaptation',
+        typeOfMaterialOrigin: 'manga',
         movies: [movie],
         seasons: [],
         isAdultContent: false,
@@ -335,10 +400,11 @@ describe('Anime Entity', () => {
         imageUrl: 'http://example.com/serie.png',
         name: 'Serie Test',
         synopsis: 'Long synopsis for a series',
-        category: Category.create('SeriesCat', 'SSSSSSSSSS'),
+        category: Category.create('SeriesCat', 'Series', 'General', 'SSSSSSSSSS'),
         genres: [Genre.create('Gam', 'GGGGGGGGGG', false)],
         animeType: 'serie',
         productionType: 'original',
+        typeOfMaterialOrigin: 'none',
         movies: [],
         seasons: [
           Season.create({ seasonNumber: 1, releaseDate: new Date(2019, 0, 1), totalEpisodes: 10 }),
@@ -352,7 +418,7 @@ describe('Anime Entity', () => {
     });
 
     it('should add and remove seasons for non-movie anime', () => {
-      const category = Category.create('Series', 'Series description');
+      const category = Category.create('Series', 'Series', 'General', 'Series description');
       const genre = Genre.create('Thrill', 'Thrilling experiences', false);
 
       const season = Season.create({
@@ -369,6 +435,7 @@ describe('Anime Entity', () => {
         genres: [genre],
         animeType: 'serie',
         productionType: 'original',
+        typeOfMaterialOrigin: 'none',
         movies: [],
         seasons: [season],
         isAdultContent: false,
@@ -401,10 +468,11 @@ describe('Anime Entity', () => {
         imageUrl: 'http://example.com/movie.png',
         name: 'Movie Anime',
         synopsis: 'Long synopsis',
-        category: Category.create('MoviesCat', 'MMMMMMMMMM'),
+        category: Category.create('MoviesCat', 'Filmes', 'General', 'MMMMMMMMMM'),
         genres: [Genre.create('Mix', 'MMMMMMMMMM', false)],
         animeType: 'movie',
         productionType: 'adaptation',
+        typeOfMaterialOrigin: 'light_novel',
         movies: [Movie.create({ name: 'MovieX', releaseDate: new Date(2021, 3, 1) })],
         seasons: [],
         isAdultContent: false,
@@ -422,10 +490,11 @@ describe('Anime Entity', () => {
         imageUrl: 'http://example.com/img.png',
         name: 'Initial',
         synopsis: 'Initial long synopsis',
-        category: Category.create('Initial', 'Initial category desc'),
+        category: Category.create('Initial', 'Inicial', 'General', 'Initial category desc'),
         genres: [Genre.create('Gen', 'GENGENGENGEN', false)],
         animeType: 'serie',
         productionType: 'original',
+        typeOfMaterialOrigin: 'none',
         movies: [],
         seasons: [
           Season.create({ seasonNumber: 1, releaseDate: new Date(2019, 1, 1), totalEpisodes: 10 }),
@@ -458,10 +527,11 @@ describe('Anime Entity', () => {
         imageUrl: 'http://example.com/img.png',
         name: 'Equal 1',
         synopsis: 'Long synopsis',
-        category: Category.create('CatOne', 'CCCCCCCCCC'),
+        category: Category.create('CatOne', 'CatUm', 'General', 'CCCCCCCCCC'),
         genres: [Genre.create('Gen1', 'GGGGGGGGGG', false)],
         animeType: 'serie',
         productionType: 'original',
+        typeOfMaterialOrigin: 'none',
         movies: [],
         seasons: [
           Season.create({ seasonNumber: 1, releaseDate: new Date(2018, 1, 1), totalEpisodes: 10 }),
@@ -473,10 +543,11 @@ describe('Anime Entity', () => {
         imageUrl: 'http://example.com/img2.png',
         name: 'Equal 2',
         synopsis: 'Long synopsis',
-        category: Category.create('CatTwo', 'CCCCCCCCCC'),
+        category: Category.create('CatTwo', 'CatDois', 'General', 'CCCCCCCCCC'),
         genres: [Genre.create('Gen2', 'GGGGGGGGGG', false)],
         animeType: 'serie',
         productionType: 'original',
+        typeOfMaterialOrigin: 'none',
         movies: [],
         seasons: [
           Season.create({ seasonNumber: 1, releaseDate: new Date(2018, 1, 1), totalEpisodes: 10 }),
@@ -499,7 +570,7 @@ describe('Anime Entity', () => {
     });
 
     it('toDomain should reconstruct an Anime from a persistence-like structure', () => {
-      const category = Category.create('Action', 'Action category');
+      const category = Category.create('Action', 'Ação', 'General', 'Action category');
       const genre = Genre.create('Adventure', 'Adventure desc', false);
 
       const movie = Movie.create({ name: 'Film Y', releaseDate: new Date(2022, 1, 1) });
@@ -517,6 +588,7 @@ describe('Anime Entity', () => {
         genres: [genre],
         animeType: 'mixed',
         productionType: 'original',
+        typeOfMaterialOrigin: 'none',
         movies: [movie],
         seasons: [season],
         isAdultContent: false,
@@ -531,6 +603,7 @@ describe('Anime Entity', () => {
         genres: [genre],
         animeType: original.animeType,
         productionType: original.productionType,
+        typeOfMaterialOrigin: original.typeOfMaterialOrigin,
         movies: original.movies,
         seasons: original.seasons,
         isAdultContent: original.isAdultContent,
@@ -548,6 +621,7 @@ describe('Anime Entity', () => {
       expect(reconstructed.movies.length).toBe(1);
       expect(reconstructed.seasons.length).toBe(1);
       expect(reconstructed.animeType).toBe(original.animeType);
+      expect(reconstructed.typeOfMaterialOrigin).toBe(original.typeOfMaterialOrigin);
     });
   });
 });

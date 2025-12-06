@@ -23,6 +23,8 @@ describe('CategoryModel', () => {
   const validCategoryData = {
     _id: 'category-123',
     name: 'Shonen',
+    translatedName: 'Shounen',
+    targetAudience: 'Young Male',
     description: 'Anime targeted at young male audiences',
   };
 
@@ -104,6 +106,8 @@ describe('CategoryModel', () => {
       await CategoryModel.create({
         _id: 'category-456',
         name: 'Seinen',
+        translatedName: 'Seinen',
+        targetAudience: 'Adult Male',
         description: 'Anime targeted at adult male audiences',
       });
 
@@ -173,6 +177,8 @@ describe('CategoryModel', () => {
       await CategoryModel.create({
         _id: 'category-456',
         name: 'Seinen',
+        translatedName: 'Seinen',
+        targetAudience: 'Adult Male',
         description: 'Another category',
       });
 
@@ -186,10 +192,10 @@ describe('CategoryModel', () => {
   describe('multiple categories', () => {
     it('should create multiple categories with different types', async () => {
       const categories = [
-        { _id: 'cat-1', name: 'Shonen', description: 'Young male audience' },
-        { _id: 'cat-2', name: 'Seinen', description: 'Adult male audience' },
-        { _id: 'cat-3', name: 'Shoujo', description: 'Young female audience' },
-        { _id: 'cat-4', name: 'Josei', description: 'Adult female audience' },
+        { _id: 'cat-1', name: 'Shonen', translatedName: 'Shounen', targetAudience: 'Young Male', description: 'Young male audience' },
+        { _id: 'cat-2', name: 'Seinen', translatedName: 'Seinen', targetAudience: 'Adult Male', description: 'Adult male audience' },
+        { _id: 'cat-3', name: 'Shoujo', translatedName: 'Shoujo', targetAudience: 'Young Female', description: 'Young female audience' },
+        { _id: 'cat-4', name: 'Josei', translatedName: 'Josei', targetAudience: 'Adult Female', description: 'Adult female audience' },
       ];
 
       for (const categoryData of categories) {

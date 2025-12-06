@@ -15,7 +15,7 @@ describe('CreateAnimeUseCase', () => {
   let mockCategoryRepository: jest.Mocked<ICategoryRepository>;
   let mockGenreRepository: jest.Mocked<IGenreRepository>;
 
-  const createMockCategory = () => Category.create('Shounen', 'Shounen description');
+  const createMockCategory = () => Category.create('Shounen', 'Shounen', 'Teens', 'Shounen description');
   const createMockGenre = () => Genre.create('Action', 'Action description', false);
 
   beforeEach(() => {
@@ -63,6 +63,7 @@ describe('CreateAnimeUseCase', () => {
       genreIds: [genre.id.value],
       animeType: 'serie',
       productionType: 'adaptation',
+      typeOfMaterialOrigin: 'manga',
       movies: [],
       seasons: [{ seasonNumber: 1, releaseDate: new Date('2002-10-03'), totalEpisodes: 220 }],
       isAdultContent: false,
@@ -96,6 +97,7 @@ describe('CreateAnimeUseCase', () => {
       genreIds: [genre.id.value],
       animeType: 'serie',
       productionType: 'adaptation',
+      typeOfMaterialOrigin: 'manga',
       movies: [],
       seasons: [{ seasonNumber: 1, releaseDate: new Date(), totalEpisodes: 220 }],
       isAdultContent: false,
@@ -109,6 +111,7 @@ describe('CreateAnimeUseCase', () => {
       genres: [genre],
       animeType: 'serie',
       productionType: 'adaptation',
+      typeOfMaterialOrigin: 'manga',
       movies: [],
       seasons: [Season.create({ seasonNumber: 1, releaseDate: new Date(), totalEpisodes: 220 })],
       isAdultContent: false,
@@ -132,6 +135,7 @@ describe('CreateAnimeUseCase', () => {
       genreIds: [genre.id.value],
       animeType: 'serie',
       productionType: 'adaptation',
+      typeOfMaterialOrigin: 'manga',
       movies: [],
       seasons: [{ seasonNumber: 1, releaseDate: new Date(), totalEpisodes: 220 }],
       isAdultContent: false,
@@ -155,6 +159,7 @@ describe('CreateAnimeUseCase', () => {
       genreIds: ['non-existent-genre'],
       animeType: 'serie',
       productionType: 'adaptation',
+      typeOfMaterialOrigin: 'manga',
       movies: [],
       seasons: [{ seasonNumber: 1, releaseDate: new Date(), totalEpisodes: 220 }],
       isAdultContent: false,

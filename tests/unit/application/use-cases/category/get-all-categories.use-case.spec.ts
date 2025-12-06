@@ -20,9 +20,9 @@ describe('GetAllCategoriesUseCase', () => {
 
   it('should return all categories', async () => {
     const categories = [
-      Category.create('Action', 'Action description'),
-      Category.create('Comedy', 'Comedy description'),
-      Category.create('Drama', 'Drama description'),
+      Category.create('Action', 'Action', 'General', 'Action description'),
+      Category.create('Comedy', 'Comedy', 'General', 'Comedy description'),
+      Category.create('Drama', 'Drama', 'General', 'Drama description'),
     ];
 
     mockCategoryRepository.findAll.mockResolvedValue(categories);

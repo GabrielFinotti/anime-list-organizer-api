@@ -19,6 +19,8 @@ describe('CategoryController', () => {
   const mockCategoryOutput: CategoryOutputDTO = {
     id: 'category-123',
     name: 'Action',
+    translatedName: 'Ação',
+    targetAudience: 'Shounen',
     description: 'Action category',
   };
 
@@ -66,6 +68,8 @@ describe('CategoryController', () => {
     it('should create a category and return 201', async () => {
       mockRequest.body = {
         name: 'Action',
+        translatedName: 'Ação',
+        targetAudience: 'Shounen',
         description: 'Action category',
       };
 
@@ -75,6 +79,8 @@ describe('CategoryController', () => {
 
       expect(mockCreateCategoryUseCase.execute).toHaveBeenCalledWith({
         name: 'Action',
+        translatedName: 'Ação',
+        targetAudience: 'Shounen',
         description: 'Action category',
       });
       expect(mockResponse.status).toHaveBeenCalledWith(201);
@@ -84,6 +90,8 @@ describe('CategoryController', () => {
     it('should call next with error when create fails', async () => {
       mockRequest.body = {
         name: 'Action',
+        translatedName: 'Ação',
+        targetAudience: 'Shounen',
         description: 'Action category',
       };
 

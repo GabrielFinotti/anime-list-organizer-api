@@ -25,6 +25,8 @@ export interface TestUser {
 export interface TestCategory {
   id: string;
   name: string;
+  translatedName: string;
+  targetAudience: string;
   description: string;
 }
 
@@ -44,6 +46,7 @@ export interface TestAnime {
   genres: string[];
   animeType: 'serie' | 'movie' | 'mixed';
   productionType: 'original' | 'adaptation';
+  typeOfMaterialOrigin: 'manga' | 'light_novel' | 'visual_novel' | 'game' | 'other' | 'none';
   movies: Array<{
     title: string;
     releaseDate: Date;
@@ -104,10 +107,14 @@ export const createTestCategory = async (
   const id = overrides.id || ulid();
 
   const categoryName = overrides.name ? Name.create(overrides.name).value : Name.create(`Category ${id}`).value;
+  const translatedName = overrides.translatedName ? Name.create(overrides.translatedName).value : Name.create(`Categoria ${id}`).value;
+  const targetAudience = overrides.targetAudience ? Name.create(overrides.targetAudience).value : Name.create('General').value;
 
   const categoryData = {
     _id: id,
     name: categoryName,
+    translatedName,
+    targetAudience,
     description: overrides.description || 'Test category description',
   };
 
@@ -116,6 +123,8 @@ export const createTestCategory = async (
   return {
     id,
     name: categoryData.name,
+    translatedName: categoryData.translatedName,
+    targetAudience: categoryData.targetAudience,
     description: categoryData.description,
   };
 };
@@ -160,6 +169,7 @@ export const createTestAnime = async (
     genres: genreIds,
     animeType: overrides.animeType || 'serie',
     productionType: overrides.productionType || 'original',
+    typeOfMaterialOrigin: overrides.typeOfMaterialOrigin || 'none',
     movies: overrides.movies || [],
     seasons: overrides.seasons || [],
     isAdultContent: overrides.isAdultContent ?? false,
@@ -176,6 +186,7 @@ export const createTestAnime = async (
     genres: genreIds,
     animeType: animeData.animeType,
     productionType: animeData.productionType,
+    typeOfMaterialOrigin: animeData.typeOfMaterialOrigin,
     movies: animeData.movies,
     seasons: animeData.seasons,
     isAdultContent: animeData.isAdultContent,

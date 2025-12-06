@@ -10,6 +10,8 @@ describe('CategoryRepositoryImpl', () => {
   const mockCategoryDoc = {
     _id: '01KB3H4ZMD9J0NT3JQG8XTXWN0',
     name: 'shounen',
+    translatedName: 'shounen',
+    targetAudience: 'Young Males',
     description: 'Anime targeted at young male audiences',
     createdAt: new Date('2024-01-01'),
     updatedAt: new Date('2024-01-01'),
@@ -106,7 +108,7 @@ describe('CategoryRepositoryImpl', () => {
 
   describe('create', () => {
     it('should create a category successfully', async () => {
-      const category = Category.create('Shounen', 'Anime targeted at young male audiences');
+      const category = Category.create('Shounen', 'Shounen', 'Young Males', 'Anime targeted at young male audiences');
 
       (CategoryModel.create as jest.Mock).mockResolvedValue(mockCategoryDoc);
 

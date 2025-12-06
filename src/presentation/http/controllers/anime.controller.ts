@@ -58,6 +58,7 @@ export class AnimeController {
         genreIds: req.body.genreIds ?? [],
         animeType: req.body.animeType,
         productionType: req.body.productionType,
+        typeOfMaterialOrigin: req.body.typeOfMaterialOrigin,
         movies: req.body.movies ?? [],
         seasons: req.body.seasons ?? [],
         isAdultContent: req.body.isAdultContent ?? false,
@@ -104,6 +105,7 @@ export class AnimeController {
         categoryId: req.body.categoryId,
         animeType: req.body.animeType,
         productionType: req.body.productionType,
+        typeOfMaterialOrigin: req.body.typeOfMaterialOrigin,
         isAdultContent: req.body.isAdultContent,
         imageUrl: req.body.imageUrl,
       };

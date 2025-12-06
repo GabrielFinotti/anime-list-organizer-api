@@ -79,6 +79,7 @@ class LookupAnimeService implements ILookupAnimeService {
         genres: Array.isArray(parsed.anime?.genres) ? parsed.anime.genres.map(String) : [],
         animeType: this.validateAnimeType(parsed.anime?.animeType),
         productionType: this.validateProductionType(parsed.anime?.productionType),
+        typeOfMaterialOrigin: this.validateTypeOfMaterialOrigin(parsed.anime?.typeOfMaterialOrigin),
         movies: this.parseMovies(parsed.anime?.movies),
         seasons: this.parseSeasons(parsed.anime?.seasons),
         isAdultContent: Boolean(parsed.anime?.isAdultContent),
@@ -92,17 +93,35 @@ class LookupAnimeService implements ILookupAnimeService {
   }
 
   private validateAnimeType(value: unknown): 'serie' | 'movie' | 'mixed' {
-    if (value === 'serie' || value === 'movie' || value === 'mixed') {
-      return value;
+    const validTypes = ['serie', 'movie', 'mixed'];
+
+    if (validTypes.includes(value as string)) {
+      return value as 'serie' | 'movie' | 'mixed';
     }
+
     return 'serie';
   }
 
   private validateProductionType(value: unknown): 'original' | 'adaptation' {
-    if (value === 'original' || value === 'adaptation') {
-      return value;
+    const validProductionType = ['original', 'adaptation'];
+
+    if (validProductionType.includes(value as string)) {
+      return value as 'original' | 'adaptation';
     }
+
     return 'original';
+  }
+
+  private validateTypeOfMaterialOrigin(
+    value: unknown,
+  ): 'manga' | 'light_novel' | 'visual_novel' | 'game' | 'other' | 'none' {
+    const validTypes = ['manga', 'light_novel', 'visual_novel', 'game', 'other', 'none'];
+
+    if (validTypes.includes(value as string)) {
+      return value as 'manga' | 'light_novel' | 'visual_novel' | 'game' | 'other' | 'none';
+    }
+
+    return 'none';
   }
 
   private parseMovies(movies: unknown): { title: string; releaseDate: Date }[] {

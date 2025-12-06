@@ -11,6 +11,7 @@ type IAnimeDocument = Document & {
   genres: string[];
   animeType: 'serie' | 'movie' | 'mixed';
   productionType: 'original' | 'adaptation';
+  typeOfMaterialOrigin: 'manga' | 'light_novel' | 'visual_novel' | 'game' | 'other' | 'none';
   movies: IMovieSchema[];
   seasons: ISeasonSchema[];
   isAdultContent: boolean;
@@ -30,6 +31,11 @@ const animeSchema = new Schema<IAnimeDocument>(
     genres: [{ type: String, ref: 'Genre', required: true }],
     animeType: { type: String, enum: ['serie', 'movie', 'mixed'], required: true },
     productionType: { type: String, enum: ['original', 'adaptation'], required: true },
+    typeOfMaterialOrigin: {
+      type: String,
+      enum: ['manga', 'light_novel', 'visual_novel', 'game', 'other', 'none'],
+      required: true,
+    },
     movies: [movieSchema],
     seasons: [seasonSchema],
     isAdultContent: { type: Boolean, required: true },

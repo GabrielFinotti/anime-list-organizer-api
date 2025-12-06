@@ -17,6 +17,7 @@ export type AnimeInputDTO = {
   genreIds: string[];
   animeType: string;
   productionType: string;
+  typeOfMaterialOrigin: string;
   movies: { name: string; releaseDate: Date }[];
   seasons: { seasonNumber: number; releaseDate: Date; totalEpisodes: number }[];
   isAdultContent: boolean;
@@ -37,6 +38,7 @@ export type AnimeOutputDTO = {
   }[];
   animeType: string;
   productionType: string;
+  typeOfMaterialOrigin: string;
   movies: MovieDTO[];
   seasons: SeasonDTO[];
   isAdultContent: boolean;
@@ -51,6 +53,7 @@ export type UpdateAnimeInputDTO = {
   categoryId?: string;
   animeType?: string;
   productionType?: string;
+  typeOfMaterialOrigin?: string;
   isAdultContent?: boolean;
   imageUrl?: string;
 };

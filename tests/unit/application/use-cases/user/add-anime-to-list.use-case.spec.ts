@@ -23,7 +23,7 @@ describe('AddAnimeToListUseCase', () => {
       role: 'user',
     });
 
-  const mockCategory = Category.create('Shounen', 'Action anime for boys');
+  const mockCategory = Category.create('Shounen', 'Shounen', 'Young Male', 'Action anime for boys');
   const mockGenre = Genre.create('Action', 'Action genre', false);
 
   const createMockAnime = () =>
@@ -35,6 +35,7 @@ describe('AddAnimeToListUseCase', () => {
       genres: [mockGenre],
       animeType: 'serie',
       productionType: 'original',
+      typeOfMaterialOrigin: 'manga',
       movies: [],
       seasons: [Season.create({ seasonNumber: 1, releaseDate: new Date(), totalEpisodes: 220 })],
       isAdultContent: false,

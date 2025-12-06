@@ -20,7 +20,7 @@ describe('DeleteCategoryUseCase', () => {
   });
 
   it('should delete a category successfully', async () => {
-    const category = Category.create('Action', 'Action description');
+    const category = Category.create('Action', 'Action', 'General', 'Action description');
     mockCategoryRepository.findById.mockResolvedValue(category);
     mockCategoryRepository.delete.mockResolvedValue();
 

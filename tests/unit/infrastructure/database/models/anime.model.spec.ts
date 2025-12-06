@@ -29,6 +29,7 @@ describe('AnimeModel', () => {
     genres: ['genre-1', 'genre-2'],
     animeType: 'serie' as const,
     productionType: 'original' as const,
+    typeOfMaterialOrigin: 'none' as const,
     movies: [],
     seasons: [],
     isAdultContent: false,

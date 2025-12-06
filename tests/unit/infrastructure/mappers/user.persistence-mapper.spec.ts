@@ -12,7 +12,7 @@ describe('UserPersistenceMapper', () => {
   const validAnimeId = '01KB3H4ZMD9J0NT3JQG8XTXWN1';
   const now = new Date();
 
-  const createCategory = () => Category.create('Shonen', 'Anime for young boys');
+  const createCategory = () => Category.create('Shonen', 'Shounen', 'Young Male', 'Anime for young boys');
   const createGenre = () => Genre.create('Action', 'Action packed adventures', false);
 
   const createAnime = (category: Category, genre: Genre) => {
@@ -30,6 +30,7 @@ describe('UserPersistenceMapper', () => {
       genres: [genre],
       animeType: 'serie',
       productionType: 'original',
+      typeOfMaterialOrigin: 'manga',
       movies: [],
       seasons: [season],
       isAdultContent: false,

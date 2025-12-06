@@ -24,22 +24,7 @@ export type AnimeDocument = {
   genres: string[];
   animeType: 'serie' | 'movie' | 'mixed';
   productionType: 'original' | 'adaptation';
-  movies: MovieDocument[];
-  seasons: SeasonDocument[];
-  isAdultContent: boolean;
-  createdAt: Date;
-  updatedAt: Date;
-};
-
-export type AnimePersistenceData = {
-  _id: string;
-  imageUrl: string;
-  name: string;
-  synopsis: string;
-  category: string;
-  genres: string[];
-  animeType: 'serie' | 'movie' | 'mixed';
-  productionType: 'original' | 'adaptation';
+  typeOfMaterialOrigin: 'manga' | 'light_novel' | 'visual_novel' | 'game' | 'other' | 'none';
   movies: MovieDocument[];
   seasons: SeasonDocument[];
   isAdultContent: boolean;
@@ -73,6 +58,7 @@ class AnimePersistenceMapper {
       genres,
       animeType: doc.animeType,
       productionType: doc.productionType,
+      typeOfMaterialOrigin: doc.typeOfMaterialOrigin,
       movies,
       seasons,
       isAdultContent: doc.isAdultContent,
@@ -81,7 +67,7 @@ class AnimePersistenceMapper {
     });
   }
 
-  static toPersistence(anime: Anime): AnimePersistenceData {
+  static toPersistence(anime: Anime): AnimeDocument {
     return {
       _id: anime.id.value,
       imageUrl: anime.imageUrl.value,
@@ -91,6 +77,7 @@ class AnimePersistenceMapper {
       genres: anime.genres.map((genre) => genre.id.value),
       animeType: anime.animeType,
       productionType: anime.productionType,
+      typeOfMaterialOrigin: anime.typeOfMaterialOrigin,
       movies: anime.movies.map((movie) => ({
         title: movie.title.value,
         releaseDate: movie.releaseDate,

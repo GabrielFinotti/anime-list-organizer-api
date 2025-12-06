@@ -10,7 +10,7 @@ import AnimeStatus from '../../../../src/domain/value-objects/animeStatus';
 describe('AnimeStatus Value Object', () => {
   describe('create', () => {
     it('should create an AnimeStatus with valid data', () => {
-      const category = Category.create('Action', 'Action animes');
+      const category = Category.create('Action', 'Action', 'Young Adults', 'Action animes');
       const genre = Genre.create('Adventure', 'Adventures', false);
 
       const movie = Movie.create({ name: 'Movie 1', releaseDate: new Date(2020, 0, 1) });
@@ -28,6 +28,7 @@ describe('AnimeStatus Value Object', () => {
         genres: [genre],
         animeType: 'mixed',
         productionType: 'original',
+        typeOfMaterialOrigin: 'none',
         movies: [movie],
         seasons: [season],
         isAdultContent: false,
@@ -57,7 +58,7 @@ describe('AnimeStatus Value Object', () => {
     });
 
     it('should throw when status is invalid', () => {
-      const category = Category.create('Action', 'Action animes');
+      const category = Category.create('Action', 'Action', 'Young Adults', 'Action animes');
       const genre = Genre.create('Adventure', 'Adventures', false);
 
       const anime = Anime.create({
@@ -68,6 +69,7 @@ describe('AnimeStatus Value Object', () => {
         genres: [genre],
         animeType: 'serie',
         productionType: 'original',
+        typeOfMaterialOrigin: 'none',
         movies: [],
         seasons: [
           Season.create({ seasonNumber: 1, releaseDate: new Date(2020, 0, 1), totalEpisodes: 5 }),
@@ -87,7 +89,7 @@ describe('AnimeStatus Value Object', () => {
     });
 
     it('should throw when isLiked is invalid', () => {
-      const category = Category.create('Action', 'Category for action animes');
+      const category = Category.create('Action', 'Action', 'Young Adults', 'Category for action animes');
       const genre = Genre.create('Adventure', 'Genre description for testing', false);
 
       const anime = Anime.create({
@@ -98,6 +100,7 @@ describe('AnimeStatus Value Object', () => {
         genres: [genre],
         animeType: 'serie',
         productionType: 'original',
+        typeOfMaterialOrigin: 'none',
         movies: [],
         seasons: [
           Season.create({ seasonNumber: 1, releaseDate: new Date(2019, 0, 1), totalEpisodes: 4 }),
@@ -117,7 +120,7 @@ describe('AnimeStatus Value Object', () => {
     });
 
     it('equals should compare properly', () => {
-      const category = Category.create('CatC', 'Category description');
+      const category = Category.create('CatC', 'CatC', 'Young Adults', 'Category description');
       const genre = Genre.create('Gaku', 'Genre description for equals test', false);
 
       const movie = Movie.create({ name: 'Same', releaseDate: new Date(2021, 2, 2) });
@@ -135,6 +138,7 @@ describe('AnimeStatus Value Object', () => {
         genres: [genre],
         animeType: 'mixed',
         productionType: 'original',
+        typeOfMaterialOrigin: 'none',
         movies: [movie],
         seasons: [season],
         isAdultContent: false,
@@ -144,10 +148,11 @@ describe('AnimeStatus Value Object', () => {
         imageUrl: 'http://example.com/b.png',
         name: 'Anime2',
         synopsis: 'Long enough synopsis',
-        category: Category.create('Other', 'Other category with long description'),
+        category: Category.create('Other', 'Other', 'Young Adults', 'Other category with long description'),
         genres: [Genre.create('GXZ', 'Other genre long description', false)],
         animeType: 'mixed',
         productionType: 'original',
+        typeOfMaterialOrigin: 'none',
         movies: [movie],
         seasons: [season],
         isAdultContent: false,

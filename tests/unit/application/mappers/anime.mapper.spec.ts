@@ -7,7 +7,7 @@ import AnimeMapper from '../../../../src/application/mappers/anime.mapper';
 
 describe('AnimeMapper', () => {
   it('toResponse should map domain to DTO correctly', () => {
-    const category = Category.create('Action', 'Action description');
+    const category = Category.create('Action', 'Ação', 'General', 'Action description');
     const genre = Genre.create('Adventure', 'Adventure desc', false);
     const movie = Movie.create({ name: 'M A', releaseDate: new Date(2023, 1, 1) });
     const season = Season.create({
@@ -24,6 +24,7 @@ describe('AnimeMapper', () => {
       genres: [genre],
       animeType: 'mixed',
       productionType: 'original',
+      typeOfMaterialOrigin: 'none',
       movies: [movie],
       seasons: [season],
       isAdultContent: false,
@@ -37,6 +38,7 @@ describe('AnimeMapper', () => {
     expect(response.synopsis).toBe(anime.synopsis.value);
     expect(response.animeType).toBe(anime.animeType);
     expect(response.productionType).toBe(anime.productionType);
+    expect(response.typeOfMaterialOrigin).toBe(anime.typeOfMaterialOrigin);
     expect(response.isAdultContent).toBe(anime.isAdultContent);
     expect(response.genres).toHaveLength(1);
     expect(response.genres[0].id).toBe(genre.id.value);

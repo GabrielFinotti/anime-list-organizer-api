@@ -106,6 +106,7 @@ describe('Anime Routes - Integration Tests', () => {
         genreIds: [genre.id],
         animeType: 'serie',
         productionType: 'original',
+        typeOfMaterialOrigin: 'none',
         movies: [],
         seasons: [
           {
@@ -142,6 +143,7 @@ describe('Anime Routes - Integration Tests', () => {
         genreIds: [genre.id],
         animeType: 'movie',
         productionType: 'original',
+        typeOfMaterialOrigin: 'none',
         movies: [
           {
             name: 'Movie 1',
@@ -174,6 +176,7 @@ describe('Anime Routes - Integration Tests', () => {
         genreIds: [genre.id],
         animeType: 'serie',
         productionType: 'original',
+        typeOfMaterialOrigin: 'none',
         movies: [],
         seasons: [
           {
@@ -211,6 +214,7 @@ describe('Anime Routes - Integration Tests', () => {
           genreIds: [genre.id],
           animeType: 'serie',
           productionType: 'original',
+          typeOfMaterialOrigin: 'none',
           seasons: [
             {
               seasonNumber: 1,
@@ -240,6 +244,7 @@ describe('Anime Routes - Integration Tests', () => {
           genreIds: [genre.id],
           animeType: 'serie',
           productionType: 'original',
+          typeOfMaterialOrigin: 'none',
           seasons: [
             {
               seasonNumber: 1,
@@ -271,6 +276,7 @@ describe('Anime Routes - Integration Tests', () => {
           genreIds: [genre.id],
           animeType: 'serie',
           productionType: 'original',
+          typeOfMaterialOrigin: 'none',
           seasons: [
             {
               seasonNumber: 1,
@@ -301,6 +307,7 @@ describe('Anime Routes - Integration Tests', () => {
           genreIds: [genre.id],
           animeType: 'serie',
           productionType: 'original',
+          typeOfMaterialOrigin: 'none',
           seasons: [
             {
               seasonNumber: 1,
@@ -330,6 +337,7 @@ describe('Anime Routes - Integration Tests', () => {
           genreIds: [genre.id],
           animeType: 'serie',
           productionType: 'original',
+          typeOfMaterialOrigin: 'none',
           seasons: [
             {
               seasonNumber: 1,
@@ -353,6 +361,7 @@ describe('Anime Routes - Integration Tests', () => {
           categoryId: '01ARZ3NDEKTSV4RRFFQ69G5FAV',
           animeType: 'serie',
           productionType: 'original',
+          typeOfMaterialOrigin: 'none',
         })
         .expect(401);
 

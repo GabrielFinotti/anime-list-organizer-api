@@ -22,6 +22,8 @@ describe('CreateCategoryUseCase', () => {
   it('should create a category successfully', async () => {
     const input = {
       name: 'Action',
+      translatedName: 'Ação',
+      targetAudience: 'General',
       description: 'Action category description',
     };
 
@@ -32,6 +34,8 @@ describe('CreateCategoryUseCase', () => {
 
     expect(result).toHaveProperty('id');
     expect(result.name).toBe(input.name.toLowerCase());
+    expect(result.translatedName).toBe(input.translatedName.toLowerCase());
+    expect(result.targetAudience).toBe(input.targetAudience.toLowerCase());
     expect(result.description).toBe(input.description);
     expect(mockCategoryRepository.findByName).toHaveBeenCalledWith(input.name.toLowerCase());
     expect(mockCategoryRepository.create).toHaveBeenCalled();
@@ -40,10 +44,12 @@ describe('CreateCategoryUseCase', () => {
   it('should throw ConflictError when category name already exists', async () => {
     const input = {
       name: 'Action',
+      translatedName: 'Ação',
+      targetAudience: 'General',
       description: 'Action category description',
     };
 
-    const existingCategory = Category.create('Action', 'Existing description');
+    const existingCategory = Category.create('Action', 'Ação', 'General', 'Existing description');
     mockCategoryRepository.findByName.mockResolvedValue(existingCategory);
 
     await expect(useCase.execute(input)).rejects.toThrow(ConflictError);

@@ -23,7 +23,7 @@ describe('GetAllAnimesUseCase', () => {
   });
 
   it('should return all animes', async () => {
-    const category = Category.create('Shounen', 'Shounen description');
+    const category = Category.create('Shounen', 'Shounen', 'Teens', 'Shounen description');
     const genre = Genre.create('Action', 'Action description', false);
 
     const animes = [
@@ -35,6 +35,7 @@ describe('GetAllAnimesUseCase', () => {
         genres: [genre],
         animeType: 'serie',
         productionType: 'adaptation',
+        typeOfMaterialOrigin: 'manga',
         movies: [],
         seasons: [Season.create({ seasonNumber: 1, releaseDate: new Date(), totalEpisodes: 220 })],
         isAdultContent: false,
@@ -47,6 +48,7 @@ describe('GetAllAnimesUseCase', () => {
         genres: [genre],
         animeType: 'serie',
         productionType: 'adaptation',
+        typeOfMaterialOrigin: 'manga',
         movies: [],
         seasons: [Season.create({ seasonNumber: 1, releaseDate: new Date(), totalEpisodes: 1000 })],
         isAdultContent: false,

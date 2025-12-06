@@ -8,7 +8,12 @@ export class CreateCategoryUseCase {
   constructor(private readonly categoryRepository: ICategoryRepository) {}
 
   async execute(input: CategoryInputDTO): Promise<CategoryOutputDTO> {
-    const category = Category.create(input.name, input.description);
+    const category = Category.create(
+      input.name,
+      input.translatedName,
+      input.targetAudience,
+      input.description,
+    );
 
     const existingCategory = await this.categoryRepository.findByName(category.name.value);
 

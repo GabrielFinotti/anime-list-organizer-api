@@ -7,6 +7,7 @@ const buildPrompt = (
 ): string => {
   const animeTypes = ['serie', 'movie', 'mixed'] as const;
   const productionTypes = ['original', 'adaptation'] as const;
+  const typeOfMaterialOrigins = ['manga', 'light_novel', 'visual_novel', 'game', 'other', 'none'] as const;
 
   const genreNames = availableGenres.map((g) => g.name);
   const adultGenres = availableGenres.filter((g) => g.isAdultContent).map((g) => g.name);
@@ -20,6 +21,7 @@ Dados fornecidos:
 - Gêneros adultos: ${JSON.stringify(adultGenres, null, 2)}
 - animeType: ${JSON.stringify(animeTypes, null, 2)}
 - productionType: ${JSON.stringify(productionTypes, null, 2)}
+- typeOfMaterialOrigin: ${JSON.stringify(typeOfMaterialOrigins, null, 2)}
 
 Retorne exatamente:
 {
@@ -30,6 +32,7 @@ Retorne exatamente:
     "genres": ["string"],
     "animeType": "serie | movie | mixed",
     "productionType": "original | adaptation",
+    "typeOfMaterialOrigin": "manga | light_novel | visual_novel | game | other | none",
     "movies": [{ "title": "string", "releaseDate": "YYYY-MM-DD" }],
     "seasons": [{ "seasonNumber": number, "releaseDate": "YYYY-MM-DD", "totalEpisodes": number }],
     "isAdultContent": boolean
@@ -47,12 +50,13 @@ Regras (siga em ordem):
    - "movie": seasons=[] e movies length>=1
    - "mixed": movies length>=1 e seasons length>=1
 6) productionType: escolha um dos permitidos.
-7) movies/seasons: se não houver dados confiáveis, use [].
-8) isAdultContent: true se qualquer gênero selecionado estiver na lista adulta; senão false.
-9) Campos ausentes: strings -> "", arrays -> [], boolean -> false, números -> 0.
-10) Datas: sempre "YYYY-MM-DD"; se desconhecida, use "".
-11) Não invente links nem fontes; use apenas dados encontrados ou deixe vazio conforme regras.
-12) Para dados parcialmente encontrados, preencha o que souber.
+7) typeOfMaterialOrigin: escolha um dos permitidos; so use o "none" se o productionType for "original"; Para material desconhecido use "".
+8) movies/seasons: se não houver dados confiáveis, use [].
+9) isAdultContent: true se qualquer gênero selecionado estiver na lista adulta; senão false.
+10) Campos ausentes: strings -> "", arrays -> [], boolean -> false, números -> 0.
+11) Datas: sempre "YYYY-MM-DD"; se desconhecida, use "".
+12) Não invente links nem fontes; use apenas dados encontrados ou deixe vazio conforme regras.
+13) Para dados parcialmente encontrados, preencha o que souber.
 14) Para os campos parcialmente preenchidos ou vazios, liste somente o nome do campo em observedDetails.
 15) Não adicione dados extras como fonte de pesquisa ou avisos, somente os dados solicitados no JSON.
 16) Checklist final antes de responder: validar (a) animeType x movies/seasons, (b) uso apenas de categorias/gêneros fornecidos, (c) isAdultContent coerente com gêneros.

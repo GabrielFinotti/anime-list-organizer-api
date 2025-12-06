@@ -10,7 +10,7 @@ describe('RemoveGenreFromAnimeUseCase', () => {
   let useCase: RemoveGenreFromAnimeUseCase;
   let animeRepository: jest.Mocked<IAnimeRepository>;
 
-  const mockCategory = Category.create('Shounen', 'Action anime for boys');
+  const mockCategory = Category.create('Shounen', 'Shounen', 'Teens', 'Action anime for boys');
 
   const mockGenre = Genre.create('Action', 'Action-packed anime', false);
   const mockGenre2 = Genre.create('Adventure', 'Adventure anime', false);
@@ -24,6 +24,7 @@ describe('RemoveGenreFromAnimeUseCase', () => {
       genres: [mockGenre, mockGenre2],
       animeType: 'serie',
       productionType: 'original',
+      typeOfMaterialOrigin: 'none',
       movies: [],
       seasons: [Season.create({ seasonNumber: 1, releaseDate: new Date(), totalEpisodes: 220 })],
       isAdultContent: false,

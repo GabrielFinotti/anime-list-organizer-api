@@ -36,6 +36,7 @@ export class UpdateAnimeUseCase {
       category,
       animeType: input.animeType,
       productionType: input.productionType,
+      typeOfMaterialOrigin: input.typeOfMaterialOrigin,
       isAdultContent: input.isAdultContent,
     });
 

@@ -13,7 +13,7 @@ describe('AnimePersistenceMapper', () => {
   const validGenreId = '01KB3H4ZMD9J0NT3JQG8XTXWN2';
   const now = new Date();
 
-  const createCategory = () => Category.create('Shonen', 'Anime for young boys');
+  const createCategory = () => Category.create('Shonen', 'Shounen', 'Young Male', 'Anime for young boys');
   const createGenre = () => Genre.create('Action', 'Action packed adventures', false);
 
   describe('toPersistence', () => {
@@ -34,6 +34,7 @@ describe('AnimePersistenceMapper', () => {
         genres: [genre],
         animeType: 'serie',
         productionType: 'original',
+        typeOfMaterialOrigin: 'manga',
         movies: [],
         seasons: [season],
         isAdultContent: false,
@@ -72,6 +73,7 @@ describe('AnimePersistenceMapper', () => {
         genres: [genre],
         animeType: 'movie',
         productionType: 'adaptation',
+        typeOfMaterialOrigin: 'manga',
         movies: [movie],
         seasons: [],
         isAdultContent: false,
@@ -107,6 +109,7 @@ describe('AnimePersistenceMapper', () => {
         genres: [genre],
         animeType: 'mixed',
         productionType: 'original',
+        typeOfMaterialOrigin: 'light_novel',
         movies: [movie],
         seasons: [season],
         isAdultContent: true,
@@ -138,6 +141,7 @@ describe('AnimePersistenceMapper', () => {
         genres: [genre1, genre2],
         animeType: 'serie',
         productionType: 'original',
+        typeOfMaterialOrigin: 'manga',
         movies: [],
         seasons: [season],
         isAdultContent: false,
@@ -165,6 +169,7 @@ describe('AnimePersistenceMapper', () => {
         genres: [genre.id.value],
         animeType: 'serie',
         productionType: 'original',
+        typeOfMaterialOrigin: 'none',
         movies: [],
         seasons: [
           {
@@ -203,6 +208,7 @@ describe('AnimePersistenceMapper', () => {
         genres: [genre.id.value],
         animeType: 'movie',
         productionType: 'adaptation',
+        typeOfMaterialOrigin: 'manga',
         movies: [
           {
             title: 'the movie',
@@ -235,6 +241,7 @@ describe('AnimePersistenceMapper', () => {
         genres: [genre.id.value],
         animeType: 'mixed',
         productionType: 'original',
+        typeOfMaterialOrigin: 'none',
         movies: [
           {
             title: 'special movie',
@@ -280,6 +287,7 @@ describe('AnimePersistenceMapper', () => {
         genres: [genre],
         animeType: 'serie',
         productionType: 'original',
+        typeOfMaterialOrigin: 'manga',
         movies: [],
         seasons: [season],
         isAdultContent: false,
@@ -315,6 +323,7 @@ describe('AnimePersistenceMapper', () => {
         genres: [genre],
         animeType: 'movie',
         productionType: 'adaptation',
+        typeOfMaterialOrigin: 'manga',
         movies: [movie],
         seasons: [],
         isAdultContent: false,

@@ -9,7 +9,7 @@ describe('CategoryPersistenceMapper', () => {
 
   describe('toPersistence', () => {
     it('should convert domain entity to persistence document', () => {
-      const category = Category.create('Shonen', 'Anime for young boys');
+      const category = Category.create('Shonen', 'Shounen', 'Young Male', 'Anime for young boys');
 
       const document = CategoryPersistenceMapper.toPersistence(category);
 
@@ -21,7 +21,7 @@ describe('CategoryPersistenceMapper', () => {
     });
 
     it('should normalize name to lowercase', () => {
-      const category = Category.create('SEINEN', 'Anime for adult men');
+      const category = Category.create('SEINEN', 'Seinen', 'Adult Male', 'Anime for adult men');
 
       const document = CategoryPersistenceMapper.toPersistence(category);
 
@@ -34,6 +34,8 @@ describe('CategoryPersistenceMapper', () => {
       const doc: CategoryDocument = {
         _id: validId,
         name: 'shoujo',
+        translatedName: 'Shoujo',
+        targetAudience: 'Young Female',
         description: 'Anime for young girls',
         createdAt: now,
         updatedAt: now,
@@ -52,6 +54,8 @@ describe('CategoryPersistenceMapper', () => {
       const doc: CategoryDocument = {
         _id: validId,
         name: 'josei',
+        translatedName: 'Josei',
+        targetAudience: 'Adult Female',
         description: 'Anime for adult women audience',
         createdAt: now,
         updatedAt: now,
@@ -66,7 +70,7 @@ describe('CategoryPersistenceMapper', () => {
 
   describe('round-trip conversion', () => {
     it('should preserve data through toPersistence -> toDomain cycle', () => {
-      const originalCategory = Category.create('Kodomo', 'Anime for children audiences');
+      const originalCategory = Category.create('Kodomo', 'Kodomo', 'Children', 'Anime for children audiences');
 
       const document = CategoryPersistenceMapper.toPersistence(originalCategory);
       const reconstructedCategory = CategoryPersistenceMapper.toDomain(document);
@@ -80,6 +84,8 @@ describe('CategoryPersistenceMapper', () => {
       const originalDoc: CategoryDocument = {
         _id: validId,
         name: 'isekai',
+        translatedName: 'Isekai',
+        targetAudience: 'General',
         description: 'Another world transportation genre',
         createdAt: now,
         updatedAt: now,

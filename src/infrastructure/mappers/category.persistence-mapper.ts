@@ -3,6 +3,8 @@ import Category from '../../domain/entities/Category.entity.js';
 export type CategoryDocument = {
   _id: string;
   name: string;
+  translatedName: string;
+  targetAudience: string;
   description: string;
   createdAt: Date;
   updatedAt: Date;
@@ -13,6 +15,8 @@ class CategoryPersistenceMapper {
     return Category.toDomain({
       id: doc._id,
       name: doc.name,
+      translatedName: doc.translatedName,
+      targetAudience: doc.targetAudience,
       description: doc.description,
       createdAt: doc.createdAt,
       updatedAt: doc.updatedAt,
@@ -23,6 +27,8 @@ class CategoryPersistenceMapper {
     return {
       _id: category.id.value,
       name: category.name.value,
+      translatedName: category.translatedName.value,
+      targetAudience: category.targetAudience.value,
       description: category.description.value,
       createdAt: category.createdAt,
       updatedAt: category.updatedAt,

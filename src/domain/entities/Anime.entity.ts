@@ -10,6 +10,7 @@ import { InvalidValueError, BusinessRuleError } from '../errors/index.js';
 
 type AnimeType = 'serie' | 'movie' | 'mixed';
 type ProductionType = 'original' | 'adaptation';
+type TypeOfMaterialOrigin = 'manga' | 'light_novel' | 'visual_novel' | 'game' | 'other' | 'none';
 
 type AnimeProps = {
   id: Id;
@@ -20,6 +21,7 @@ type AnimeProps = {
   genres: Genre[];
   animeType: AnimeType;
   productionType: ProductionType;
+  typeOfMaterialOrigin: TypeOfMaterialOrigin;
   movies: Movie[];
   seasons: Season[];
   isAdultContent: boolean;
@@ -36,6 +38,7 @@ class Anime {
   private _genres: Genre[];
   private _animeType: AnimeType;
   private _productionType: ProductionType;
+  private _typeOfMaterialOrigin: TypeOfMaterialOrigin;
   private _movies: Movie[];
   private _seasons: Season[];
   private _isAdultContent: boolean;
@@ -44,6 +47,14 @@ class Anime {
 
   private static readonly ANIME_TYPES = ['serie', 'movie', 'mixed'];
   private static readonly PRODUCTION_TYPES = ['original', 'adaptation'];
+  private static readonly TYPE_OF_MATERIAL_ORIGINS = [
+    'manga',
+    'light_novel',
+    'visual_novel',
+    'game',
+    'other',
+    'none',
+  ];
 
   private constructor(props: AnimeProps) {
     this._id = props.id;
@@ -54,6 +65,7 @@ class Anime {
     this._genres = [...props.genres];
     this._animeType = props.animeType;
     this._productionType = props.productionType;
+    this._typeOfMaterialOrigin = props.typeOfMaterialOrigin;
     this._movies = [...props.movies];
     this._seasons = [...props.seasons];
     this._isAdultContent = props.isAdultContent;
@@ -93,6 +105,10 @@ class Anime {
     return this._productionType;
   }
 
+  get typeOfMaterialOrigin() {
+    return this._typeOfMaterialOrigin;
+  }
+
   get movies() {
     return [...this._movies];
   }
@@ -125,6 +141,7 @@ class Anime {
     genres: Genre[];
     animeType: string;
     productionType: string;
+    typeOfMaterialOrigin: string;
     movies: Movie[];
     seasons: Season[];
     isAdultContent: boolean;
@@ -136,6 +153,20 @@ class Anime {
       });
     }
 
+    if (typeof data.productionType !== 'string') {
+      throw new InvalidValueError({
+        message: 'productionType: must be a string',
+        field: 'productionType',
+      });
+    }
+
+    if (typeof data.typeOfMaterialOrigin !== 'string') {
+      throw new InvalidValueError({
+        message: 'typeOfMaterialOrigin: must be a string',
+        field: 'typeOfMaterialOrigin',
+      });
+    }
+
     if (data.genres.length === 0) {
       throw new InvalidValueError({
         message: 'genres: at least one genre must be provided',
@@ -144,17 +175,16 @@ class Anime {
       });
     }
 
-    if (typeof data.productionType !== 'string') {
-      throw new InvalidValueError({
-        message: 'productionType: must be a string',
-        field: 'productionType',
-      });
-    }
-
     const normalizedAnimeType = data.animeType.toLowerCase().trim();
     const normalizedProductionType = data.productionType.toLowerCase().trim();
+    const normalizedTypeOfMaterialOrigin = data.typeOfMaterialOrigin.toLowerCase().trim();
 
-    this.validateEnumFields(normalizedAnimeType, normalizedProductionType);
+    this.validateEnumFields(
+      normalizedAnimeType,
+      normalizedProductionType,
+      normalizedTypeOfMaterialOrigin,
+    );
+    this.validateTypeOfMaterialOrigin(normalizedProductionType, normalizedTypeOfMaterialOrigin);
     this.validateBooleanFields(data.isAdultContent, 'Adult content flag');
     this.ensureUniqueGenres(data.genres);
     this.validateCreateMovies(normalizedAnimeType, data.movies);
@@ -171,6 +201,7 @@ class Anime {
     const genres = data.genres;
     const animeType = normalizedAnimeType as AnimeType;
     const productionType = normalizedProductionType as ProductionType;
+    const typeOfMaterialOrigin = normalizedTypeOfMaterialOrigin as TypeOfMaterialOrigin;
     const movies = data.movies;
     const seasons = data.seasons;
     const isAdultContent = data.isAdultContent;
@@ -186,6 +217,7 @@ class Anime {
       genres,
       animeType,
       productionType,
+      typeOfMaterialOrigin,
       movies,
       seasons,
       isAdultContent,
@@ -203,7 +235,11 @@ class Anime {
     }
   }
 
-  private static validateEnumFields(animeType: string, productionType: string) {
+  private static validateEnumFields(
+    animeType: string,
+    productionType: string,
+    typeOfMaterialOrigin: string,
+  ) {
     if (!Anime.ANIME_TYPES.includes(animeType)) {
       throw new InvalidValueError({
         message: `animeType: must be one of ${Anime.ANIME_TYPES.join(', ')}`,
@@ -217,6 +253,27 @@ class Anime {
         message: `productionType: must be one of ${Anime.PRODUCTION_TYPES.join(', ')}`,
         field: 'productionType',
         allowedValues: Anime.PRODUCTION_TYPES,
+      });
+    }
+
+    if (!Anime.TYPE_OF_MATERIAL_ORIGINS.includes(typeOfMaterialOrigin)) {
+      throw new InvalidValueError({
+        message: `typeOfMaterialOrigin: must be one of ${Anime.TYPE_OF_MATERIAL_ORIGINS.join(', ')}`,
+        field: 'typeOfMaterialOrigin',
+        allowedValues: Anime.TYPE_OF_MATERIAL_ORIGINS,
+      });
+    }
+  }
+
+  private static validateTypeOfMaterialOrigin(
+    productionType: string,
+    typeOfMaterialOrigin: string,
+  ) {
+    if (productionType !== 'original' && typeOfMaterialOrigin === 'none') {
+      throw new BusinessRuleError({
+        message: `typeOfMaterialOrigin: adaptations cannot have 'none' as type of material origin`,
+        field: 'typeOfMaterialOrigin',
+        rule: 'original_none_origin',
       });
     }
   }
@@ -401,6 +458,7 @@ class Anime {
     category?: Category;
     animeType?: string;
     productionType?: string;
+    typeOfMaterialOrigin?: string;
     isAdultContent?: boolean;
   }) {
     if (data.synopsis !== undefined && typeof data.synopsis !== 'string') {
@@ -424,6 +482,13 @@ class Anime {
       });
     }
 
+    if (data.typeOfMaterialOrigin !== undefined && typeof data.typeOfMaterialOrigin !== 'string') {
+      throw new InvalidValueError({
+        message: 'typeOfMaterialOrigin: must be a string',
+        field: 'typeOfMaterialOrigin',
+      });
+    }
+
     data.name !== undefined && (this._name = Name.create(data.name));
     data.category !== undefined && (this._category = data.category);
     data.synopsis !== undefined && (this._synopsis = Description.create(data.synopsis));
@@ -434,18 +499,31 @@ class Anime {
       this._isAdultContent = data.isAdultContent;
     }
 
-    if (data.animeType !== undefined || data.productionType !== undefined) {
+    if (
+      data.animeType !== undefined ||
+      data.productionType !== undefined ||
+      data.typeOfMaterialOrigin !== undefined
+    ) {
       const normalizedAnimeType = data.animeType
         ? data.animeType.toLowerCase().trim()
         : this._animeType;
       const normalizedProductionType = data.productionType
         ? data.productionType.toLowerCase().trim()
         : this._productionType;
+      const normalizedTypeOfMaterialOrigin = data.typeOfMaterialOrigin
+        ? data.typeOfMaterialOrigin.toLowerCase().trim()
+        : this._typeOfMaterialOrigin;
 
-      Anime.validateEnumFields(normalizedAnimeType, normalizedProductionType);
+      Anime.validateEnumFields(
+        normalizedAnimeType,
+        normalizedProductionType,
+        normalizedTypeOfMaterialOrigin,
+      );
+      Anime.validateTypeOfMaterialOrigin(normalizedProductionType, normalizedTypeOfMaterialOrigin);
 
       this._animeType = normalizedAnimeType as AnimeType;
       this._productionType = normalizedProductionType as ProductionType;
+      this._typeOfMaterialOrigin = normalizedTypeOfMaterialOrigin as TypeOfMaterialOrigin;
     }
 
     const hasAnyProp = Object.keys(data).some((k) => (data as any)[k] !== undefined);
@@ -467,6 +545,7 @@ class Anime {
     genres: Genre[];
     animeType: AnimeType;
     productionType: ProductionType;
+    typeOfMaterialOrigin: TypeOfMaterialOrigin;
     movies: Movie[];
     seasons: Season[];
     isAdultContent: boolean;
@@ -482,6 +561,7 @@ class Anime {
       genres: data.genres,
       animeType: data.animeType,
       productionType: data.productionType,
+      typeOfMaterialOrigin: data.typeOfMaterialOrigin,
       movies: data.movies,
       seasons: data.seasons,
       isAdultContent: data.isAdultContent,

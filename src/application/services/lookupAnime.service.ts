@@ -22,6 +22,7 @@ export type PromptResponse = {
     genres: string[];
     animeType: 'serie' | 'movie' | 'mixed';
     productionType: 'original' | 'adaptation';
+    typeOfMaterialOrigin: 'manga' | 'light_novel' | 'visual_novel' | 'game' | 'other' | 'none';
     movies: MoviesStructure[];
     seasons: SeasonsStructure[];
     isAdultContent: boolean;

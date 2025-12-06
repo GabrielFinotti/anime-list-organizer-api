@@ -52,6 +52,7 @@ export class CreateAnimeUseCase {
       genres: genres.filter((g) => g !== null),
       animeType: input.animeType,
       productionType: input.productionType,
+      typeOfMaterialOrigin: input.typeOfMaterialOrigin,
       movies,
       seasons,
       isAdultContent: input.isAdultContent,

@@ -20,7 +20,7 @@ describe('LookupAnimeService', () => {
   let mockOpenAIClient: any;
 
   const createMockCategory = (name: string = 'Shounen') =>
-    Category.create(name, `${name} description`);
+    Category.create(name, name, 'General', `${name} description`);
 
   const createMockGenre = (name: string = 'Action', isAdultContent: boolean = false) =>
     Genre.create(name, `${name} description`, isAdultContent);

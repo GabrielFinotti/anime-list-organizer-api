@@ -24,7 +24,7 @@ describe('DeleteAnimeUseCase', () => {
   });
 
   it('should delete an anime successfully', async () => {
-    const category = Category.create('Shounen', 'Shounen description');
+    const category = Category.create('Shounen', 'Shounen', 'Teens', 'Shounen description');
     const genre = Genre.create('Action', 'Action description', false);
 
     const anime = Anime.create({
@@ -35,6 +35,7 @@ describe('DeleteAnimeUseCase', () => {
       genres: [genre],
       animeType: 'serie',
       productionType: 'adaptation',
+      typeOfMaterialOrigin: 'manga',
       movies: [],
       seasons: [Season.create({ seasonNumber: 1, releaseDate: new Date(), totalEpisodes: 220 })],
       isAdultContent: false,

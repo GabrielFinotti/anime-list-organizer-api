@@ -11,7 +11,7 @@ describe('AddMovieToAnimeUseCase', () => {
   let useCase: AddMovieToAnimeUseCase;
   let animeRepository: jest.Mocked<IAnimeRepository>;
 
-  const mockCategory = Category.create('Shounen', 'Action anime for boys');
+  const mockCategory = Category.create('Shounen', 'Shounen', 'Teens', 'Action anime for boys');
   const mockGenre = Genre.create('Action', 'Action genre', false);
 
   const createMockAnime = () =>
@@ -23,6 +23,7 @@ describe('AddMovieToAnimeUseCase', () => {
       genres: [mockGenre],
       animeType: 'mixed',
       productionType: 'original',
+      typeOfMaterialOrigin: 'none',
       movies: [Movie.create({ name: 'Naruto: First Movie', releaseDate: new Date('2002-01-01') })],
       seasons: [Season.create({ seasonNumber: 1, releaseDate: new Date(), totalEpisodes: 220 })],
       isAdultContent: false,

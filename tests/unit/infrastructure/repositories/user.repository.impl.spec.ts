@@ -16,6 +16,8 @@ describe('UserRepositoryImpl', () => {
   const mockCategory = Category.toDomain({
     id: '01KB3H4ZMD9J0NT3JQG8XTXWN0',
     name: 'shounen',
+    translatedName: 'Shounen',
+    targetAudience: 'Young Male',
     description: 'Anime targeted at young male audiences',
     createdAt: new Date('2024-01-01'),
     updatedAt: new Date('2024-01-01'),
@@ -39,6 +41,7 @@ describe('UserRepositoryImpl', () => {
     genres: [mockGenre],
     animeType: 'serie',
     productionType: 'adaptation',
+    typeOfMaterialOrigin: 'manga',
     movies: [],
     seasons: [],
     isAdultContent: false,

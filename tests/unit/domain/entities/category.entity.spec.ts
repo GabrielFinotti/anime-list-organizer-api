@@ -25,8 +25,18 @@ describe('Category Entity', () => {
     });
 
     it('should generate a new ULID when id is not provided', () => {
-      const category1 = Category.create('Drama', 'Drama', 'Adults', 'Emotional and character-driven stories');
-      const category2 = Category.create('Drama', 'Drama', 'Adults', 'Emotional and character-driven stories');
+      const category1 = Category.create(
+        'Drama',
+        'Drama',
+        'Adults',
+        'Emotional and character-driven stories',
+      );
+      const category2 = Category.create(
+        'Drama',
+        'Drama',
+        'Adults',
+        'Emotional and character-driven stories',
+      );
 
       expect(category1.id.value).not.toBe(category2.id.value);
     });
@@ -36,7 +46,12 @@ describe('Category Entity', () => {
 
     it('should set createdAt and updatedAt to current time', () => {
       const beforeCreation = new Date();
-      const category = Category.create('Romance', 'Romance', 'Teens', 'Love-centered anime stories');
+      const category = Category.create(
+        'Romance',
+        'Romance',
+        'Teens',
+        'Love-centered anime stories',
+      );
       const afterCreation = new Date();
 
       expect(category.createdAt.getTime()).toBeGreaterThanOrEqual(beforeCreation.getTime());
@@ -115,7 +130,12 @@ describe('Category Entity', () => {
 
   describe('immutability', () => {
     it('should not allow modification of properties', () => {
-      const category = Category.create('Mystery', 'Mistério', 'Teens', 'Suspenseful and mysterious storylines');
+      const category = Category.create(
+        'Mystery',
+        'Mistério',
+        'Teens',
+        'Suspenseful and mysterious storylines',
+      );
 
       expect(() => {
         (category as any).description = 'Modified description';
@@ -125,7 +145,12 @@ describe('Category Entity', () => {
 
   describe('toDomain', () => {
     it('should reconstruct a Category from a persistence-like object', () => {
-      const original = Category.create('Adventure', 'Aventura', 'General', 'Explorative and journey focused');
+      const original = Category.create(
+        'Adventure',
+        'Aventura',
+        'General',
+        'Explorative and journey focused',
+      );
 
       const doc = {
         id: original.id.value,

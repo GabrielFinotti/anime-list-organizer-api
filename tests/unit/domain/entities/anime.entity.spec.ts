@@ -8,7 +8,12 @@ import Id from '../../../../src/domain/value-objects/id.value-object';
 describe('Anime Entity', () => {
   describe('create', () => {
     it('should create a serie anime with valid data', () => {
-      const category = Category.create('Action', 'Ação', 'General', 'Animes with action-packed scenes');
+      const category = Category.create(
+        'Action',
+        'Ação',
+        'General',
+        'Animes with action-packed scenes',
+      );
       const genre = Genre.create('Adventure', 'Long expeditions and quests', false);
 
       const season = Season.create({
@@ -293,7 +298,9 @@ describe('Anime Entity', () => {
           ],
           isAdultContent: false,
         }),
-      ).toThrow('typeOfMaterialOrigin: must be one of manga, light_novel, visual_novel, game, other, none');
+      ).toThrow(
+        'typeOfMaterialOrigin: must be one of manga, light_novel, visual_novel, game, other, none',
+      );
     });
 
     it('should throw when adaptation has typeOfMaterialOrigin as none', () => {
@@ -310,9 +317,7 @@ describe('Anime Entity', () => {
           animeType: 'movie',
           productionType: 'adaptation',
           typeOfMaterialOrigin: 'none',
-          movies: [
-            Movie.create({ name: 'Movie A', releaseDate: new Date(2021, 6, 20) }),
-          ],
+          movies: [Movie.create({ name: 'Movie A', releaseDate: new Date(2021, 6, 20) })],
           seasons: [],
           isAdultContent: false,
         }),

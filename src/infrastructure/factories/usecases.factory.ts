@@ -48,6 +48,8 @@ import {
   makeJwtService,
   makeLookupAnimeService,
   makeTokenBlacklistService,
+  makeImagesService,
+  makeR2Service,
 } from './services.factory.js';
 
 /* Anime */
@@ -55,7 +57,13 @@ export const makeLookupAnimeUseCase = (): LookupAnimeUseCase =>
   new LookupAnimeUseCase(makeLookupAnimeService());
 
 export const makeCreateAnimeUseCase = (): CreateAnimeUseCase =>
-  new CreateAnimeUseCase(makeAnimeRepository(), makeCategoryRepository(), makeGenreRepository());
+  new CreateAnimeUseCase(
+    makeAnimeRepository(),
+    makeCategoryRepository(),
+    makeGenreRepository(),
+    makeImagesService(),
+    makeR2Service(),
+  );
 
 export const makeGetAnimeByIdUseCase = (): GetAnimeByIdUseCase =>
   new GetAnimeByIdUseCase(makeAnimeRepository());
@@ -64,10 +72,15 @@ export const makeGetAllAnimesUseCase = (): GetAllAnimesUseCase =>
   new GetAllAnimesUseCase(makeAnimeRepository());
 
 export const makeUpdateAnimeUseCase = (): UpdateAnimeUseCase =>
-  new UpdateAnimeUseCase(makeAnimeRepository(), makeCategoryRepository());
+  new UpdateAnimeUseCase(
+    makeAnimeRepository(),
+    makeCategoryRepository(),
+    makeImagesService(),
+    makeR2Service(),
+  );
 
 export const makeDeleteAnimeUseCase = (): DeleteAnimeUseCase =>
-  new DeleteAnimeUseCase(makeAnimeRepository());
+  new DeleteAnimeUseCase(makeAnimeRepository(), makeR2Service());
 
 export const makeAddMovieToAnimeUseCase = (): AddMovieToAnimeUseCase =>
   new AddMovieToAnimeUseCase(makeAnimeRepository());

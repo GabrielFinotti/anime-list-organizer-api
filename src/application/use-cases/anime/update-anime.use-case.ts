@@ -4,11 +4,16 @@ import { AnimeOutputDTO, UpdateAnimeInputDTO } from '../../dtos/anime.dto.js';
 import AnimeMapper from '../../mappers/anime.mapper.js';
 import { NotFoundError } from '../../errors/index.js';
 import Category from '../../../domain/entities/Category.entity.js';
+import { IImagesService } from '../../services/index.js';
+import { IR2Service } from '../../services/r2.service.js';
+import slugify from '../../utils/slugify.js';
 
 export class UpdateAnimeUseCase {
   constructor(
     private readonly animeRepository: IAnimeRepository,
     private readonly categoryRepository: ICategoryRepository,
+    private readonly imagesService: IImagesService,
+    private readonly r2Service: IR2Service,
   ) {}
 
   async execute(input: UpdateAnimeInputDTO): Promise<AnimeOutputDTO> {
@@ -41,7 +46,15 @@ export class UpdateAnimeUseCase {
     });
 
     if (input.imageUrl) {
-      anime.updateImageUrl(input.imageUrl);
+      const imageBuffer = await this.imagesService.downloadImage(input.imageUrl, anime.name.value);
+
+      const fileName = slugify(anime.name.value);
+      const uploadedImageUrl = await this.r2Service.updateObject(
+        imageBuffer,
+        `animes/${anime.id.value}/${fileName}.webp`,
+      );
+
+      anime.updateImageUrl(uploadedImageUrl.toString());
     }
 
     const updatedAnime = await this.animeRepository.update(anime);

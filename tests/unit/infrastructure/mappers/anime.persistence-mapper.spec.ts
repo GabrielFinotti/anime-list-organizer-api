@@ -13,7 +13,8 @@ describe('AnimePersistenceMapper', () => {
   const validGenreId = '01KB3H4ZMD9J0NT3JQG8XTXWN2';
   const now = new Date();
 
-  const createCategory = () => Category.create('Shonen', 'Shounen', 'Young Male', 'Anime for young boys');
+  const createCategory = () =>
+    Category.create('Shonen', 'Shounen', 'Young Male', 'Anime for young boys');
   const createGenre = () => Genre.create('Action', 'Action packed adventures', false);
 
   describe('toPersistence', () => {

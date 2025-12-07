@@ -1,9 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { UnauthorizedError } from '../../../../../src/application/errors/unauthorized.error';
-import {
-  IJwtService,
-  TokenPayload,
-} from '../../../../../src/application/services/jwt.service';
+import { IJwtService, TokenPayload } from '../../../../../src/application/services/jwt.service';
 import { ITokenBlacklistService } from '../../../../../src/application/services/token-blacklist.service';
 import { makeAuthMiddleware } from '../../../../../src/presentation/http/middlewares/auth.middleware';
 

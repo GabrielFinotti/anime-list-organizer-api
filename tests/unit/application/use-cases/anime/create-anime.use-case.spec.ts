@@ -2,6 +2,8 @@ import { CreateAnimeUseCase } from '../../../../../src/application/use-cases/ani
 import { IAnimeRepository } from '../../../../../src/domain/repositories/anime.repository';
 import { ICategoryRepository } from '../../../../../src/domain/repositories/category.repository';
 import { IGenreRepository } from '../../../../../src/domain/repositories/genre.repository';
+import { IImagesService } from '../../../../../src/application/services/images.service';
+import { IR2Service } from '../../../../../src/application/services/r2.service';
 import Category from '../../../../../src/domain/entities/Category.entity';
 import Genre from '../../../../../src/domain/entities/Genre.entity';
 import Anime from '../../../../../src/domain/entities/Anime.entity';
@@ -14,8 +16,11 @@ describe('CreateAnimeUseCase', () => {
   let mockAnimeRepository: jest.Mocked<IAnimeRepository>;
   let mockCategoryRepository: jest.Mocked<ICategoryRepository>;
   let mockGenreRepository: jest.Mocked<IGenreRepository>;
+  let mockImagesService: jest.Mocked<IImagesService>;
+  let mockR2Service: jest.Mocked<IR2Service>;
 
-  const createMockCategory = () => Category.create('Shounen', 'Shounen', 'Teens', 'Shounen description');
+  const createMockCategory = () =>
+    Category.create('Shounen', 'Shounen', 'Teens', 'Shounen description');
   const createMockGenre = () => Genre.create('Action', 'Action description', false);
 
   beforeEach(() => {
@@ -44,10 +49,22 @@ describe('CreateAnimeUseCase', () => {
       delete: jest.fn(),
     };
 
+    mockImagesService = {
+      downloadImage: jest.fn(),
+    };
+
+    mockR2Service = {
+      uploadObject: jest.fn(),
+      updateObject: jest.fn(),
+      deleteObject: jest.fn(),
+    };
+
     useCase = new CreateAnimeUseCase(
       mockAnimeRepository,
       mockCategoryRepository,
       mockGenreRepository,
+      mockImagesService,
+      mockR2Service,
     );
   });
 
@@ -69,9 +86,14 @@ describe('CreateAnimeUseCase', () => {
       isAdultContent: false,
     };
 
+    const mockImageBuffer = Buffer.from('processed-image');
+    const mockUploadedUrl = new URL('https://cdn.example.com/animes/123/naruto.webp');
+
     mockAnimeRepository.findByTitle.mockResolvedValue(null);
     mockCategoryRepository.findById.mockResolvedValue(category);
     mockGenreRepository.findById.mockResolvedValue(genre);
+    mockImagesService.downloadImage.mockResolvedValue(mockImageBuffer);
+    mockR2Service.uploadObject.mockResolvedValue(mockUploadedUrl);
     mockAnimeRepository.create.mockImplementation(async (anime) => anime);
 
     const result = await useCase.execute(input);
@@ -82,6 +104,8 @@ describe('CreateAnimeUseCase', () => {
     expect(result.category.name).toBe('shounen');
     expect(result.genres).toHaveLength(1);
     expect(result.animeType).toBe('serie');
+    expect(mockImagesService.downloadImage).toHaveBeenCalledWith(input.imageUrl, 'naruto');
+    expect(mockR2Service.uploadObject).toHaveBeenCalled();
     expect(mockAnimeRepository.create).toHaveBeenCalled();
   });
 
@@ -122,6 +146,8 @@ describe('CreateAnimeUseCase', () => {
     mockGenreRepository.findById.mockResolvedValue(genre);
 
     await expect(useCase.execute(input)).rejects.toThrow(ConflictError);
+    expect(mockImagesService.downloadImage).not.toHaveBeenCalled();
+    expect(mockR2Service.uploadObject).not.toHaveBeenCalled();
   });
 
   it('should throw NotFoundError when category not found', async () => {

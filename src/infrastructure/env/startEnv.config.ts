@@ -11,6 +11,11 @@ type StartEnvProps = {
   REDIS_URL: string;
   SECRET_KEY: string;
   OPENAI_API_KEY: string;
+  CLOUDFLARE_ACCOUNT_ID: string;
+  CLOUDFLARE_ACCESS_KEY_ID: string;
+  CLOUDFLARE_SECRET_ACCESS_KEY: string;
+  CLOUDFLARE_R2_BUCKET_NAME: string;
+  CLOUDFLARE_R2_PUBLIC_DOMAIN: string;
   TOKEN_EXPIRATION: string;
 };
 
@@ -45,11 +50,16 @@ class StartEnv {
       REDIS_URL: process.env.REDIS_URL,
       SECRET_KEY: process.env.SECRET_KEY,
       OPENAI_API_KEY: process.env.OPENAI_API_KEY,
+      CLOUDFLARE_ACCOUNT_ID: process.env.CLOUDFLARE_ACCOUNT_ID,
+      CLOUDFLARE_ACCESS_KEY_ID: process.env.CLOUDFLARE_ACCESS_KEY_ID,
+      CLOUDFLARE_SECRET_ACCESS_KEY: process.env.CLOUDFLARE_SECRET_ACCESS_KEY,
+      CLOUDFLARE_R2_BUCKET_NAME: process.env.CLOUDFLARE_R2_BUCKET_NAME,
+      CLOUDFLARE_R2_PUBLIC_DOMAIN: process.env.CLOUDFLARE_R2_PUBLIC_DOMAIN,
       TOKEN_EXPIRATION: process.env.TOKEN_EXPIRATION,
     };
 
     if (Object.values(envProps).some((value) => value === undefined)) {
-      throw new Error('Missing environment variables');
+      throw new Error('Some environment variables are missing or undefined.');
     }
 
     return new StartEnv(envProps as StartEnvProps);

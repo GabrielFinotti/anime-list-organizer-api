@@ -51,15 +51,13 @@ describe('User Routes - Integration Tests', () => {
     it('should return 409 when email already exists', async () => {
       await createTestUser({ email: 'existing@example.com' });
 
-      const response = await request(app)
-        .post('/api/users')
-        .send({
-          username: 'anotheruser',
-          email: 'existing@example.com',
-          password: 'ValidPassword123!',
-          imageUrl: 'https://example.com/avatar.jpg',
-          biography: 'Test biography content',
-        });
+      const response = await request(app).post('/api/users').send({
+        username: 'anotheruser',
+        email: 'existing@example.com',
+        password: 'ValidPassword123!',
+        imageUrl: 'https://example.com/avatar.jpg',
+        biography: 'Test biography content',
+      });
 
       expect(response.status).toBe(409);
       expect(response.body).toHaveProperty('message');

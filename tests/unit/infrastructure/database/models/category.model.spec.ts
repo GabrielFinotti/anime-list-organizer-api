@@ -192,10 +192,34 @@ describe('CategoryModel', () => {
   describe('multiple categories', () => {
     it('should create multiple categories with different types', async () => {
       const categories = [
-        { _id: 'cat-1', name: 'Shonen', translatedName: 'Shounen', targetAudience: 'Young Male', description: 'Young male audience' },
-        { _id: 'cat-2', name: 'Seinen', translatedName: 'Seinen', targetAudience: 'Adult Male', description: 'Adult male audience' },
-        { _id: 'cat-3', name: 'Shoujo', translatedName: 'Shoujo', targetAudience: 'Young Female', description: 'Young female audience' },
-        { _id: 'cat-4', name: 'Josei', translatedName: 'Josei', targetAudience: 'Adult Female', description: 'Adult female audience' },
+        {
+          _id: 'cat-1',
+          name: 'Shonen',
+          translatedName: 'Shounen',
+          targetAudience: 'Young Male',
+          description: 'Young male audience',
+        },
+        {
+          _id: 'cat-2',
+          name: 'Seinen',
+          translatedName: 'Seinen',
+          targetAudience: 'Adult Male',
+          description: 'Adult male audience',
+        },
+        {
+          _id: 'cat-3',
+          name: 'Shoujo',
+          translatedName: 'Shoujo',
+          targetAudience: 'Young Female',
+          description: 'Young female audience',
+        },
+        {
+          _id: 'cat-4',
+          name: 'Josei',
+          translatedName: 'Josei',
+          targetAudience: 'Adult Female',
+          description: 'Adult female audience',
+        },
       ];
 
       for (const categoryData of categories) {

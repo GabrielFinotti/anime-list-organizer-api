@@ -28,7 +28,12 @@ describe('User Entity', () => {
   it('should add and remove anime from animeList', () => {
     const user = User.create(defaultUserData);
 
-    const category = Category.create('Action', 'Action Translated', 'Shounen', 'Action description');
+    const category = Category.create(
+      'Action',
+      'Action Translated',
+      'Shounen',
+      'Action description',
+    );
     const genre = Genre.create('Adventure', 'Awesome genre', false);
     const movie = Movie.create({ name: 'Movie 1', releaseDate: new Date(2020, 0, 1) });
     const season = Season.create({
@@ -76,7 +81,12 @@ describe('User Entity', () => {
   it('should add and remove anime from favorites using updateAnimeLikeStatus', () => {
     const user = User.create(defaultUserData);
 
-    const category = Category.create('Action', 'Action Translated', 'Shounen', 'Action description');
+    const category = Category.create(
+      'Action',
+      'Action Translated',
+      'Shounen',
+      'Action description',
+    );
     const genre = Genre.create('Adventure', 'Awesome genre', false);
     const anime = Anime.create({
       imageUrl: 'http://example.com/a.png',
@@ -128,7 +138,12 @@ describe('User Entity', () => {
   it('should update movie and season statuses (and validate belong to anime)', () => {
     const user = User.create(defaultUserData);
 
-    const category = Category.create('Action', 'Action Translated', 'Shounen', 'Action description');
+    const category = Category.create(
+      'Action',
+      'Action Translated',
+      'Shounen',
+      'Action description',
+    );
     const genre = Genre.create('Adventure', 'Awesome genre', false);
     const movie = Movie.create({ name: 'Movie 1', releaseDate: new Date(2020, 0, 1) });
     const season = Season.create({
@@ -204,7 +219,12 @@ describe('User Entity', () => {
   it('should not allow setting anime status to finished if any movie or season is not finished', () => {
     const user = User.create(defaultUserData);
 
-    const category = Category.create('Action', 'Action Translated', 'Shounen', 'Action description');
+    const category = Category.create(
+      'Action',
+      'Action Translated',
+      'Shounen',
+      'Action description',
+    );
     const genre = Genre.create('Adventure', 'Awesome genre', false);
     const movie = Movie.create({ name: 'Movie 1', releaseDate: new Date(2020, 0, 1) });
     const season = Season.create({
@@ -238,7 +258,12 @@ describe('User Entity', () => {
   it('should allow setting anime status to finished if all movies and seasons are finished', () => {
     const user = User.create(defaultUserData);
 
-    const category = Category.create('Action', 'Action Translated', 'Shounen', 'Action description');
+    const category = Category.create(
+      'Action',
+      'Action Translated',
+      'Shounen',
+      'Action description',
+    );
     const genre = Genre.create('Adventure', 'Awesome genre', false);
     const movie = Movie.create({ name: 'Movie 1', releaseDate: new Date(2020, 0, 1) });
     const season = Season.create({
@@ -284,7 +309,12 @@ describe('User Entity', () => {
   it('should enforce validation for movie-only animes (no seasons)', () => {
     const user = User.create(defaultUserData);
 
-    const category = Category.create('Action', 'Action Translated', 'Shounen', 'Action description');
+    const category = Category.create(
+      'Action',
+      'Action Translated',
+      'Shounen',
+      'Action description',
+    );
     const genre = Genre.create('Adventure', 'Awesome genre', false);
     const movie = Movie.create({ name: 'Movie 1', releaseDate: new Date(2020, 0, 1) });
 
@@ -322,7 +352,12 @@ describe('User Entity', () => {
   it('should enforce validation for series-only animes (no movies)', () => {
     const user = User.create(defaultUserData);
 
-    const category = Category.create('Action', 'Action Translated', 'Shounen', 'Action description');
+    const category = Category.create(
+      'Action',
+      'Action Translated',
+      'Shounen',
+      'Action description',
+    );
     const genre = Genre.create('Adventure', 'Awesome genre', false);
     const season = Season.create({
       seasonNumber: 1,

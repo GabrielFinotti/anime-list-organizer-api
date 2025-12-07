@@ -70,7 +70,12 @@ describe('CategoryPersistenceMapper', () => {
 
   describe('round-trip conversion', () => {
     it('should preserve data through toPersistence -> toDomain cycle', () => {
-      const originalCategory = Category.create('Kodomo', 'Kodomo', 'Children', 'Anime for children audiences');
+      const originalCategory = Category.create(
+        'Kodomo',
+        'Kodomo',
+        'Children',
+        'Anime for children audiences',
+      );
 
       const document = CategoryPersistenceMapper.toPersistence(originalCategory);
       const reconstructedCategory = CategoryPersistenceMapper.toDomain(document);

@@ -16,7 +16,6 @@ export class CreateUserUseCase {
       throw new ConflictError('User', 'email', user.email.value);
     }
 
-
     const savedUser = await this.userRepository.create(user);
 
     return UserMapper.toResponse(savedUser);

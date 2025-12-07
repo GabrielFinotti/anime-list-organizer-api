@@ -20,7 +20,6 @@ export class CategoryController {
         translatedName: req.body.translatedName,
         targetAudience: req.body.targetAudience,
         description: req.body.description,
-        
       };
 
       const category = await this.createCategoryUseCase.execute(input);

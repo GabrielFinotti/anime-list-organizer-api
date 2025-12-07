@@ -7,7 +7,14 @@ const buildPrompt = (
 ): string => {
   const animeTypes = ['serie', 'movie', 'mixed'] as const;
   const productionTypes = ['original', 'adaptation'] as const;
-  const typeOfMaterialOrigins = ['manga', 'light_novel', 'visual_novel', 'game', 'other', 'none'] as const;
+  const typeOfMaterialOrigins = [
+    'manga',
+    'light_novel',
+    'visual_novel',
+    'game',
+    'other',
+    'none',
+  ] as const;
 
   const genreNames = availableGenres.map((g) => g.name);
   const adultGenres = availableGenres.filter((g) => g.isAdultContent).map((g) => g.name);

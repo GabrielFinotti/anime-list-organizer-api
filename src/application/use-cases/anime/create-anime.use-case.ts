@@ -7,12 +7,17 @@ import Season from '../../../domain/value-objects/season.value-object.js';
 import { AnimeInputDTO, AnimeOutputDTO } from '../../dtos/anime.dto.js';
 import AnimeMapper from '../../mappers/anime.mapper.js';
 import { NotFoundError, ConflictError } from '../../errors/index.js';
+import { IImagesService } from '../../services/index.js';
+import { IR2Service } from '../../services/r2.service.js';
+import slugify from '../../utils/slugify.js';
 
 export class CreateAnimeUseCase {
   constructor(
     private readonly animeRepository: IAnimeRepository,
     private readonly categoryRepository: ICategoryRepository,
     private readonly genreRepository: IGenreRepository,
+    private readonly imagesService: IImagesService,
+    private readonly r2Service: IR2Service,
   ) {}
 
   async execute(input: AnimeInputDTO): Promise<AnimeOutputDTO> {
@@ -63,6 +68,16 @@ export class CreateAnimeUseCase {
     if (existingAnime) {
       throw new ConflictError('Anime', 'name', anime.name.value);
     }
+
+    const imageBuffer = await this.imagesService.downloadImage(input.imageUrl, anime.name.value);
+
+    const fileName = slugify(anime.name.value);
+    const uploadedImageUrl = await this.r2Service.uploadObject(
+      imageBuffer,
+      `animes/${anime.id.value}/${fileName}.webp`,
+    );
+
+    anime.updateImageUrl(uploadedImageUrl.toString());
 
     const savedAnime = await this.animeRepository.create(anime);
 

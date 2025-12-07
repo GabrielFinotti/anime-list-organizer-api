@@ -108,7 +108,12 @@ describe('CategoryRepositoryImpl', () => {
 
   describe('create', () => {
     it('should create a category successfully', async () => {
-      const category = Category.create('Shounen', 'Shounen', 'Young Males', 'Anime targeted at young male audiences');
+      const category = Category.create(
+        'Shounen',
+        'Shounen',
+        'Young Males',
+        'Anime targeted at young male audiences',
+      );
 
       (CategoryModel.create as jest.Mock).mockResolvedValue(mockCategoryDoc);
 

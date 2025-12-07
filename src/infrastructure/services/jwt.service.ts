@@ -15,6 +15,7 @@ class JwtService implements IJwtService {
 
   private constructor() {
     const env = StartEnv.getInstance().value;
+
     this.secretKey = env.SECRET_KEY;
     this.tokenExpiration = env.TOKEN_EXPIRATION;
   }

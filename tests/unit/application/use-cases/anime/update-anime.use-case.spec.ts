@@ -1,6 +1,8 @@
 import { UpdateAnimeUseCase } from '../../../../../src/application/use-cases/anime/update-anime.use-case';
 import { IAnimeRepository } from '../../../../../src/domain/repositories/anime.repository';
 import { ICategoryRepository } from '../../../../../src/domain/repositories/category.repository';
+import { IImagesService } from '../../../../../src/application/services/images.service';
+import { IR2Service } from '../../../../../src/application/services/r2.service';
 import Anime from '../../../../../src/domain/entities/Anime.entity';
 import Category from '../../../../../src/domain/entities/Category.entity';
 import Genre from '../../../../../src/domain/entities/Genre.entity';
@@ -11,6 +13,8 @@ describe('UpdateAnimeUseCase', () => {
   let useCase: UpdateAnimeUseCase;
   let mockAnimeRepository: jest.Mocked<IAnimeRepository>;
   let mockCategoryRepository: jest.Mocked<ICategoryRepository>;
+  let mockImagesService: jest.Mocked<IImagesService>;
+  let mockR2Service: jest.Mocked<IR2Service>;
 
   beforeEach(() => {
     mockAnimeRepository = {
@@ -30,7 +34,22 @@ describe('UpdateAnimeUseCase', () => {
       delete: jest.fn(),
     };
 
-    useCase = new UpdateAnimeUseCase(mockAnimeRepository, mockCategoryRepository);
+    mockImagesService = {
+      downloadImage: jest.fn(),
+    };
+
+    mockR2Service = {
+      uploadObject: jest.fn(),
+      updateObject: jest.fn(),
+      deleteObject: jest.fn(),
+    };
+
+    useCase = new UpdateAnimeUseCase(
+      mockAnimeRepository,
+      mockCategoryRepository,
+      mockImagesService,
+      mockR2Service,
+    );
   });
 
   it('should update anime name successfully', async () => {
@@ -138,5 +157,78 @@ describe('UpdateAnimeUseCase', () => {
 
     await expect(useCase.execute(input)).rejects.toThrow(NotFoundError);
     await expect(useCase.execute(input)).rejects.toThrow('Category');
+  });
+
+  it('should update anime image when imageUrl is provided', async () => {
+    const category = Category.create('Shounen', 'Shounen', 'Teens', 'Shounen description');
+    const genre = Genre.create('Action', 'Action description', false);
+
+    const anime = Anime.create({
+      imageUrl: 'https://example.com/old-image.jpg',
+      name: 'Naruto',
+      synopsis: 'A ninja story',
+      category,
+      genres: [genre],
+      animeType: 'serie',
+      productionType: 'adaptation',
+      typeOfMaterialOrigin: 'manga',
+      movies: [],
+      seasons: [Season.create({ seasonNumber: 1, releaseDate: new Date(), totalEpisodes: 220 })],
+      isAdultContent: false,
+    });
+
+    const input = {
+      id: anime.id.value,
+      imageUrl: 'https://example.com/new-image.jpg',
+    };
+
+    const mockImageBuffer = Buffer.from('processed-image');
+    const mockUploadedUrl = new URL('https://cdn.example.com/animes/123/naruto.webp');
+
+    mockAnimeRepository.findById.mockResolvedValue(anime);
+    mockImagesService.downloadImage.mockResolvedValue(mockImageBuffer);
+    mockR2Service.updateObject.mockResolvedValue(mockUploadedUrl);
+    mockAnimeRepository.update.mockImplementation(async (a) => a);
+
+    const result = await useCase.execute(input);
+
+    expect(mockImagesService.downloadImage).toHaveBeenCalledWith(input.imageUrl, 'naruto');
+    expect(mockR2Service.updateObject).toHaveBeenCalledWith(
+      mockImageBuffer,
+      `animes/${anime.id.value}/naruto.webp`,
+    );
+    expect(result.imageUrl).toBe(mockUploadedUrl.toString());
+  });
+
+  it('should not update image when imageUrl is not provided', async () => {
+    const category = Category.create('Shounen', 'Shounen', 'Teens', 'Shounen description');
+    const genre = Genre.create('Action', 'Action description', false);
+
+    const anime = Anime.create({
+      imageUrl: 'https://example.com/image.jpg',
+      name: 'Naruto',
+      synopsis: 'A ninja story',
+      category,
+      genres: [genre],
+      animeType: 'serie',
+      productionType: 'adaptation',
+      typeOfMaterialOrigin: 'manga',
+      movies: [],
+      seasons: [Season.create({ seasonNumber: 1, releaseDate: new Date(), totalEpisodes: 220 })],
+      isAdultContent: false,
+    });
+
+    const input = {
+      id: anime.id.value,
+      name: 'Naruto Shippuden',
+    };
+
+    mockAnimeRepository.findById.mockResolvedValue(anime);
+    mockAnimeRepository.update.mockImplementation(async (a) => a);
+
+    await useCase.execute(input);
+
+    expect(mockImagesService.downloadImage).not.toHaveBeenCalled();
+    expect(mockR2Service.updateObject).not.toHaveBeenCalled();
   });
 });

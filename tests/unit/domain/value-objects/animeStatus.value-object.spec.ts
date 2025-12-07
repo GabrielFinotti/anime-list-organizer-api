@@ -89,7 +89,12 @@ describe('AnimeStatus Value Object', () => {
     });
 
     it('should throw when isLiked is invalid', () => {
-      const category = Category.create('Action', 'Action', 'Young Adults', 'Category for action animes');
+      const category = Category.create(
+        'Action',
+        'Action',
+        'Young Adults',
+        'Category for action animes',
+      );
       const genre = Genre.create('Adventure', 'Genre description for testing', false);
 
       const anime = Anime.create({
@@ -148,7 +153,12 @@ describe('AnimeStatus Value Object', () => {
         imageUrl: 'http://example.com/b.png',
         name: 'Anime2',
         synopsis: 'Long enough synopsis',
-        category: Category.create('Other', 'Other', 'Young Adults', 'Other category with long description'),
+        category: Category.create(
+          'Other',
+          'Other',
+          'Young Adults',
+          'Other category with long description',
+        ),
         genres: [Genre.create('GXZ', 'Other genre long description', false)],
         animeType: 'mixed',
         productionType: 'original',

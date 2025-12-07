@@ -106,9 +106,15 @@ export const createTestCategory = async (
 ): Promise<TestCategory> => {
   const id = overrides.id || ulid();
 
-  const categoryName = overrides.name ? Name.create(overrides.name).value : Name.create(`Category ${id}`).value;
-  const translatedName = overrides.translatedName ? Name.create(overrides.translatedName).value : Name.create(`Categoria ${id}`).value;
-  const targetAudience = overrides.targetAudience ? Name.create(overrides.targetAudience).value : Name.create('General').value;
+  const categoryName = overrides.name
+    ? Name.create(overrides.name).value
+    : Name.create(`Category ${id}`).value;
+  const translatedName = overrides.translatedName
+    ? Name.create(overrides.translatedName).value
+    : Name.create(`Categoria ${id}`).value;
+  const targetAudience = overrides.targetAudience
+    ? Name.create(overrides.targetAudience).value
+    : Name.create('General').value;
 
   const categoryData = {
     _id: id,
@@ -132,7 +138,9 @@ export const createTestCategory = async (
 export const createTestGenre = async (overrides: Partial<TestGenre> = {}): Promise<TestGenre> => {
   const id = overrides.id || ulid();
 
-  const genreName = overrides.name ? Name.create(overrides.name).value : Name.create(`Genre ${id}`).value;
+  const genreName = overrides.name
+    ? Name.create(overrides.name).value
+    : Name.create(`Genre ${id}`).value;
 
   const genreData = {
     _id: id,
@@ -158,7 +166,9 @@ export const createTestAnime = async (
 ): Promise<TestAnime> => {
   const id = overrides.id || ulid();
 
-  const animeName = overrides.name ? Name.create(overrides.name).value : Name.create(`Anime ${id}`).value;
+  const animeName = overrides.name
+    ? Name.create(overrides.name).value
+    : Name.create(`Anime ${id}`).value;
 
   const animeData = {
     _id: id,

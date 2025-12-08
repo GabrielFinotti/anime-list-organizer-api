@@ -22,15 +22,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/GabrielFinotti/anime-list-organizer-api.git"
+    "url": "git+https://github.com/GabrielFinotti/anime-timeline-api.git"
   },
   "keywords": [],
   "author": "",
   "license": "Proprietary",
   "bugs": {
-    "url": "https://github.com/GabrielFinotti/anime-list-organizer-api/issues"
+    "url": "https://github.com/GabrielFinotti/anime-timeline-api/issues"
   },
-  "homepage": "https://github.com/GabrielFinotti/anime-list-organizer-api#readme",
+  "homepage": "https://github.com/GabrielFinotti/anime-timeline-api#readme",
   "devDependencies": {
     "@types/bcrypt": "^6.0.0",
     "@types/express": "^5.0.5",

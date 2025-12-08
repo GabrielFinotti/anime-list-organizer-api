@@ -12,7 +12,7 @@ const seasonSchema = new Schema<ISeasonSchema>(
     releaseDate: { type: Date, required: true },
     totalEpisodes: { type: Number, required: true },
   },
-  { versionKey: false, id: false, timestamps: false },
+  { versionKey: false, _id: false, timestamps: false },
 );
 
 export default seasonSchema;

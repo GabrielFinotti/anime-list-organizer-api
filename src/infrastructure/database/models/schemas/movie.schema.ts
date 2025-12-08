@@ -10,7 +10,7 @@ const movieSchema = new Schema<IMovieSchema>(
     title: { type: String, required: true },
     releaseDate: { type: Date, required: true },
   },
-  { versionKey: false, id: false, timestamps: false },
+  { versionKey: false, _id: false, timestamps: false },
 );
 
 export default movieSchema;

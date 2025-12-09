@@ -785,7 +785,7 @@ describe('Anime Routes - Integration Tests', () => {
         .post(`/api/animes/${anime.id}/genres`)
         .set('Authorization', `Bearer ${admin.token}`)
         .send({
-          genreId: genre2.id,
+          genreIds: [genre2.id],
         })
         .expect(200);
 
@@ -803,7 +803,7 @@ describe('Anime Routes - Integration Tests', () => {
         .post(`/api/animes/${anime.id}/genres`)
         .set('Authorization', `Bearer ${user.token}`)
         .send({
-          genreId: genre2.id,
+          genreIds: [genre2.id],
         })
         .expect(401);
 
@@ -820,7 +820,7 @@ describe('Anime Routes - Integration Tests', () => {
         .post(`/api/animes/${anime.id}/genres`)
         .set('Authorization', `Bearer ${admin.token}`)
         .send({
-          genreId: '01ARZ3NDEKTSV4RRFFQ69G5FAV',
+          genreIds: ['01ARZ3NDEKTSV4RRFFQ69G5FAV'],
         })
         .expect(404);
 
@@ -831,7 +831,7 @@ describe('Anime Routes - Integration Tests', () => {
       const response = await request(app)
         .post('/api/animes/01ARZ3NDEKTSV4RRFFQ69G5FAV/genres')
         .send({
-          genreId: '01ARZ3NDEKTSV4RRFFQ69G5FAV',
+          genreIds: ['01ARZ3NDEKTSV4RRFFQ69G5FAV'],
         })
         .expect(401);
 

@@ -53,8 +53,12 @@ jest.mock('../../../src/infrastructure/services/images.service', () => {
 // Mock do R2Service para testes de integração
 jest.mock('../../../src/infrastructure/cloudflare/r2/service/r2.service', () => {
   const mockInstance = {
-    uploadObject: jest.fn().mockResolvedValue(new URL('https://cdn.test.example.com/test-image.webp')),
-    updateObject: jest.fn().mockResolvedValue(new URL('https://cdn.test.example.com/test-image.webp')),
+    uploadObject: jest
+      .fn()
+      .mockResolvedValue(new URL('https://cdn.test.example.com/test-image.webp')),
+    updateObject: jest
+      .fn()
+      .mockResolvedValue(new URL('https://cdn.test.example.com/test-image.webp')),
     deleteObject: jest.fn().mockResolvedValue(undefined),
   };
 

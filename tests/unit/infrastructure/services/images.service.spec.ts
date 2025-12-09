@@ -45,19 +45,16 @@ describe('ImagesService', () => {
 
       mockFetch.mockResolvedValue(mockResponse);
 
-      const result = await service.downloadImage(
-        'https://example.com/image.jpg',
-        'Test Anime',
-      );
+      const result = await service.downloadImage('https://example.com/image.jpg', 'Test Anime');
 
       expect(result).toBeInstanceOf(Buffer);
       expect(mockFetch).toHaveBeenCalledWith('https://example.com/image.jpg');
     });
 
     it('should throw error for invalid URL', async () => {
-      await expect(
-        service.downloadImage('invalid-url', 'Test Anime'),
-      ).rejects.toThrow('Invalid URL provided for image download.');
+      await expect(service.downloadImage('invalid-url', 'Test Anime')).rejects.toThrow(
+        'Invalid URL provided for image download.',
+      );
     });
 
     it('should throw error when fetch fails', async () => {
@@ -118,10 +115,7 @@ describe('ImagesService', () => {
 
         mockFetch.mockResolvedValue(mockResponse);
 
-        const result = await service.downloadImage(
-          'https://example.com/image.jpg',
-          'Test Anime',
-        );
+        const result = await service.downloadImage('https://example.com/image.jpg', 'Test Anime');
 
         expect(result).toBeInstanceOf(Buffer);
       }
@@ -139,10 +133,7 @@ describe('ImagesService', () => {
 
       mockFetch.mockResolvedValue(mockResponse);
 
-      const result = await service.downloadImage(
-        'https://example.com/image.jpg',
-        'Test Anime',
-      );
+      const result = await service.downloadImage('https://example.com/image.jpg', 'Test Anime');
 
       expect(result).toBeInstanceOf(Buffer);
     });

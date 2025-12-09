@@ -120,9 +120,7 @@ describe('AddGenreToAnimeUseCase', () => {
     };
 
     animeRepository.findById.mockResolvedValue(anime);
-    genreRepository.findById
-      .mockResolvedValueOnce(mockNewGenre)
-      .mockResolvedValueOnce(null);
+    genreRepository.findById.mockResolvedValueOnce(mockNewGenre).mockResolvedValueOnce(null);
 
     await expect(useCase.execute(input)).rejects.toThrow(NotFoundError);
     expect(animeRepository.update).not.toHaveBeenCalled();

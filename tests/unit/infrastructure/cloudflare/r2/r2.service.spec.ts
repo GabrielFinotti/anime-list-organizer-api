@@ -167,9 +167,7 @@ describe('R2Service', () => {
         $metadata: { httpStatusCode: 500 },
       });
 
-      await expect(service.deleteObject(key)).rejects.toThrow(
-        'Failed to delete object from R2',
-      );
+      await expect(service.deleteObject(key)).rejects.toThrow('Failed to delete object from R2');
     });
 
     it('should throw error when delete fails with 4xx status', async () => {
@@ -179,9 +177,7 @@ describe('R2Service', () => {
         $metadata: { httpStatusCode: 404 },
       });
 
-      await expect(service.deleteObject(key)).rejects.toThrow(
-        'Failed to delete object from R2',
-      );
+      await expect(service.deleteObject(key)).rejects.toThrow('Failed to delete object from R2');
     });
 
     it('should handle delete with 200 status', async () => {

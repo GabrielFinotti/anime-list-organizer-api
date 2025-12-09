@@ -3,7 +3,7 @@ services:
     image: mongo:latest
     container_name: mongo-prod
     expose:
-      - "27017"
+      - '27017'
     volumes:
       - mongo_data_prod:/data/db
     restart: unless-stopped
@@ -17,7 +17,7 @@ services:
     image: redis:latest
     container_name: redis-prod
     expose:
-      - "6379"
+      - '6379'
     volumes:
       - redis_data_prod:/data
     command: redis-server --appendonly yes
@@ -36,22 +36,23 @@ services:
     container_name: api-prod
     command: npm start
     environment:
-    - NODE_ENV=${NODE_ENV}
-    - PORT=${PORT}
-    - VERSION=${VERSION}
-    - MONGO_URI=${MONGO_URI}
-    - MONGO_NAME=${MONGO_NAME}
-    - REDIS_URL=${REDIS_URL}
-    - SECRET_KEY=${SECRET_KEY}
-    - OPENAI_API_KEY=${OPENAI_API_KEY}
-    - CLOUDFLARE_ACCOUNT_ID=${CLOUDFLARE_ACCOUNT_ID}
-    - CLOUDFLARE_ACCESS_KEY_ID=${CLOUDFLARE_ACCESS_KEY_ID}
-    - CLOUDFLARE_SECRET_ACCESS_KEY=${CLOUDFLARE_SECRET_ACCESS_KEY}
-    - CLOUDFLARE_R2_BUCKET_NAME=${CLOUDFLARE_R2_BUCKET_NAME}
-    - CLOUDFLARE_R2_PUBLIC_DOMAIN=${CLOUDFLARE_R2_PUBLIC_DOMAIN}
-    - TOKEN_EXPIRATION=${TOKEN_EXPIRATION}
+      - NODE_ENV=${NODE_ENV}
+      - PORT=${PORT}
+      - VERSION=${VERSION}
+      - CORS_ORIGINS=${CORS_ORIGINS}
+      - MONGO_URI=${MONGO_URI}
+      - MONGO_NAME=${MONGO_NAME}
+      - REDIS_URL=${REDIS_URL}
+      - SECRET_KEY=${SECRET_KEY}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - CLOUDFLARE_ACCOUNT_ID=${CLOUDFLARE_ACCOUNT_ID}
+      - CLOUDFLARE_ACCESS_KEY_ID=${CLOUDFLARE_ACCESS_KEY_ID}
+      - CLOUDFLARE_SECRET_ACCESS_KEY=${CLOUDFLARE_SECRET_ACCESS_KEY}
+      - CLOUDFLARE_R2_BUCKET_NAME=${CLOUDFLARE_R2_BUCKET_NAME}
+      - CLOUDFLARE_R2_PUBLIC_DOMAIN=${CLOUDFLARE_R2_PUBLIC_DOMAIN}
+      - TOKEN_EXPIRATION=${TOKEN_EXPIRATION}
     ports:
-      - "${PORT}:${PORT}"
+      - '${PORT}:${PORT}'
     depends_on:
       mongo:
         condition: service_healthy

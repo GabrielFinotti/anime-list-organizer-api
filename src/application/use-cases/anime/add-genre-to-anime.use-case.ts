@@ -18,15 +18,15 @@ export class AddGenreToAnimeUseCase {
     }
 
     const genres = await Promise.all(
-      input.genreIds.map(genreId => this.genreRepository.findById(genreId))
+      input.genreIds.map((genreId) => this.genreRepository.findById(genreId)),
     );
 
-    const notFoundIndex = genres.findIndex(genre => !genre);
+    const notFoundIndex = genres.findIndex((genre) => !genre);
     if (notFoundIndex !== -1) {
       throw new NotFoundError('Genre', input.genreIds[notFoundIndex]);
     }
 
-    genres.forEach(genre => {
+    genres.forEach((genre) => {
       if (genre) {
         anime.addGenre(genre);
       }

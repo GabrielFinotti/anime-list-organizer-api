@@ -56,9 +56,7 @@ describe('DeleteAnimeUseCase', () => {
     await useCase.execute(anime.id.value);
 
     expect(mockAnimeRepository.findById).toHaveBeenCalledWith(anime.id.value);
-    expect(mockR2Service.deleteObject).toHaveBeenCalledWith(
-      `animes/${anime.id.value}/naruto.webp`,
-    );
+    expect(mockR2Service.deleteObject).toHaveBeenCalledWith(`animes/${anime.id.value}/naruto.webp`);
     expect(mockAnimeRepository.delete).toHaveBeenCalledWith(anime.id.value);
   });
 

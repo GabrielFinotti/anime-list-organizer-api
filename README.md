@@ -47,7 +47,7 @@ O **Anime Timeline API** é uma API REST completa para gerenciamento e organiza�
 - 📺 **Catálogo de Animes**: CRUD completo com suporte a filmes, temporadas e gêneros
 - 👤 **Gerenciamento de Usuários**: Sistema completo de perfil e lista personalizada de animes
 - 🔐 **Autenticação JWT**: Login seguro com token blacklist via Redis
-- 🤖 **Lookup Inteligente**: Busca automática de metadados via GPT-4 com web search
+- 🤖 **Lookup Inteligente**: Busca automática de metadados via GPT-5 com web search
 - 🖼️ **Upload de Imagens**: Integração com Cloudflare R2 para armazenamento
 - 📊 **Tracking de Progresso**: Acompanhamento de episódios, temporadas e status
 
@@ -75,7 +75,7 @@ O **Anime Timeline API** é uma API REST completa para gerenciamento e organiza�
 
 | Tecnologia                                                                                       | Descrição                    |
 | ------------------------------------------------------------------------------------------------ | ---------------------------- |
-| ![OpenAI](https://img.shields.io/badge/OpenAI-GPT--4-412991?logo=openai&logoColor=white)         | Lookup inteligente de animes |
+| ![OpenAI](https://img.shields.io/badge/OpenAI-GPT--5-412991?logo=openai&logoColor=white)         | Lookup inteligente de animes |
 | ![Cloudflare](https://img.shields.io/badge/Cloudflare-R2-F38020?logo=cloudflare&logoColor=white) | Storage de imagens           |
 
 ### DevOps & Testing
@@ -670,7 +670,7 @@ tests/
 - [x] CRUD completo de Animes, Categorias e Gêneros
 - [x] Sistema de usuários com lista personalizada
 - [x] Autenticação JWT com Redis
-- [x] Lookup inteligente via OpenAI GPT-4
+- [x] Lookup inteligente via OpenAI GPT-5
 - [x] Upload de imagens via Cloudflare R2
 - [x] Docker para desenvolvimento e produção
 - [x] Suite de testes (unitários e integração)

@@ -22,7 +22,7 @@ class RedisClient {
     });
 
     this.client.on('connect', () => {
-      console.log('Redis: Connected successfully');
+      console.log(`Redis: Connected to ${REDIS_URL}`);
     });
 
     this.client.on('error', (error: Error) => {

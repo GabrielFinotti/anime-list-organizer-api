@@ -4,6 +4,7 @@
 // Configurar variáveis de ambiente para testes ANTES de qualquer import
 process.env.NODE_ENV = 'test';
 process.env.PORT = '3001';
+process.env.CORS_ORIGINS = '*';
 process.env.MONGO_URI = 'mongodb://localhost:27017';
 process.env.MONGO_NAME = 'test_db';
 process.env.REDIS_URL = 'redis://localhost:6379';

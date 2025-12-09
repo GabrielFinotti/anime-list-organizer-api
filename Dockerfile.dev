@@ -12,6 +12,7 @@ RUN apt-get update && apt-get install -y python3 build-essential --no-install-re
 
 # Copy package files and install deps (including dev dependencies for hot reload)
 COPY package.json package-lock.json ./
+
 RUN npm ci
 
 # Copy app source

@@ -12,7 +12,7 @@ export class ValidationError extends ApplicationError {
   public readonly errors?: ValidationErrorDetail[];
 
   constructor(message: string, field?: string, code?: string, errors?: ValidationErrorDetail[]) {
-    super(message, 400);
+    super(message, 400, 'ValidationError');
     this.field = field;
     this.code = code;
     this.errors = errors;

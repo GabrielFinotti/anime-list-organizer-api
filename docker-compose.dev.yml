@@ -5,7 +5,7 @@ services:
     expose:
       - '27017'
     volumes:
-      - mongo_data:/data/db
+      - mongo_data_dev:/data/db
 
   redis:
     image: redis:latest
@@ -13,18 +13,33 @@ services:
     expose:
       - '6379'
     volumes:
-      - redis_data:/data
+      - redis_data_dev:/data
     command: redis-server --appendonly yes
 
   api:
     build:
       context: .
       dockerfile: Dockerfile.dev
+    image: anime-timeline-api-dev
     container_name: api-dev
     command: npm run dev
-    env_file: .env.development
+    environment:
+    - NODE_ENV=${NODE_ENV}
+    - PORT=${PORT}
+    - VERSION=${VERSION}
+    - MONGO_URI=${MONGO_URI}
+    - MONGO_NAME=${MONGO_NAME}
+    - REDIS_URL=${REDIS_URL}
+    - SECRET_KEY=${SECRET_KEY}
+    - OPENAI_API_KEY=${OPENAI_API_KEY}
+    - CLOUDFLARE_ACCOUNT_ID=${CLOUDFLARE_ACCOUNT_ID}
+    - CLOUDFLARE_ACCESS_KEY_ID=${CLOUDFLARE_ACCESS_KEY_ID}
+    - CLOUDFLARE_SECRET_ACCESS_KEY=${CLOUDFLARE_SECRET_ACCESS_KEY}
+    - CLOUDFLARE_R2_BUCKET_NAME=${CLOUDFLARE_R2_BUCKET_NAME}
+    - CLOUDFLARE_R2_PUBLIC_DOMAIN=${CLOUDFLARE_R2_PUBLIC_DOMAIN}
+    - TOKEN_EXPIRATION=${TOKEN_EXPIRATION}
     ports:
-      - '3000:3000'
+      - '${PORT}:${PORT}'
     volumes:
       - ./:/app
       - /app/node_modules
@@ -33,5 +48,9 @@ services:
       - redis
 
 volumes:
-  mongo_data:
-  redis_data:
+  mongo_data_dev:
+  redis_data_dev:
+
+networks:
+  default:
+    name: anime-timeline-network-dev

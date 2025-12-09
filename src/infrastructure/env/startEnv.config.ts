@@ -6,6 +6,7 @@ type StartEnvProps = {
   NODE_ENV: 'development' | 'production' | 'test';
   PORT: number;
   VERSION: string;
+  CORS_ORIGINS: string;
   MONGO_URI: string;
   MONGO_NAME: string;
   REDIS_URL: string;
@@ -45,6 +46,7 @@ class StartEnv {
       NODE_ENV: process.env.NODE_ENV,
       PORT: Number(process.env.PORT),
       VERSION: process.env.VERSION,
+      CORS_ORIGINS: process.env.CORS_ORIGINS,
       MONGO_URI: process.env.MONGO_URI,
       MONGO_NAME: process.env.MONGO_NAME,
       REDIS_URL: process.env.REDIS_URL,

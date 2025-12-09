@@ -6,7 +6,7 @@ export class NotFoundError extends ApplicationError {
       ? `${resource} with identifier '${identifier}' not found`
       : `${resource} not found`;
 
-    super(message, 404);
+    super(message, 404, 'NotFoundError');
   }
 }
 

@@ -4,9 +4,11 @@ import categoryRoutes from './category.routes.js';
 import genreRoutes from './genre.routes.js';
 import animeRoutes from './anime.routes.js';
 import userRoutes from './user.routes.js';
+import healthRoutes from './health.routes.js';
 
 const router = Router();
 
+router.use('/health', healthRoutes);
 router.use('/auth', authRoutes);
 router.use('/categories', categoryRoutes);
 router.use('/genres', genreRoutes);

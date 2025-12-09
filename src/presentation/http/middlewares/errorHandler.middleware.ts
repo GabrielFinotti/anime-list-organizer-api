@@ -20,7 +20,7 @@ const errorHandler = (error: Error, _req: Request, res: Response, _next: NextFun
   if (DomainErrorMapper.isDomainError(error)) {
     const validationError = DomainErrorMapper.toValidationError(error as DomainError);
     const response: ErrorResponse = {
-      error: validationError.name,
+      error: validationError.errorCode,
       message: validationError.message,
     };
 
@@ -35,7 +35,7 @@ const errorHandler = (error: Error, _req: Request, res: Response, _next: NextFun
 
   if (error instanceof ApplicationError) {
     const response: ErrorResponse = {
-      error: error.name,
+      error: error.errorCode,
       message: error.message,
     };
 

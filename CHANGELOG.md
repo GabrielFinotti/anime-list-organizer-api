@@ -176,14 +176,14 @@ e este projeto adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR
 
 ## Comparativo de Versões
 
-| Aspecto | v3.1.0 (main) | v4.0.0 (atual) |
-|---------|---------------|----------------|
-| Arquitetura | MVC | DDD + Clean Architecture |
-| Autenticação | Basic Auth | JWT + Redis |
-| Usuários | Não suportado | Completo com perfil e lista |
-| Testes | Não | 97 testes (unit + integration) |
-| Docker | Não | Sim (dev + prod) |
-| Cache | Não | Redis |
-| Storage | Não | Cloudflare R2 |
-| Módulos | CommonJS | ESM |
-| Licença | Apache 2.0 | GPL-3.0-or-later |
+| Aspecto      | v3.1.0 (main) | v4.0.0 (atual)                 |
+| ------------ | ------------- | ------------------------------ |
+| Arquitetura  | MVC           | DDD + Clean Architecture       |
+| Autenticação | Basic Auth    | JWT + Redis                    |
+| Usuários     | Não suportado | Completo com perfil e lista    |
+| Testes       | Não           | 97 testes (unit + integration) |
+| Docker       | Não           | Sim (dev + prod)               |
+| Cache        | Não           | Redis                          |
+| Storage      | Não           | Cloudflare R2                  |
+| Módulos      | CommonJS      | ESM                            |
+| Licença      | Apache 2.0    | GPL-3.0-or-later               |

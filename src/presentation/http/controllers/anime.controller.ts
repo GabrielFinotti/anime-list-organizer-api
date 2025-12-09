@@ -173,7 +173,7 @@ export class AnimeController {
 
       const input: AddGenreToAnimeInputDTO = {
         animeId: id,
-        genreId: req.body.genreId,
+        genreIds: Array.isArray(req.body.genreIds) ? req.body.genreIds : [req.body.genreIds],
       };
 
       const anime = await this.addGenreToAnimeUseCase.execute(input);

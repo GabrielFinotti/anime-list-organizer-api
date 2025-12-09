@@ -73,7 +73,7 @@ export type AddSeasonInputDTO = {
 
 export type AddGenreToAnimeInputDTO = {
   animeId: string;
-  genreId: string;
+  genreIds: string[];
 };
 
 export type RemoveMovieInputDTO = {

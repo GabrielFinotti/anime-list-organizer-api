@@ -17,13 +17,20 @@ export class AddGenreToAnimeUseCase {
       throw new NotFoundError('Anime', input.animeId);
     }
 
-    const genre = await this.genreRepository.findById(input.genreId);
+    const genres = await Promise.all(
+      input.genreIds.map(genreId => this.genreRepository.findById(genreId))
+    );
 
-    if (!genre) {
-      throw new NotFoundError('Genre', input.genreId);
+    const notFoundIndex = genres.findIndex(genre => !genre);
+    if (notFoundIndex !== -1) {
+      throw new NotFoundError('Genre', input.genreIds[notFoundIndex]);
     }
 
-    anime.addGenre(genre);
+    genres.forEach(genre => {
+      if (genre) {
+        anime.addGenre(genre);
+      }
+    });
 
     const updatedAnime = await this.animeRepository.update(anime);
 

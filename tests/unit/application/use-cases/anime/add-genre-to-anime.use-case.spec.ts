@@ -18,6 +18,8 @@ describe('AddGenreToAnimeUseCase', () => {
 
   const mockNewGenre = Genre.create('Adventure', 'Adventure anime', false);
 
+  const mockAnotherGenre = Genre.create('Drama', 'Drama anime', false);
+
   const createMockAnime = () =>
     Anime.create({
       imageUrl: 'https://example.com/naruto.jpg',
@@ -54,11 +56,11 @@ describe('AddGenreToAnimeUseCase', () => {
     useCase = new AddGenreToAnimeUseCase(animeRepository, genreRepository);
   });
 
-  it('deve adicionar um gênero ao anime com sucesso', async () => {
+  it('deve adicionar um único gênero ao anime com sucesso', async () => {
     const anime = createMockAnime();
     const input = {
       animeId: anime.id.value,
-      genreId: mockNewGenre.id.value,
+      genreIds: [mockNewGenre.id.value],
     };
 
     animeRepository.findById.mockResolvedValue(anime);
@@ -68,16 +70,39 @@ describe('AddGenreToAnimeUseCase', () => {
     const result = await useCase.execute(input);
 
     expect(animeRepository.findById).toHaveBeenCalledWith(input.animeId);
-    expect(genreRepository.findById).toHaveBeenCalledWith(input.genreId);
+    expect(genreRepository.findById).toHaveBeenCalledWith(input.genreIds[0]);
     expect(animeRepository.update).toHaveBeenCalled();
     expect(result.genres).toHaveLength(2);
     expect(result.genres[1].name).toBe('adventure');
   });
 
+  it('deve adicionar múltiplos gêneros ao anime com sucesso', async () => {
+    const anime = createMockAnime();
+    const input = {
+      animeId: anime.id.value,
+      genreIds: [mockNewGenre.id.value, mockAnotherGenre.id.value],
+    };
+
+    animeRepository.findById.mockResolvedValue(anime);
+    genreRepository.findById
+      .mockResolvedValueOnce(mockNewGenre)
+      .mockResolvedValueOnce(mockAnotherGenre);
+    animeRepository.update.mockImplementation(async (a) => a);
+
+    const result = await useCase.execute(input);
+
+    expect(animeRepository.findById).toHaveBeenCalledWith(input.animeId);
+    expect(genreRepository.findById).toHaveBeenCalledTimes(2);
+    expect(genreRepository.findById).toHaveBeenNthCalledWith(1, input.genreIds[0]);
+    expect(genreRepository.findById).toHaveBeenNthCalledWith(2, input.genreIds[1]);
+    expect(animeRepository.update).toHaveBeenCalled();
+    expect(result.genres).toHaveLength(3);
+  });
+
   it('deve lançar NotFoundError quando o anime não existir', async () => {
     const input = {
       animeId: 'non-existent-anime-id',
-      genreId: mockGenre.id.value,
+      genreIds: [mockGenre.id.value],
     };
 
     animeRepository.findById.mockResolvedValue(null);
@@ -87,15 +112,17 @@ describe('AddGenreToAnimeUseCase', () => {
     expect(animeRepository.update).not.toHaveBeenCalled();
   });
 
-  it('deve lançar NotFoundError quando o gênero não existir', async () => {
+  it('deve lançar NotFoundError quando um dos gêneros não existir', async () => {
     const anime = createMockAnime();
     const input = {
       animeId: anime.id.value,
-      genreId: 'non-existent-genre-id',
+      genreIds: [mockNewGenre.id.value, 'non-existent-genre-id'],
     };
 
     animeRepository.findById.mockResolvedValue(anime);
-    genreRepository.findById.mockResolvedValue(null);
+    genreRepository.findById
+      .mockResolvedValueOnce(mockNewGenre)
+      .mockResolvedValueOnce(null);
 
     await expect(useCase.execute(input)).rejects.toThrow(NotFoundError);
     expect(animeRepository.update).not.toHaveBeenCalled();

@@ -352,9 +352,9 @@ describe('AnimeController', () => {
   });
 
   describe('addGenre', () => {
-    it('should add a genre to anime and return 200', async () => {
+    it('should add a single genre to anime and return 200', async () => {
       mockRequest.params = { id: 'anime-123' };
-      mockRequest.body = { genreId: 'genre-456' };
+      mockRequest.body = { genreIds: ['genre-456'] };
 
       mockAddGenreToAnimeUseCase.execute.mockResolvedValue(mockAnimeOutput);
 
@@ -362,7 +362,39 @@ describe('AnimeController', () => {
 
       expect(mockAddGenreToAnimeUseCase.execute).toHaveBeenCalledWith({
         animeId: 'anime-123',
-        genreId: 'genre-456',
+        genreIds: ['genre-456'],
+      });
+      expect(mockResponse.status).toHaveBeenCalledWith(200);
+      expect(mockResponse.json).toHaveBeenCalledWith(mockAnimeOutput);
+    });
+
+    it('should add multiple genres to anime and return 200', async () => {
+      mockRequest.params = { id: 'anime-123' };
+      mockRequest.body = { genreIds: ['genre-456', 'genre-789'] };
+
+      mockAddGenreToAnimeUseCase.execute.mockResolvedValue(mockAnimeOutput);
+
+      await animeController.addGenre(mockRequest as Request, mockResponse as Response, mockNext);
+
+      expect(mockAddGenreToAnimeUseCase.execute).toHaveBeenCalledWith({
+        animeId: 'anime-123',
+        genreIds: ['genre-456', 'genre-789'],
+      });
+      expect(mockResponse.status).toHaveBeenCalledWith(200);
+      expect(mockResponse.json).toHaveBeenCalledWith(mockAnimeOutput);
+    });
+
+    it('should handle single genreId and convert to array', async () => {
+      mockRequest.params = { id: 'anime-123' };
+      mockRequest.body = { genreIds: 'genre-456' };
+
+      mockAddGenreToAnimeUseCase.execute.mockResolvedValue(mockAnimeOutput);
+
+      await animeController.addGenre(mockRequest as Request, mockResponse as Response, mockNext);
+
+      expect(mockAddGenreToAnimeUseCase.execute).toHaveBeenCalledWith({
+        animeId: 'anime-123',
+        genreIds: ['genre-456'],
       });
       expect(mockResponse.status).toHaveBeenCalledWith(200);
       expect(mockResponse.json).toHaveBeenCalledWith(mockAnimeOutput);
@@ -370,7 +402,7 @@ describe('AnimeController', () => {
 
     it('should call next with error when addGenre fails', async () => {
       mockRequest.params = { id: 'anime-123' };
-      mockRequest.body = { genreId: 'genre-456' };
+      mockRequest.body = { genreIds: ['genre-456'] };
 
       const error = new Error('Add genre failed');
       mockAddGenreToAnimeUseCase.execute.mockRejectedValue(error);

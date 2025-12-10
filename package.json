@@ -36,6 +36,10 @@
     "url": "https://github.com/GabrielFinotti/anime-timeline-api/issues"
   },
   "homepage": "https://github.com/GabrielFinotti/anime-timeline-api#readme",
+  "ts-node": {
+    "esm": true,
+    "experimentalEsm": true
+  },
   "devDependencies": {
     "@types/bcrypt": "^6.0.0",
     "@types/cors": "^2.8.19",

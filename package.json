@@ -1,6 +1,6 @@
 {
   "name": "anime-timeline-api",
-  "version": "4.0.0-dev",
+  "version": "4.0.0",
   "description": "API Dedicada para o Anime Timeline",
   "main": "server.js",
   "type": "module",

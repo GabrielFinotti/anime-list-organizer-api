@@ -10,7 +10,7 @@
 ![PRs](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)
 ![Tests](https://img.shields.io/badge/tests-97%20passed-brightgreen)
 [![Validate PR](https://github.com/GabrielFinotti/anime-list-organizer-api/actions/workflows/validate.yml/badge.svg)](https://github.com/GabrielFinotti/anime-list-organizer-api/actions/workflows/validate.yml)
-[![codecov](https://codecov.io/gh/GabrielFinotti/anime-timeline-api/branch/main/graph/badge.svg)](https://codecov.io/gh/GabrielFinotti/anime-timeline-api)
+[![codecov](https://codecov.io/gh/GabrielFinotti/anime-timeline-api/graph/badge.svg?token=y6u23zVtx0)](https://codecov.io/gh/GabrielFinotti/anime-timeline-api)
 [![Docker Image](https://img.shields.io/docker/pulls/gabrielfinotti/anime-list-organizer-api?logo=docker&label=docker%20pulls)](https://hub.docker.com/r/gabrielfinotti/anime-list-organizer-api)
 
 **API RESTful para gerenciamento de animes com arquitetura DDD, autenticação JWT e lookup inteligente via OpenAI.**

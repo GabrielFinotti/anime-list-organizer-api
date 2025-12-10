@@ -1,6 +1,5 @@
-import type { Config } from 'jest';
-
-const baseConfig: Config = {
+/** @type {import('jest').Config} */
+const baseConfig = {
   preset: 'ts-jest/presets/default-esm',
   testEnvironment: 'node',
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
@@ -9,7 +8,7 @@ const baseConfig: Config = {
     '^.+\\.[tj]s$': [
       'ts-jest',
       {
-        tsconfig: 'tsconfig.json',
+        tsconfig: 'tsconfig.jest.json',
         useESM: true,
         diagnostics: { ignoreCodes: [151002] },
       },
@@ -22,7 +21,7 @@ const baseConfig: Config = {
   coveragePathIgnorePatterns: ['/node_modules/', '/dist/'],
 };
 
-const unitConfig: Config = {
+const unitConfig = {
   ...baseConfig,
   displayName: 'unit',
   roots: ['<rootDir>/tests/unit'],
@@ -37,7 +36,7 @@ const unitConfig: Config = {
   },
 };
 
-const integrationConfig: Config = {
+const integrationConfig = {
   ...baseConfig,
   displayName: 'integration',
   roots: ['<rootDir>/tests/integration'],
@@ -54,12 +53,10 @@ const integrationConfig: Config = {
   },
 };
 
-const config: Config = {
+const config = {
   projects: [unitConfig, integrationConfig],
   collectCoverageFrom: baseConfig.collectCoverageFrom,
   coveragePathIgnorePatterns: baseConfig.coveragePathIgnorePatterns,
 };
 
-export default config;
-
-export { unitConfig, integrationConfig };
+module.exports = config;

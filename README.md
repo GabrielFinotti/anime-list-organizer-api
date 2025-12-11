@@ -22,7 +22,6 @@
 [🤝 Contribuição](#-contribuição)
 
 </div>
----
 
 ## 📋 Sumário
 

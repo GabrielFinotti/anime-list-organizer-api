@@ -1,0 +1,12 @@
+node_modules
+dist
+build
+coverage
+.git
+.gitignore
+.prettierignore
+.prettierrc.ts
+tsconfig.json
+package-lock.json
+yarn.lock
+README.md

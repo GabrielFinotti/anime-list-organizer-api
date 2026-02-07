@@ -1,40 +1,25 @@
-import express from "express";
-import dotenv from "dotenv";
-import cors from "cors";
-import MongoConfig from "@/database/config/mongo.config";
-import adminRoute from "@/router/admin.route";
-import animeRoute from "@/router/anime.route";
-import openAiRoute from "@/router/openAi.route";
-import basicAuth from "./middleware/basicAuth";
+import MongoConfig from './infrastructure/database/config/mongo.config.js';
+import RedisClient from './infrastructure/cache/redis.client.js';
+import StartEnv from './infrastructure/env/startEnv.config.js';
+import app from './app.js';
 
-dotenv.config();
-
-const app = express();
-app.use(express.json());
-app.use(
-  cors({
-    allowedHeaders: "*",
-    origin: process.env.CORS_ORIGIN,
-  })
-);
+const env = StartEnv.getInstance();
 
 const startServer = async () => {
   try {
-    await MongoConfig.connectToDatabase(process.env.MONGODB_URI as string);
+    await MongoConfig.newConnection();
 
-    app.use(
-      `/api/${process.env.VERSION}`,
-      basicAuth,
-      adminRoute,
-      animeRoute,
-      openAiRoute
-    );
+    await RedisClient.getInstance().connect();
 
-    app.listen(process.env.PORT, () => {
-      console.log(`Servidor rodando na porta ${process.env.PORT}`);
+    app.listen(env.value.PORT, () => {
+      console.log(`Server running on port ${env.value.PORT}, version ${env.value.VERSION}`);
     });
   } catch (error) {
-    console.error(error);
+    if (error instanceof Error) {
+      console.error('Failed to start server:', error.message);
+    } else {
+      console.error('Failed to start server:', error);
+    }
   }
 };
 

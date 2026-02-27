@@ -28,6 +28,9 @@
     "typescript": "^5.9.3"
   },
   "dependencies": {
-    "express": "^5.1.0"
+    "@types/bcrypt": "^6.0.0",
+    "bcrypt": "^6.0.0",
+    "express": "^5.1.0",
+    "ulid": "^3.0.2"
   }
 }

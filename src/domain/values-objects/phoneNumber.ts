@@ -1,6 +1,6 @@
 class PhoneNumber {
   private readonly _value: string;
-  private static readonly PHONE_NUMBER_REGEX = /^55\d{9}$/;
+  private static readonly PHONE_NUMBER_REGEX = /^55\d{11}$/;
 
   private constructor(phoneNumber: string) {
     this._value = phoneNumber;
@@ -21,7 +21,7 @@ class PhoneNumber {
   private static validate(phoneNumber: string) {
     if (!this.PHONE_NUMBER_REGEX.test(phoneNumber)) {
       throw new Error(
-        "Invalid phone number format. Expected format: 55XXXXXXXXX",
+        "Invalid phone number format. Expected format: 55XXXXXXXXXXX",
       );
     }
   }

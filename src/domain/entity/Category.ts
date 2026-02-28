@@ -1,11 +1,12 @@
+import About from "../values-objects/about.js";
 import Id from "../values-objects/id.js";
 import Name from "../values-objects/name.js";
 
 type CategoryProps = {
   id: Id;
   name: Name;
-  description: string;
-  targetAudience: string;
+  description: About;
+  targetAudience: About;
   createdAt: Date;
   updatedAt: Date;
 };
@@ -13,8 +14,8 @@ type CategoryProps = {
 class Category {
   private readonly _id: Id;
   private _name: Name;
-  private _description: string;
-  private _targetAudience: string;
+  private _description: About;
+  private _targetAudience: About;
   private readonly _createdAt: Date;
   private _updatedAt: Date;
 
@@ -49,6 +50,32 @@ class Category {
 
   get updatedAt() {
     return this._updatedAt;
+  }
+
+  static create(data: {
+    name: string;
+    description: string;
+    targetAudience: string;
+  }) {
+    const id = Id.generateRandom();
+    const name = Name.create(data.name);
+    const description = About.create(data.description);
+    const targetAudience = About.create(data.targetAudience);
+    const createdAt = new Date();
+    const updatedAt = new Date();
+
+    return new Category({
+      id,
+      name,
+      description,
+      targetAudience,
+      createdAt,
+      updatedAt,
+    });
+  }
+
+  equals(other: Category) {
+    return this._id.equals(other.id);
   }
 }
 

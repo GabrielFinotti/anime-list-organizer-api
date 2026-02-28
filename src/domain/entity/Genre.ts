@@ -1,10 +1,11 @@
+import About from "../values-objects/about.js";
 import Id from "../values-objects/id.js";
 import Name from "../values-objects/name.js";
 
 type GenreProps = {
   id: Id;
   name: Name;
-  description: string;
+  description: About;
   isAdultGenre: boolean;
   createdAt: Date;
   updatedAt: Date;
@@ -13,7 +14,7 @@ type GenreProps = {
 class Genre {
   private readonly _id: Id;
   private _name: Name;
-  private _description: string;
+  private _description: About;
   private _isAdultGenre: boolean;
   private readonly _createdAt: Date;
   private _updatedAt: Date;
@@ -49,6 +50,32 @@ class Genre {
 
   get updatedAt() {
     return this._updatedAt;
+  }
+
+  static create(data: {
+    name: string;
+    description: string;
+    isAdultGenre: boolean;
+  }) {
+    const id = Id.generateRandom();
+    const name = Name.create(data.name);
+    const description = About.create(data.description);
+    const isAdultGenre = data.isAdultGenre;
+    const createdAt = new Date();
+    const updatedAt = new Date();
+
+    return new Genre({
+      id,
+      name,
+      description,
+      isAdultGenre,
+      createdAt,
+      updatedAt,
+    });
+  }
+
+  equals(other: Genre) {
+    return this._id.equals(other.id);
   }
 }
 

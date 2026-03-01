@@ -31,7 +31,7 @@ type AnimeProps = {
   totalSeasons: number;
   totalEpisodes: number;
   movies: {
-    list: string[];
+    list: Name[];
     updatedAt: Date;
   };
   createdAt: Date;
@@ -53,7 +53,7 @@ class Anime {
   private _totalSeasons: number;
   private _totalEpisodes: number;
   private _movies: {
-    list: string[];
+    list: Name[];
     updatedAt: Date;
   };
   private readonly _createdAt: Date;
@@ -155,18 +155,17 @@ class Anime {
     isAdultContent: boolean;
     totalSeasons: number;
     totalEpisodes: number;
-    movies: {
-      list: string[];
-      updatedAt: Date;
-    };
+    movies: string[];
   }) {
     this.validateDate(data.releaseDate);
     this.validateTypeOfAnime(data.typeOfAnime);
     this.validateTypeOfProduction(data.typeOfProduction);
     this.validateTypeOfSourceMaterial(data.typeOfSourceMaterial);
+    this.validateIsNumber(data.totalSeasons, "totalSeasons");
+    this.validateIsNumber(data.totalEpisodes, "totalEpisodes");
 
     const id = Id.generateRandom();
-    const title = Name.create(data.title);
+    const title = Name.create(data.title, true);
     const synopsis = About.create(data.synopsis);
     const coverUrl = Url.create(data.coverUrl);
     const releaseDate = new Date(data.releaseDate);
@@ -179,9 +178,13 @@ class Anime {
     const isAdultContent = data.isAdultContent;
     const totalSeasons = data.totalSeasons;
     const totalEpisodes = data.totalEpisodes;
-    const movies = data.movies;
+    const movies = {
+      list: data.movies.map((movieTitle) => Name.create(movieTitle, true)),
+      updatedAt: new Date(),
+    };
     const createdAt = new Date();
     const updatedAt = new Date();
+
     return new Anime({
       id,
       title,
@@ -246,6 +249,147 @@ class Anime {
         `Invalid type of source material. Valid types are: ${validTypes.join(", ")}`,
       );
     }
+  }
+
+  private static validateIsNumber(value: any, fieldName: string) {
+    if (typeof value !== "number" || isNaN(value)) {
+      throw new Error(`Invalid value for ${fieldName}. Expected a number.`);
+    }
+  }
+
+  private static validateNoDuplicates(movies: Name[]) {
+    const seen = new Set<string>();
+
+    for (const movie of movies) {
+      const movieTitle = movie.value;
+
+      if (seen.has(movieTitle)) {
+        throw new Error(
+          `Duplicate movie title found: "${movieTitle}". Each movie title must be unique.`,
+        );
+      }
+
+      seen.add(movieTitle);
+    }
+  }
+
+  updateCommonInfo(data: {
+    title?: string;
+    synopsis?: string;
+    coverUrl?: string;
+    releaseDate?: string;
+    category?: Category;
+    genres?: Genre[];
+    typeOfAnime?: string;
+    typeOfProduction?: string;
+    typeOfSourceMaterial?: string;
+    isAdultContent?: boolean;
+  }) {
+    if (Object.keys(data).length === 0) {
+      throw new Error("At least one field must be provided for update.");
+    }
+
+    if (data.title) {
+      this._title = Name.create(data.title, true);
+    }
+
+    if (data.synopsis) {
+      this._synopsis = About.create(data.synopsis);
+    }
+
+    if (data.coverUrl) {
+      this._coverUrl = Url.create(data.coverUrl);
+    }
+
+    if (data.releaseDate) {
+      Anime.validateDate(data.releaseDate);
+      this._releaseDate = new Date(data.releaseDate);
+    }
+
+    if (data.category) {
+      this._category = data.category;
+    }
+
+    if (data.genres) {
+      this._genres = data.genres;
+    }
+
+    if (data.typeOfAnime) {
+      Anime.validateTypeOfAnime(data.typeOfAnime);
+      this._typeOfAnime = data.typeOfAnime as TypeOfAnime;
+    }
+
+    if (data.typeOfProduction) {
+      Anime.validateTypeOfProduction(data.typeOfProduction);
+      this._typeOfProduction = data.typeOfProduction as TypeOfProduction;
+    }
+
+    if (data.typeOfSourceMaterial) {
+      Anime.validateTypeOfSourceMaterial(data.typeOfSourceMaterial);
+      this._typeOfSourceMaterial =
+        data.typeOfSourceMaterial as TypeOfSourceMaterial;
+    }
+
+    if (data.isAdultContent !== undefined) {
+      this._isAdultContent = data.isAdultContent;
+    }
+
+    this._updatedAt = new Date();
+  }
+
+  updateSeasonOrEpisodeInfo(data: {
+    totalSeasons?: number;
+    totalEpisodes?: number;
+  }) {
+    if (Object.keys(data).length === 0) {
+      throw new Error("At least one field must be provided for update.");
+    }
+
+    if (this.typeOfAnime === "movie") {
+      throw new Error("Cannot update seasons or episodes for a movie.");
+    }
+
+    if (data.totalSeasons !== undefined) {
+      Anime.validateIsNumber(data.totalSeasons, "totalSeasons");
+      this._totalSeasons = data.totalSeasons;
+    }
+
+    if (data.totalEpisodes !== undefined) {
+      Anime.validateIsNumber(data.totalEpisodes, "totalEpisodes");
+      this._totalEpisodes = data.totalEpisodes;
+    }
+
+    this._updatedAt = new Date();
+  }
+
+  updateMovies(movies: string[]) {
+    if (this.typeOfAnime === "serie") {
+      throw new Error("Cannot update movies for a serie.");
+    }
+
+    const currentMovieTitles = this._movies.list;
+    const newMovieTitles = movies.map((movieTitle) =>
+      Name.create(movieTitle, true),
+    );
+
+    Anime.validateNoDuplicates(newMovieTitles);
+
+    const hasChanges =
+      currentMovieTitles.length !== newMovieTitles.length ||
+      currentMovieTitles.some(
+        (currentTitle, index) => !currentTitle.equals(newMovieTitles[index]),
+      );
+
+    if (!hasChanges) {
+      throw new Error("No changes detected in the movies list.");
+    }
+
+    this._movies = {
+      list: movies.map((movieTitle) => Name.create(movieTitle, true)),
+      updatedAt: new Date(),
+    };
+
+    this._updatedAt = new Date();
   }
 
   equals(other: Anime) {

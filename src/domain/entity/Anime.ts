@@ -205,6 +205,52 @@ class Anime {
     });
   }
 
+  static toDomain(raw: {
+    _id: string;
+    title: string;
+    synopsis: string;
+    coverUrl: string;
+    releaseDate: Date;
+    category: Category;
+    genres: Genre[];
+    typeOfAnime: string;
+    typeOfProduction: string;
+    typeOfSourceMaterial: string;
+    isAdultContent: boolean;
+    totalSeasons: number;
+    totalEpisodes: number;
+    movies: {
+      list: string[];
+      updatedAt: Date;
+    };
+    createdAt: Date;
+    updatedAt: Date;
+  }) {
+    return new Anime({
+      id: Id.create(raw._id),
+      title: Name.create(raw.title, true),
+      synopsis: About.create(raw.synopsis, true),
+      coverUrl: Url.create(raw.coverUrl),
+      releaseDate: raw.releaseDate,
+      category: raw.category,
+      genres: raw.genres,
+      typeOfAnime: raw.typeOfAnime as TypeOfAnime,
+      typeOfProduction: raw.typeOfProduction as TypeOfProduction,
+      typeOfSourceMaterial: raw.typeOfSourceMaterial as TypeOfSourceMaterial,
+      isAdultContent: raw.isAdultContent,
+      totalSeasons: raw.totalSeasons,
+      totalEpisodes: raw.totalEpisodes,
+      movies: {
+        list: raw.movies.list.map((movieTitle) =>
+          Name.create(movieTitle, true),
+        ),
+        updatedAt: raw.movies.updatedAt,
+      },
+      createdAt: raw.createdAt,
+      updatedAt: raw.updatedAt,
+    });
+  }
+
   private static validateDate(date: string) {
     const parsedDate = Date.parse(date);
 

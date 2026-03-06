@@ -74,6 +74,24 @@ class Genre {
     });
   }
 
+  static toDomain(raw: {
+    _id: string;
+    name: string;
+    description: string;
+    isAdultGenre: boolean;
+    createdAt: Date;
+    updatedAt: Date;
+  }) {
+    return new Genre({
+      id: Id.create(raw._id),
+      name: Name.create(raw.name),
+      description: About.create(raw.description),
+      isAdultGenre: raw.isAdultGenre,
+      createdAt: raw.createdAt,
+      updatedAt: raw.updatedAt,
+    });
+  }
+
   equals(other: Genre) {
     return this._id.equals(other.id);
   }

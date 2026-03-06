@@ -74,6 +74,24 @@ class Category {
     });
   }
 
+  static toDomain(raw: {
+    _id: string;
+    name: string;
+    description: string;
+    targetAudience: string;
+    createdAt: Date;
+    updatedAt: Date;
+  }) {
+    return new Category({
+      id: Id.create(raw._id),
+      name: Name.create(raw.name),
+      description: About.create(raw.description),
+      targetAudience: About.create(raw.targetAudience),
+      createdAt: raw.createdAt,
+      updatedAt: raw.updatedAt,
+    });
+  }
+
   equals(other: Category) {
     return this._id.equals(other.id);
   }

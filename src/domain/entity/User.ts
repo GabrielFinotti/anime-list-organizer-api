@@ -166,6 +166,44 @@ class User {
     });
   }
 
+  static toDomain(raw: {
+    _id: string;
+    username: string;
+    email: string;
+    password: string;
+    phoneNumber: string;
+    imageUrl: string;
+    bio: string;
+    dateOfBirth: Date;
+    role: string;
+    animeList: {
+      list: Anime[];
+      updatedAt: Date;
+    };
+    favoritesAnimes: {
+      list: Anime[];
+      updatedAt: Date;
+    };
+    createdAt: Date;
+    updatedAt: Date;
+  }) {
+    return new User({
+      id: Id.create(raw._id),
+      username: Name.create(raw.username),
+      email: Email.create(raw.email),
+      password: Password.create(raw.password),
+      phoneNumber: PhoneNumber.create(raw.phoneNumber),
+      imageUrl: Url.create(raw.imageUrl),
+      bio: About.create(raw.bio),
+      dateOfBirth: raw.dateOfBirth,
+      role: Role.create(raw.role),
+      animeList: raw.animeList,
+      favoritesAnimes: raw.favoritesAnimes,
+      createdAt: raw.createdAt,
+      updatedAt: raw.updatedAt,
+    });
+  }
+
   private static validateDateOfBirth(dateOfBirth: string) {
     const date = new Date(dateOfBirth);
     const now = new Date();

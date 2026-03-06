@@ -30,7 +30,9 @@
   "dependencies": {
     "@types/bcrypt": "^6.0.0",
     "bcrypt": "^6.0.0",
+    "dotenv": "^17.3.1",
     "express": "^5.1.0",
+    "mongoose": "^9.2.3",
     "ulid": "^3.0.2"
   }
 }

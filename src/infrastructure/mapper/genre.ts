@@ -11,7 +11,7 @@ type GenreDocument = {
 
 class GenrePersistenceMapper {
   static toDomain(genreDoc: GenreDocument) {
-    return Genre.toDomain(genreDoc);
+    return Genre.fromPersistence(genreDoc);
   }
 
   static toPersistence(genre: Genre) {

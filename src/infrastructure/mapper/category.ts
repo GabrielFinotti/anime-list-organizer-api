@@ -11,7 +11,7 @@ type CategoryDocument = {
 
 class CategoryPersistenceMapper {
   static toDomain(doc: CategoryDocument) {
-    return Category.toDomain(doc);
+    return Category.fromPersistence(doc);
   }
 
   static toPersistence(category: Category) {

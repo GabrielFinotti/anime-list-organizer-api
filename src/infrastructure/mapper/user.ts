@@ -29,7 +29,7 @@ class UserPersistenceMapper {
     animeList: Anime[],
     favoritesAnimes: Anime[],
   ) {
-    return User.toDomain({
+    return User.fromPersistence({
       ...doc,
       animeList: { list: animeList, updatedAt: doc.animeList.updatedAt },
       favoritesAnimes: {
@@ -44,7 +44,7 @@ class UserPersistenceMapper {
       _id: user.id.value,
       username: user.username.value,
       email: user.email.value,
-      password: user.password.value,
+      password: user.getPasswordFromPersistence(),
       phoneNumber: user.phoneNumber.value,
       imageUrl: user.imageUrl.value,
       bio: user.bio.value,

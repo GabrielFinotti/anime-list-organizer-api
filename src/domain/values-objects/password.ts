@@ -23,6 +23,10 @@ class Password {
     return new Password(hashedPassword);
   }
 
+  static fromPersistence(hashedPassword: string) {
+    return new Password(hashedPassword);
+  }
+
   private static validatePassword(password: string) {
     if (!this.PASSWORD_REGEX.test(password)) {
       throw new Error(

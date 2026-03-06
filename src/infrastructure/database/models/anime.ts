@@ -14,7 +14,7 @@ export type IAnimeDocument = Document & {
     | "manga"
     | "manhwa"
     | "donghua"
-    | "light novel"
+    | "light_novel"
     | "game"
     | "other"
     | "none";
@@ -52,7 +52,7 @@ const animeSchema = new Schema<IAnimeDocument>(
         "manga",
         "manhwa",
         "donghua",
-        "light novel",
+        "light_novel",
         "game",
         "other",
         "none",

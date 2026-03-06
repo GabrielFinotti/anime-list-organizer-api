@@ -79,10 +79,6 @@ class User {
     return this._email;
   }
 
-  get password() {
-    return this._password;
-  }
-
   get phoneNumber() {
     return this._phoneNumber;
   }
@@ -96,7 +92,7 @@ class User {
   }
 
   get dateOfBirth() {
-    return this._dateOfBirth;
+    return new Date(this._dateOfBirth);
   }
 
   get role() {
@@ -104,19 +100,25 @@ class User {
   }
 
   get animeList() {
-    return this._animeList;
+    return {
+      list: [...this._animeList.list],
+      updatedAt: new Date(this._animeList.updatedAt),
+    };
   }
 
   get favoritesAnimes() {
-    return this._favoritesAnimes;
+    return {
+      list: [...this._favoritesAnimes.list],
+      updatedAt: new Date(this._favoritesAnimes.updatedAt),
+    };
   }
 
   get createdAt() {
-    return this._createdAt;
+    return new Date(this._createdAt);
   }
 
   get updatedAt() {
-    return this._updatedAt;
+    return new Date(this._updatedAt);
   }
 
   static create(data: {
@@ -166,7 +168,7 @@ class User {
     });
   }
 
-  static toDomain(raw: {
+  static fromPersistence(raw: {
     _id: string;
     username: string;
     email: string;
@@ -191,7 +193,7 @@ class User {
       id: Id.create(raw._id),
       username: Name.create(raw.username),
       email: Email.create(raw.email),
-      password: Password.create(raw.password),
+      password: Password.fromPersistence(raw.password),
       phoneNumber: PhoneNumber.create(raw.phoneNumber),
       imageUrl: Url.create(raw.imageUrl),
       bio: About.create(raw.bio),
@@ -207,12 +209,17 @@ class User {
   private static validateDateOfBirth(dateOfBirth: string) {
     const date = new Date(dateOfBirth);
     const now = new Date();
+    const age = now.getFullYear() - date.getFullYear();
 
     if (isNaN(date.getTime())) {
       throw new Error("Invalid date of birth");
     }
     if (date > now) {
       throw new Error("Date of birth cannot be in the future");
+    }
+
+    if (age < 13) {
+      throw new Error("User must be at least 13 years old");
     }
   }
 
@@ -323,6 +330,14 @@ class User {
 
     this._favoritesAnimes.list.splice(existingAnimeIndex, 1);
     this._favoritesAnimes.updatedAt = new Date();
+  }
+
+  getPasswordFromPersistence() {
+    return this._password.value;
+  }
+
+  comparePassword(password: string) {
+    return this._password.comparePassword(password);
   }
 
   equals(other: User) {

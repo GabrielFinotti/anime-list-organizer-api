@@ -26,7 +26,7 @@ export type AnimeDocument = {
 
 class AnimePersistenceMapper {
   static toDomain(doc: AnimeDocument, category: Category, genres: Genre[]) {
-    return Anime.toDomain({ ...doc, category, genres });
+    return Anime.fromPersistence({ ...doc, category, genres });
   }
 
   static toPersistence(anime: Anime) {

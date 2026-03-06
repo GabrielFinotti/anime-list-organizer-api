@@ -95,7 +95,7 @@ class Anime {
   }
 
   get releaseDate() {
-    return this._releaseDate;
+    return new Date(this._releaseDate);
   }
 
   get category() {
@@ -131,15 +131,18 @@ class Anime {
   }
 
   get movies() {
-    return this._movies;
+    return {
+      list: [...this._movies.list],
+      updatedAt: new Date(this._movies.updatedAt),
+    };
   }
 
   get createdAt() {
-    return this._createdAt;
+    return new Date(this._createdAt);
   }
 
   get updatedAt() {
-    return this._updatedAt;
+    return new Date(this._updatedAt);
   }
 
   static create(data: {
@@ -205,7 +208,7 @@ class Anime {
     });
   }
 
-  static toDomain(raw: {
+  static fromPersistence(raw: {
     _id: string;
     title: string;
     synopsis: string;

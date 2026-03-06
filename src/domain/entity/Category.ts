@@ -74,7 +74,7 @@ class Category {
     });
   }
 
-  static toDomain(raw: {
+  static fromPersistence(raw: {
     _id: string;
     name: string;
     description: string;

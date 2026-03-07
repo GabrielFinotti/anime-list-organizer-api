@@ -1,7 +1,7 @@
 import Anime from "../../domain/entity/Anime.js";
 import User from "../../domain/entity/User.js";
 
-type UserDocument = {
+export type UserDocument = {
   _id: string;
   username: string;
   email: string;

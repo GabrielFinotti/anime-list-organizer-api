@@ -12,11 +12,11 @@ type IUserDocument = Document & {
   dateOfBirth: Date;
   role: "user" | "admin";
   animeList: {
-    list: IAnimeDocument[];
+    list: string[];
     updatedAt: Date;
   };
   favoritesAnimes: {
-    list: IAnimeDocument[];
+    list: string[];
     updatedAt: Date;
   };
 };

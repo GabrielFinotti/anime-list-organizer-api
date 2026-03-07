@@ -1,6 +1,6 @@
 import Genre from "../../domain/entity/Genre.js";
 
-type GenreDocument = {
+export type GenreDocument = {
   _id: string;
   name: string;
   description: string;

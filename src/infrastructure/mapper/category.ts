@@ -1,6 +1,6 @@
 import Category from "../../domain/entity/Category.js";
 
-type CategoryDocument = {
+export type CategoryDocument = {
   _id: string;
   name: string;
   description: string;

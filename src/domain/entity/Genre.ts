@@ -49,7 +49,7 @@ class Genre {
   }
 
   get updatedAt() {
-    return this._updatedAt;
+    return new Date(this._updatedAt);
   }
 
   static create(data: {

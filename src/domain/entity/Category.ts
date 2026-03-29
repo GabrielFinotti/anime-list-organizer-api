@@ -45,11 +45,11 @@ class Category {
   }
 
   get createdAt() {
-    return this._createdAt;
+    return new Date(this._createdAt);
   }
 
   get updatedAt() {
-    return this._updatedAt;
+    return new Date(this._updatedAt);
   }
 
   static create(data: {

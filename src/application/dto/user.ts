@@ -7,6 +7,11 @@ export type UserInputDTO = {
     role?: string;
 }
 
+export type UserLoginDTO = {
+    email: string;
+    password: string;
+}
+
 export type UpdateUserProfileDTO = {
     username?: string;
     imageUrl?: string;
